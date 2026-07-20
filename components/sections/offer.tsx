@@ -1,6 +1,5 @@
 import { ArrowUpRight, CheckCircle2, MessageCircle, ShoppingBag, Sparkles, Store } from "lucide-react";
-import { PromoOfferPrice } from "@/components/promo-price";
-import { PromoTimer } from "@/components/promo-timer";
+import { PromoOfferNotice, PromoOfferPrice } from "@/components/promo-price";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { onlineStorePackage, starterPackage } from "@/lib/commerce";
@@ -30,13 +29,7 @@ export function Offer() {
           <p className="mt-5 text-base leading-7 text-[var(--muted-foreground)] md:text-lg">Mulai dari katalog sederhana yang mengarahkan pembeli ke kanal favorit Anda, hingga toko online dengan sistem pembayaran lengkap.</p>
         </div>
 
-        <div className="mb-5 flex flex-col items-center justify-between gap-3 rounded-2xl border border-[var(--accent)]/20 bg-[var(--accent)]/[0.055] px-4 py-3 sm:flex-row sm:px-5">
-          <div className="text-center sm:text-left">
-            <p className="font-heading text-sm font-bold text-white">🔥 Promo Spesial Hari Ini!</p>
-            <p className="mt-0.5 text-xs text-[var(--muted-foreground)]">Harga promo terbatas dan berakhir malam ini. Pesan sekarang!</p>
-          </div>
-          <PromoTimer />
-        </div>
+        <PromoOfferNotice />
 
         <div className="grid gap-5 lg:grid-cols-2 lg:gap-6">
           <article className="flex h-full flex-col rounded-[32px] border border-white/10 bg-[var(--card)] p-6 shadow-[0_32px_90px_rgba(0,0,0,0.25)] sm:p-8 md:p-10">

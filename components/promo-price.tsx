@@ -1,7 +1,7 @@
 "use client";
 
 import { formatRupiah } from "@/lib/commerce";
-import { usePromoTimer } from "@/components/promo-timer";
+import { PromoTimer, usePromoTimer } from "@/components/promo-timer";
 
 type PromoPriceProps = {
   promoPrice: number;
@@ -33,6 +33,19 @@ export function PromoStatusLabel() {
   return <>{timer?.phase === "pause" ? "JEDA PROMO" : "PROMO PORTOFOLIO"}</>;
 }
 
+export function PromoOfferNotice() {
+  const timer = usePromoTimer();
+
+  if (timer?.phase !== "promo") return null;
+
+  return (
+    <div className="mb-5 rounded-2xl border border-[var(--accent)]/20 bg-[var(--accent)]/[0.055] px-4 py-3 text-center sm:px-5 sm:text-left">
+      <p className="font-heading text-sm font-bold text-white">🔥 Promo Spesial Hari Ini!</p>
+      <p className="mt-0.5 text-xs text-[var(--muted-foreground)]">Harga promo terbatas dan berakhir malam ini. Pesan sekarang!</p>
+    </div>
+  );
+}
+
 export function PromoOfferPrice({ promoPrice, regularPrice }: PromoPriceProps) {
   const timer = usePromoTimer();
   const isPaused = timer?.phase === "pause";
@@ -45,9 +58,14 @@ export function PromoOfferPrice({ promoPrice, regularPrice }: PromoPriceProps) {
         </span>
         {!isPaused && <span className="pb-1.5 text-base text-[var(--muted-foreground)] line-through decoration-2">{formatRupiah(regularPrice)}</span>}
       </div>
-      <p className={`mt-2 text-xs font-semibold ${isPaused ? "text-amber-200" : "text-[var(--accent)]"}`}>
-        {isPaused ? "Harga normal berlaku selama jeda promo" : `Hemat ${formatRupiah(regularPrice - promoPrice)}`}
-      </p>
+      {!isPaused && (
+        <div className="mt-2">
+          <p className="text-xs font-semibold text-[var(--accent)]">Hemat {formatRupiah(regularPrice - promoPrice)}</p>
+          <div className="mt-3">
+            <PromoTimer />
+          </div>
+        </div>
+      )}
     </>
   );
 }

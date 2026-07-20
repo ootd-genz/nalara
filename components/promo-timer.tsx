@@ -52,18 +52,20 @@ export function usePromoTimer() {
 
 export function PromoTimer() {
   const timer = usePromoTimer();
-  const isPaused = timer?.phase === "pause";
-  const time = timer ? formatTime(timer.remaining) : "--:--:--";
-  const label = isPaused ? "Promo kembali dalam" : "Promo berakhir dalam";
+
+  if (!timer || timer.phase === "pause") return null;
+
+  const time = formatTime(timer.remaining);
+  const label = "Promo berakhir dalam";
 
   return (
     <span
-      className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-1 font-mono text-[11px] font-bold tabular-nums sm:text-xs ${isPaused ? "border-amber-300/25 bg-amber-300/10 text-amber-200" : "border-[var(--accent)]/25 bg-[var(--accent)]/10 text-[var(--accent)]"}`}
+      className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-[var(--accent)]/25 bg-[var(--accent)]/10 px-2.5 py-1 font-mono text-[11px] font-bold tabular-nums text-[var(--accent)] motion-safe:animate-pulse sm:text-xs"
       role="timer"
       aria-label={`${label} ${time}`}
     >
       <Clock3 className="size-3.5" aria-hidden="true" />
-      <span className="hidden md:inline">{label}</span>
+      <span>{label}</span>
       <span>{time}</span>
     </span>
   );

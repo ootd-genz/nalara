@@ -1,6 +1,5 @@
 import { ArrowRight } from "lucide-react";
 import { PromoAnnouncementPrice, PromoStatusLabel } from "@/components/promo-price";
-import { PromoTimer } from "@/components/promo-timer";
 import { starterPackage } from "@/lib/commerce";
 
 export function Announcement() {
@@ -13,7 +12,6 @@ export function Announcement() {
           <span className="hidden sm:inline">Website Katalog Produk <PromoAnnouncementPrice promoPrice={starterPackage.price} regularPrice={starterPackage.regularPrice} /></span>
           <ArrowRight className="hidden size-3.5 shrink-0 transition-transform group-hover:translate-x-1 lg:block" aria-hidden="true" />
         </a>
-        <PromoTimer />
       </div>
     </div>
   );
