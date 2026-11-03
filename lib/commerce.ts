@@ -1,25 +1,76 @@
-export const starterPackage = {
-  id: "website-katalog-produk",
-  name: "Website Katalog Produk",
-  description: "Katalog produk responsif dengan tombol pemesanan ke WhatsApp, marketplace, atau link affiliate.",
-  price: 69_000,
-  regularPrice: 150_000,
+export const beginnerPackage = {
+  id: "website-beginner",
+  name: "Beginner",
+  subtitle: "Landing page & website statis",
+  description: "Website statis & landing page simpel untuk profil usaha, promosi produk/jasa, atau personal branding.",
+  price: 650_000,
+  regularPrice: 850_000,
   currency: "IDR",
+  features: [
+    "1 Halaman Ringkas (Landing Page Sederhana)",
+    "Desain Responsif (Mobile & Desktop)",
+    "Setup Hosting Standar / Subdomain Siap Pakai",
+    "Integrasi Tombol WhatsApp & Media Sosial",
+    "Gratis SSL (Keamanan Standar)",
+    "Revisi Gratis 1x",
+    "Garansi Maintenance 7 hari",
+  ],
 } as const;
 
-export const onlineStorePackage = {
-  id: "website-toko-online",
-  name: "Website Toko Online",
-  description: "Toko online dengan sistem pembayaran QRIS, transfer bank, DANA, dan metode pembayaran lainnya.",
-  price: 599_000,
-  regularPrice: 1_000_000,
+export const starterPackage = {
+  id: "website-starter",
+  name: "Starter",
+  subtitle: "Paling Banyak Dipesan",
+  description: "Landing page panjang berkonversi tinggi dengan domain .com gratis dan email bisnis profesional.",
+  price: 1_200_000,
+  regularPrice: 1_400_000,
   currency: "IDR",
+  badge: "Paling Banyak Dipesan",
+  isPopular: true,
+  features: [
+    "1 Halaman Panjang (Landing Page)",
+    "Desain Responsif (Mobile & Desktop)",
+    "Gratis Domain (.com)",
+    "Hosting 1 Tahun",
+    "1 Email Bisnis (xxx@bisnis.com)",
+    "1 GB Penyimpanan",
+    "Gratis SSL (Keamanan Standar)",
+    "Revisi Gratis 2x",
+    "Garansi Maintenance 15 hari",
+  ],
 } as const;
+
+export const businessPackage = {
+  id: "website-business",
+  name: "Business",
+  subtitle: "Multi-halaman skala bisnis",
+  description: "Hingga 5 halaman website lengkap dengan SEO dasar dan resource penyimpanan lebih besar.",
+  price: 1_900_000,
+  regularPrice: 2_000_000,
+  currency: "IDR",
+  features: [
+    "Hingga 5 Halaman Website",
+    "Desain Responsif (Mobile & Desktop)",
+    "Gratis Domain (.com)",
+    "Hosting 1 tahun",
+    "2 Email Bisnis (xxx@bisnis.com)",
+    "10 GB Penyimpanan",
+    "Gratis SSL (Keamanan Standar)",
+    "SEO Dasar (Optimasi Mesin Pencari)",
+    "Revisi Gratis 5x",
+    "Garansi Maintenance 30 hari",
+  ],
+} as const;
+
+export const allPackages = [beginnerPackage, starterPackage, businessPackage] as const;
 
 export function formatRupiah(amount: number) {
   return `Rp${new Intl.NumberFormat("id-ID", { maximumFractionDigits: 0 }).format(amount)}`;
 }
 
 export function getPackageById(packageId: unknown) {
-  return packageId === starterPackage.id ? starterPackage : null;
+  if (packageId === beginnerPackage.id) return beginnerPackage;
+  if (packageId === starterPackage.id) return starterPackage;
+  if (packageId === businessPackage.id) return businessPackage;
+  return null;
 }

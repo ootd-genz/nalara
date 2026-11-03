@@ -8,7 +8,7 @@ Pemeriksaan yang telah dijalankan pada paket ini:
 
 Kontak yang diverifikasi dalam hasil build:
 
-- WhatsApp: `6282261060675`
+- WhatsApp: `6283829198193`
 - Instagram: `nalara.website`
 - Harga promo: `Rp69.000`
 - Harga reguler paket katalog: `Rp150.000`

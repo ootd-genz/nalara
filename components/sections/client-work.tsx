@@ -13,7 +13,7 @@ export function ClientWork() {
       <div className="container-shell">
         <SectionHeading
           eyebrow="Portofolio Client"
-          title="Lihat contoh website e-commerce yang sudah online."
+          title="Lihat contoh website yang sudah online."
           description="Bukti nyata dari website client sebelumnya agar Anda dapat melihat langsung kualitas tampilan dan pengalaman belanja yang kami bangun."
         />
 

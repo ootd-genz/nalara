@@ -1,7 +1,7 @@
 # QA Checklist
 
 ## Konten
-- [ ] WhatsApp `6282261060675` benar.
+- [ ] WhatsApp `6283829198193` benar.
 - [ ] Instagram `@nalara.website` benar.
 - [ ] Harga katalog Rp69.000 dari Rp150.000 dan toko online Rp599.000 dari Rp1.000.000 benar.
 - [ ] Batas scope dijelaskan.
