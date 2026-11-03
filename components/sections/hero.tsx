@@ -70,8 +70,8 @@ export function Hero() {
                 </a>
               </Button>
               <Button asChild variant="outline" size="lg" className="h-auto min-h-13 w-full whitespace-normal py-3 text-center sm:w-auto">
-                <a href="#penawaran" data-cta="hero-offer">
-                  Lihat Detail Penawaran <ArrowUpRight aria-hidden="true" />
+                <a href="#portofolio" data-cta="hero-portfolio">
+                  Lihat Portofolio Klien <ArrowUpRight aria-hidden="true" />
                 </a>
               </Button>
             </div>
