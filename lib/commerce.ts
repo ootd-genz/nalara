@@ -11,6 +11,7 @@ export const beginnerPackage = {
     "Desain Responsif (Mobile & Desktop)",
     "Setup Hosting Standar / Subdomain Siap Pakai",
     "Integrasi Tombol WhatsApp & Media Sosial",
+    "SEO Dasar (Optimasi Mesin Pencari)",
     "Gratis SSL (Keamanan Standar)",
     "Revisi Gratis 1x",
     "Garansi Maintenance 7 hari",
@@ -30,6 +31,7 @@ export const starterPackage = {
   features: [
     "1 Halaman Panjang (Landing Page)",
     "Desain Responsif (Mobile & Desktop)",
+    "SEO Dasar (Optimasi Mesin Pencari)",
     "Gratis Domain (.com)",
     "Hosting 1 Tahun",
     "1 Email Bisnis (xxx@bisnis.com)",
