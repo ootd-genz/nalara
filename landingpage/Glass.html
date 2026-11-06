@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Codecuy — Frontend Developer</title>
+
+<!-- Tailwind CSS (CDN) -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Motion (CDN) — pengganti motion/react untuk animasi sudut glow -->
+<script src="https://cdn.jsdelivr.net/npm/motion@11.11.13/dist/motion.min.js"></script>
+
+<!-- Lucide Icons (CDN) -->
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=Geist:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      fontFamily: {
+        display: ['"Space Grotesk"', 'sans-serif'],
+        body: ['Inter', 'sans-serif'],
+        mono: ['Geist', 'sans-serif'],
+      },
+      colors: {
+        ink: '#0b0d12',
+        panel: '#11141b',
+        line: '#232836',
+        soft: '#9aa3b5',
+        pink: '#dd7bbb',
+        gold: '#d79f1e',
+        leaf: '#5a922c',
+        sea: '#4c7894',
+      },
+    },
+  },
+};
+</script>
+
+<style>
+  :root { color-scheme: dark; }
+  body { background:#0b0d12; color:#e8ebf2; font-family:'Inter',sans-serif; }
+  ::selection { background:#dd7bbb; color:#0b0d12; }
+
+  /* ============================================================
+     GLOWING EFFECT — adaptasi vanilla dari glowing-effect.tsx
+     Gradien conic yang mengikuti arah kursor di sekeliling kartu
+     ============================================================ */
+  .glow-capture { position: relative; }
+
+  .glowing-effect {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    opacity: 1;
+    transition: opacity .3s;
+    --blur: 0px;
+    --spread: 40;
+    --start: 0;
+    --active: 0;
+    --glowingeffect-border-width: 3px;
+    --repeating-conic-gradient-times: 5;
+    --gradient:
+      radial-gradient(circle, #dd7bbb 10%, #dd7bbb00 20%),
+      radial-gradient(circle at 40% 40%, #d79f1e 5%, #d79f1e00 15%),
+      radial-gradient(circle at 60% 60%, #5a922c 10%, #5a922c00 20%),
+      radial-gradient(circle at 40% 60%, #4c7894 10%, #4c789400 20%),
+      repeating-conic-gradient(
+        from 236.84deg at 50% 50%,
+        #dd7bbb 0%,
+        #d79f1e calc(25% / var(--repeating-conic-gradient-times)),
+        #5a922c calc(50% / var(--repeating-conic-gradient-times)),
+        #4c7894 calc(75% / var(--repeating-conic-gradient-times)),
+        #dd7bbb calc(100% / var(--repeating-conic-gradient-times))
+      );
+  }
+  .glowing-effect .glow { border-radius: inherit; position:absolute; inset:0; }
+  .glowing-effect .glow::after {
+    content: "";
+    position: absolute;
+    inset: calc(-1 * var(--glowingeffect-border-width));
+    border-radius: inherit;
+    border: var(--glowingeffect-border-width) solid transparent;
+    background: var(--gradient);
+    background-attachment: fixed;
+    opacity: var(--active);
+    transition: opacity .3s;
+    -webkit-mask-clip: padding-box, border-box;
+    mask-clip: padding-box, border-box;
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+    -webkit-mask-image:
+      linear-gradient(#0000, #0000),
+      conic-gradient(from calc((var(--start) - var(--spread)) * 1deg),
+        #00000000 0deg, #fff, #00000000 calc(var(--spread) * 2deg));
+    mask-image:
+      linear-gradient(#0000, #0000),
+      conic-gradient(from calc((var(--start) - var(--spread)) * 1deg),
+        #00000000 0deg, #fff, #00000000 calc(var(--spread) * 2deg));
+  }
+
+  /* ============================================================
+     LIQUID GLASS — kaca tipis dengan border gradien vertikal
+     ============================================================ */
+  .liquid-glass {
+    background: rgba(255, 255, 255, 0.01);
+    background-blend-mode: luminosity;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border: none;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+  }
+  .liquid-glass::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1.4px;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.45) 0%,
+      rgba(255, 255, 255, 0.15) 20%,
+      rgba(255, 255, 255, 0) 40%,
+      rgba(255, 255, 255, 0) 60%,
+      rgba(255, 255, 255, 0.15) 80%,
+      rgba(255, 255, 255, 0.45) 100%
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  .serif-accent {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  @keyframes iridescent {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [style*="fadeSlideIn"] { animation: none !important; }
+  }
+
+  /* Reveal on scroll */
+  .reveal { opacity:0; transform:translateY(24px); transition:opacity .7s ease, transform .7s cubic-bezier(.16,1,.3,1); }
+  .reveal.is-visible { opacity:1; transform:none; }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity:1; transform:none; transition:none; }
+    .glowing-effect .glow::after { transition:none; }
+  }
+
+  /* Hero grid texture */
+  .hero-grid {
+    background-image:
+      linear-gradient(#232836 1px, transparent 1px),
+      linear-gradient(90deg, #232836 1px, transparent 1px);
+    background-size: 72px 72px;
+    -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, #000 30%, transparent 75%);
+    mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, #000 30%, transparent 75%);
+  }
+
+  .gradient-text {
+    background: linear-gradient(100deg, #dd7bbb 0%, #d79f1e 35%, #5a922c 65%, #4c7894 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .marquee { display:flex; width:max-content; flex-wrap:nowrap; animation: marquee 30s linear infinite; }
+  .marquee-group { display:flex; align-items:center; flex-wrap:nowrap; gap:3.5rem; padding-right:3.5rem; }
+  .logo-item { display:inline-flex; align-items:center; gap:.6rem; white-space:nowrap;
+               font-family:'Geist',sans-serif; font-weight:600; font-size:.875rem;
+               color:#9aa3b5; letter-spacing:.02em; }
+  .logo-item img { display:block; opacity:.9; }
+  @keyframes marquee { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .marquee { animation:none; } }
+
+  html:focus-within { scroll-behavior:smooth; }
+  a:focus-visible, button:focus-visible { outline:2px solid #dd7bbb; outline-offset:3px; border-radius:6px; }
+
+  /* Label utility: Geist semibold, tidak tipis lagi */
+  .font-mono { font-weight: 600 !important; }
+</style>
+</head>
+
+<body class="antialiased font-body">
+
+<!-- ================= NAVBAR (liquid glass pill) ================= -->
+<header class="fixed top-4 inset-x-0 z-50 px-4">
+  <nav class="liquid-glass rounded-full max-w-5xl mx-auto px-6 py-3 flex items-center justify-between bg-ink/40">
+    <a href="#home" class="font-display font-700 text-lg tracking-tight">
+      <span class="gradient-text font-bold">codecuy</span><span class="text-soft">.dev</span>
+    </a>
+    <ul class="hidden md:flex items-center gap-8 text-sm font-medium text-white/80">
+      <li><a class="hover:text-white transition-colors" href="#tentang">Tentang</a></li>
+      <li><a class="hover:text-white transition-colors" href="#keahlian">Keahlian</a></li>
+      <li><a class="hover:text-white transition-colors" href="#proyek">Proyek</a></li>
+      <li><a class="hover:text-white transition-colors" href="#pengalaman">Pengalaman</a></li>
+      <li><a class="hover:text-white transition-colors" href="#testimoni">Testimoni</a></li>
+    </ul>
+    <a href="#kontak" class="liquid-glass rounded-full px-6 py-2 text-sm font-medium text-white hover:bg-white/5 transition-colors">Hubungi saya</a>
+  </nav>
+</header>
+
+<!-- Konten utama: z-10 di atas footer reveal -->
+<main id="page-main" class="relative z-10 bg-ink rounded-b-[2.5rem] shadow-[0_60px_120px_rgba(0,0,0,0.8)]">
+
+<!-- ================= 1 · HERO (card rail) ================= -->
+<section id="home" class="relative overflow-hidden">
+  <div class="absolute inset-0 hero-grid"></div>
+  <div class="absolute -top-32 left-1/2 -translate-x-1/2 w-[60rem] h-[30rem] rounded-full blur-[140px] opacity-20"
+       style="background:conic-gradient(from 90deg,#dd7bbb,#d79f1e,#5a922c,#4c7894,#dd7bbb)"></div>
+
+  <div class="relative max-w-7xl mx-auto pt-36 pb-28 px-6 sm:pt-36 sm:pb-28">
+
+    <!-- Badge (iridescent border) -->
+    <div class="flex justify-center" style="animation: fadeSlideIn 1s ease-out 0s both;">
+      <span class="relative inline-flex items-center gap-2 rounded-full text-sm font-medium text-white tracking-tight"
+            style="padding: 8px 24px; background: linear-gradient(135deg, #1a1a1a, #2d2d2d);">
+        <span class="absolute rounded-full pointer-events-none" aria-hidden="true"
+              style="left:-1px; top:-1px; width:calc(100% + 2px); height:calc(100% + 2px); z-index:-1;
+                     background:linear-gradient(90deg,#ff00ff,#00ffff,#ffff00,#ff00ff,#00ffff,#ffff00);
+                     background-size:200%; animation: iridescent 8s linear infinite;"></span>
+        <span class="absolute rounded-full pointer-events-none" aria-hidden="true"
+              style="left:-1px; top:-1px; width:calc(100% + 2px); height:calc(100% + 2px); z-index:-2;
+                     background:linear-gradient(90deg,#ff00ff,#00ffff,#ffff00,#ff00ff,#00ffff,#ffff00);
+                     background-size:200%; animation: iridescent 8s linear infinite;
+                     filter: blur(20px); opacity: 0.5;"></span>
+        <span class="relative z-30 flex h-2 w-2">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-leaf opacity-60"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-leaf"></span>
+        </span>
+        <span class="relative z-30 font-mono">Terbuka untuk proyek freelance &amp; full-time</span>
+      </span>
+    </div>
+
+    <!-- Headline -->
+    <div class="mx-auto max-w-3xl text-center mt-8" style="animation: fadeSlideIn 1s ease-out 0.1s both;">
+      <h1 class="font-display font-semibold tracking-tighter leading-[1.06] text-4xl sm:text-6xl lg:text-7xl">
+        Tampilkan karya ke
+        <span class="serif-accent block bg-gradient-to-r from-white to-neutral-400 bg-clip-text text-transparent">seluruh dunia.</span>
+      </h1>
+    </div>
+
+    <!-- Card rail -->
+    <div class="relative max-w-5xl mx-auto mt-12" style="animation: fadeSlideIn 1s ease-out 0.3s both;">
+
+      <!-- creator tag left -->
+      <div class="absolute -top-5 left-[12%] sm:-top-7 sm:left-[16%] z-50">
+        <div class="relative">
+          <span class="inline-flex items-center gap-2 text-sm font-medium text-white bg-pink rounded-full py-1.5 px-3.5 shadow-md">
+            frontend <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+          </span>
+          <span class="absolute -bottom-1 left-6 h-2 w-2 rotate-45 bg-pink"></span>
+        </div>
+      </div>
+
+      <!-- creator tag right -->
+      <div class="absolute -top-4 right-[10%] sm:-top-6 sm:right-[14%] z-50">
+        <div class="relative">
+          <span class="inline-flex items-center gap-2 text-sm font-medium text-white bg-sea rounded-full py-1.5 px-3.5 shadow-md">
+            designer <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+          </span>
+          <span class="absolute -bottom-1 left-6 h-2 w-2 rotate-45 bg-sea"></span>
+        </div>
+      </div>
+
+      <!-- Cards -->
+      <div class="flex justify-center">
+        <div class="grid grid-cols-6 gap-x-3 gap-y-3 sm:gap-4" id="card-grid-container">
+          <div class="card-item col-span-2 sm:col-span-1 self-end transform -rotate-[8deg] translate-y-3 sm:translate-y-5 transition-all duration-700 ease-out cursor-pointer hover:scale-105" data-card-index="0">
+            <div class="liquid-glass aspect-[3/4] rounded-2xl shadow-lg transition-shadow duration-500 hover:shadow-2xl">
+              <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80&auto=format&fit=crop" alt="Kode di editor" class="w-full h-full object-cover" loading="lazy">
+            </div>
+          </div>
+          <div class="card-item col-span-2 sm:col-span-1 self-end transform -rotate-2 translate-y-5 sm:translate-y-7 transition-all duration-700 ease-out cursor-pointer hover:scale-105" data-card-index="1">
+            <div class="liquid-glass aspect-[3/4] rounded-2xl shadow-lg transition-shadow duration-500 hover:shadow-2xl">
+              <img src="https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=800&q=80&auto=format&fit=crop" alt="Eksplorasi desain" class="w-full h-full object-cover" loading="lazy">
+            </div>
+          </div>
+          <div class="card-item col-span-2 sm:col-span-1 self-end transform rotate-3 translate-y-2 transition-all duration-700 ease-out cursor-pointer hover:scale-105" data-card-index="2">
+            <div class="liquid-glass aspect-[3/4] rounded-2xl shadow-lg transition-shadow duration-500 hover:shadow-2xl">
+              <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80&auto=format&fit=crop" alt="Dashboard analitik" class="w-full h-full object-cover" loading="lazy">
+            </div>
+          </div>
+          <div class="card-item col-span-2 sm:col-span-1 self-end transform rotate-0 -translate-y-1 transition-all duration-700 ease-out cursor-pointer hover:scale-105" data-card-index="3">
+            <div class="liquid-glass aspect-[3/4] rounded-2xl shadow-lg transition-shadow duration-500 hover:shadow-2xl">
+              <img src="https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=800&q=80&auto=format&fit=crop" alt="Desain antarmuka" class="w-full h-full object-cover" loading="lazy">
+            </div>
+          </div>
+          <div class="card-item col-span-2 sm:col-span-1 self-end transform -rotate-2 translate-y-3 transition-all duration-700 ease-out cursor-pointer hover:scale-105" data-card-index="4">
+            <div class="liquid-glass aspect-[3/4] rounded-2xl shadow-lg transition-shadow duration-500 hover:shadow-2xl">
+              <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80&auto=format&fit=crop" alt="Laptop dengan kode" class="w-full h-full object-cover" loading="lazy">
+            </div>
+          </div>
+          <div class="card-item col-span-2 sm:col-span-1 self-end transform rotate-6 translate-y-6 transition-all duration-700 ease-out cursor-pointer hover:scale-105" data-card-index="5">
+            <div class="liquid-glass aspect-[3/4] rounded-2xl shadow-lg transition-shadow duration-500 hover:shadow-2xl">
+              <img src="https://images.unsplash.com/photo-1522542550221-31fd19575a2d?w=800&q=80&auto=format&fit=crop" alt="Meja kerja desainer" class="w-full h-full object-cover" loading="lazy">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Subcopy -->
+    <p class="mx-auto mt-8 max-w-xl text-center text-base text-soft" style="animation: fadeSlideIn 1s ease-out 0.5s both;">
+      Halo, saya <span class="text-white font-medium">Codecuy</span> — frontend developer
+      yang membangun web cepat, aksesibel, dan penuh detail.
+    </p>
+
+    <!-- CTAs -->
+    <div class="mt-8 flex items-center justify-center gap-4" style="animation: fadeSlideIn 1s ease-out 0.7s both;">
+      <a href="#proyek" class="group relative inline-flex h-11 items-center justify-center rounded-full px-6 text-base font-semibold text-white/95 outline outline-1 outline-white/10 hover:outline-white/20 transition-all duration-500 hover:-translate-y-0.5">
+        <span class="absolute -inset-px overflow-hidden rounded-full" aria-hidden="true">
+          <span class="absolute inset-0 rounded-full" style="background:linear-gradient(140deg,rgba(15,15,17,1) 0%,rgba(30,30,33,1) 35%,rgba(45,45,50,1) 70%,rgba(20,20,22,1) 100%);"></span>
+          <span class="absolute -top-[52px] right-1 h-20 w-20 bg-pink opacity-20 mix-blend-lighten blur-[35px] rounded-full"></span>
+          <span class="absolute -bottom-[42px] -left-[19px] h-20 w-20 bg-sea opacity-15 mix-blend-lighten blur-[40px] rounded-full"></span>
+          <span class="absolute inset-0 overflow-hidden rounded-full">
+            <span class="absolute -left-1/2 top-0 h-full w-1/2 bg-white/15 opacity-0 skew-x-12 blur-sm transition-all duration-700 group-hover:opacity-30 group-hover:translate-x-[220%] rounded-full"></span>
+          </span>
+          <span class="absolute inset-0 ring-1 ring-inset ring-white/15 rounded-full"></span>
+        </span>
+        <span class="relative z-10">Lihat proyek</span>
+      </a>
+      <a href="#kontak" class="liquid-glass inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-medium text-white hover:bg-white/5 transition-colors">
+        Kirim pesan <i data-lucide="external-link" class="h-4 w-4"></i>
+      </a>
+    </div>
+  </div>
+  <div class="relative border-t border-line/60 py-5 overflow-hidden">
+    <div class="marquee" aria-label="Tech stack">
+      <div class="marquee-group"><span class="logo-item" title="React"><img src="https://cdn.simpleicons.org/react/61DAFB" alt="React" loading="lazy" width="26" height="26"><span>React</span></span><span class="logo-item" title="TypeScript"><img src="https://cdn.simpleicons.org/typescript/3178C6" alt="TypeScript" loading="lazy" width="26" height="26"><span>TypeScript</span></span><span class="logo-item" title="Tailwind CSS"><img src="https://cdn.simpleicons.org/tailwindcss/06B6D4" alt="Tailwind CSS" loading="lazy" width="26" height="26"><span>Tailwind CSS</span></span><span class="logo-item" title="Next.js"><img src="https://cdn.simpleicons.org/nextdotjs/FFFFFF" alt="Next.js" loading="lazy" width="26" height="26"><span>Next.js</span></span><span class="logo-item" title="Vue"><img src="https://cdn.simpleicons.org/vuedotjs/4FC08D" alt="Vue" loading="lazy" width="26" height="26"><span>Vue</span></span><span class="logo-item" title="Motion"><img src="https://cdn.simpleicons.org/framer/DD7BBB" alt="Motion" loading="lazy" width="26" height="26"><span>Motion</span></span><span class="logo-item" title="Vite"><img src="https://cdn.simpleicons.org/vite/646CFF" alt="Vite" loading="lazy" width="26" height="26"><span>Vite</span></span><span class="logo-item" title="Figma"><img src="https://cdn.simpleicons.org/figma/F24E1E" alt="Figma" loading="lazy" width="26" height="26"><span>Figma</span></span></div>
+      <div class="marquee-group" aria-hidden="true"><span class="logo-item" title="React"><img src="https://cdn.simpleicons.org/react/61DAFB" alt="React" loading="lazy" width="26" height="26"><span>React</span></span><span class="logo-item" title="TypeScript"><img src="https://cdn.simpleicons.org/typescript/3178C6" alt="TypeScript" loading="lazy" width="26" height="26"><span>TypeScript</span></span><span class="logo-item" title="Tailwind CSS"><img src="https://cdn.simpleicons.org/tailwindcss/06B6D4" alt="Tailwind CSS" loading="lazy" width="26" height="26"><span>Tailwind CSS</span></span><span class="logo-item" title="Next.js"><img src="https://cdn.simpleicons.org/nextdotjs/FFFFFF" alt="Next.js" loading="lazy" width="26" height="26"><span>Next.js</span></span><span class="logo-item" title="Vue"><img src="https://cdn.simpleicons.org/vuedotjs/4FC08D" alt="Vue" loading="lazy" width="26" height="26"><span>Vue</span></span><span class="logo-item" title="Motion"><img src="https://cdn.simpleicons.org/framer/DD7BBB" alt="Motion" loading="lazy" width="26" height="26"><span>Motion</span></span><span class="logo-item" title="Vite"><img src="https://cdn.simpleicons.org/vite/646CFF" alt="Vite" loading="lazy" width="26" height="26"><span>Vite</span></span><span class="logo-item" title="Figma"><img src="https://cdn.simpleicons.org/figma/F24E1E" alt="Figma" loading="lazy" width="26" height="26"><span>Figma</span></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 2 · TENTANG (panel bernomor + stat cards) ================= -->
+<section id="tentang" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-16 sm:py-24">
+  <div class="rounded-3xl px-0 py-0 sm:p-0 reveal">
+
+    <div class="mb-12 relative">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-x-6 gap-y-6 items-start">
+
+        <!-- Number + Eyebrow -->
+        <div class="lg:col-span-2 flex items-center lg:justify-start justify-between">
+          <span class="inline-flex items-center gap-2 rounded-full px-3 py-1 ring-1 ring-white/10 bg-white/[0.03]">
+            <span class="text-[11px] font-mono font-medium tracking-widest text-zinc-300">01</span>
+            <span class="h-3 w-px bg-white/10"></span>
+            <span class="text-[11px] font-mono tracking-wide text-zinc-400">Tentang saya</span>
+          </span>
+        </div>
+
+        <!-- Title + Subtitle -->
+        <div class="lg:col-span-7">
+          <h2 class="font-display text-4xl sm:text-5xl lg:text-6xl leading-[0.95] text-zinc-100 tracking-tighter font-semibold">
+            Kode adalah
+            <span class="serif-accent bg-clip-text text-transparent bg-gradient-to-r from-pink to-sea">bahasa desain</span>
+            saya.
+          </h2>
+          <p class="mt-4 text-sm sm:text-base text-zinc-400 max-w-2xl">
+            5 tahun di persimpangan desain &amp; engineering. Fokus saya: performa,
+            aksesibilitas, dan design system yang bisa diskalakan tim.
+          </p>
+        </div>
+
+        <!-- CTA: tombol animasi text-swap -->
+        <div class="lg:col-span-3 lg:justify-end flex flex-col sm:flex-row gap-2 sm:items-center">
+          <a href="#proyek" class="group inline-flex min-w-[180px] cursor-pointer overflow-hidden transition-all duration-[1000ms] ease-[cubic-bezier(0.15,0.83,0.66,1)] hover:-translate-y-[3px] hover:text-white text-base font-medium text-neutral-300 tracking-tight bg-white/5 h-[48px] border border-white/15 rounded-full py-3 px-6 relative items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40">
+            <span class="relative z-10 transition-all duration-500 ease-out group-hover:translate-y-8 group-hover:opacity-0 group-hover:blur-md">Lihat karya</span>
+            <span class="z-10 flex items-center justify-center transition-all duration-300 ease-in-out transform -translate-y-8 group-hover:translate-y-0 group-hover:opacity-100 group-hover:blur-none font-medium opacity-0 absolute inset-0">Lihat karya</span>
+            <span aria-hidden="true" class="absolute bottom-0 left-1/2 h-[1px] w-[70%] -translate-x-1/2 rounded-full bg-gradient-to-r from-transparent via-white/70 to-transparent transition-all duration-[1000ms] opacity-70 blur-[2px]"></span>
+            <span aria-hidden="true" class="absolute inset-0 rounded-full pointer-events-none bg-gradient-to-t from-white/15 via-white/10 to-transparent"></span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel dalam: stat cards -->
+    <div class="relative mt-8 sm:mt-8">
+      <div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-5">
+
+          <!-- Card 1 -->
+          <article class="liquid-glass rounded-2xl bg-panel/40 p-6 sm:p-8 flex flex-col justify-between">
+            <div class="flex items-start justify-between mb-6">
+              <span class="font-display text-5xl sm:text-6xl leading-none tracking-tighter font-semibold text-white">5+</span>
+              <div class="w-14 h-14 rounded-xl ring-1 ring-white/10 overflow-hidden bg-neutral-800">
+                <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=300&q=80&auto=format&fit=crop" alt="Workspace kode" loading="lazy" class="w-full h-full object-cover grayscale">
+              </div>
+            </div>
+            <p class="text-neutral-300 text-base leading-relaxed">Tahun di persimpangan desain &amp; engineering — sama nyamannya di Figma maupun terminal.</p>
+            <div class="mt-6">
+              <p class="text-xs text-neutral-500 font-mono uppercase tracking-widest">Pengalaman</p>
+              <p class="text-sm text-neutral-300 mt-1">Sejak 2019</p>
+            </div>
+          </article>
+
+          <!-- Card 2 (featured) -->
+          <article class="liquid-glass p-6 sm:p-8 flex flex-col justify-between rounded-2xl bg-gradient-to-b from-panel/80 to-ink hover:-translate-y-1 transition-all duration-500">
+            <div class="flex items-start justify-between mb-6">
+              <span class="font-display text-5xl sm:text-6xl leading-none tracking-tighter font-semibold bg-clip-text text-transparent bg-gradient-to-r from-pink to-gold">30+</span>
+              <div class="w-14 h-14 rounded-xl overflow-hidden ring-1 ring-white/10 bg-neutral-800">
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=300&q=80&auto=format&fit=crop" alt="Dashboard proyek" loading="lazy" class="w-full h-full object-cover">
+              </div>
+            </div>
+            <p class="text-neutral-100 text-lg leading-relaxed">Proyek selesai — dari e-commerce UMKM sampai dashboard analitik real-time, semua dengan Core Web Vitals hijau.</p>
+            <div class="mt-6">
+              <p class="text-xs text-neutral-400 font-mono uppercase tracking-widest">Portofolio</p>
+              <p class="text-sm text-neutral-200 mt-1">2019 — 2026</p>
+            </div>
+          </article>
+
+          <!-- Card 3 -->
+          <article class="liquid-glass rounded-2xl bg-panel/40 p-6 sm:p-8 flex flex-col justify-between">
+            <div class="flex items-start justify-between mb-6">
+              <span class="font-display text-5xl sm:text-6xl leading-none tracking-tighter font-semibold text-white">12</span>
+              <div class="w-14 h-14 rounded-xl ring-1 ring-white/10 overflow-hidden bg-neutral-800">
+                <img src="https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=300&q=80&auto=format&fit=crop" alt="Design system" loading="lazy" class="w-full h-full object-cover grayscale">
+              </div>
+            </div>
+            <p class="text-neutral-300 text-base leading-relaxed">Design system dibangun &amp; didokumentasikan — dipakai tim untuk rilis fitur dua kali lebih cepat.</p>
+            <div class="mt-6">
+              <p class="text-xs text-neutral-500 font-mono uppercase tracking-widest">Sistem</p>
+              <p class="text-sm text-neutral-300 mt-1">Tailwind · Storybook</p>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 3 · KEAHLIAN (showcase kiri + teks kanan) ================= -->
+<section id="keahlian" class="max-w-7xl mx-auto px-4 sm:px-6 mt-16 sm:mt-24 md:mt-32 pb-12 relative">
+  <div class="grid gap-12 lg:grid-cols-2 items-start">
+
+    <!-- KIRI: kartu showcase dengan ilustrasi mock editor -->
+    <div class="reveal bg-[url(https://images.unsplash.com/photo-1557683316-973673baf926?w=1200&q=80&auto=format&fit=crop)] bg-cover rounded-[36px] p-5 relative"
+         style="mask-image: linear-gradient(130deg, transparent, black 10%, black 70%, transparent); -webkit-mask-image: linear-gradient(130deg, transparent, black 10%, black 70%, transparent);">
+      <article class="liquid-glass group relative transition-shadow hover:shadow-md bg-black/70 rounded-3xl shadow-xl backdrop-blur-xl">
+        <div class="p-6 sm:p-10">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+            <h3 class="text-2xl font-semibold tracking-tight text-white font-display">Frontend Toolkit</h3>
+            <span class="inline-flex items-center gap-2 text-[10px] sm:text-xs text-white/80 bg-white/5 border border-white/10 rounded-full px-2.5 py-1 backdrop-blur-sm">
+              <i data-lucide="sparkles" class="w-4 h-4 text-leaf"></i> Dipakai tiap hari
+            </span>
+          </div>
+
+          <!-- Ilustrasi: komposisi jendela editor + panel -->
+          <div class="relative h-56 sm:h-64 rounded-2xl bg-gradient-to-b from-white/5 to-white/10 ring-1 ring-inset ring-white/5 mb-8 backdrop-blur-sm">
+
+            <!-- Jendela editor utama -->
+            <div class="absolute right-3 sm:right-6 top-4 sm:top-6 w-[78%] h-[68%] rounded-2xl bg-black/90 backdrop-blur border border-white/10 shadow-sm">
+              <div class="flex items-center justify-between px-3 py-2 border-b border-white/10">
+                <div class="flex gap-1.5">
+                  <div class="w-2 h-2 rounded-full bg-red-400"></div>
+                  <div class="w-2 h-2 rounded-full bg-yellow-400"></div>
+                  <div class="w-2 h-2 rounded-full bg-green-400"></div>
+                </div>
+                <span class="text-[10px] sm:text-xs tracking-tight text-white/60">app.tsx — codecuy.dev</span>
+              </div>
+              <div class="p-3 space-y-2">
+                <div class="flex items-center gap-2 bg-leaf/10 border border-leaf/20 rounded-lg px-2 py-1.5">
+                  <div class="w-3 h-3 bg-leaf rounded"></div>
+                  <div class="flex-1"><div class="h-1.5 w-20 bg-leaf/40 rounded"></div></div>
+                  <i data-lucide="check" class="w-3 h-3 text-leaf"></i>
+                </div>
+                <div class="flex items-center gap-2 bg-white/5 border border-white/10 rounded-lg px-2 py-1.5">
+                  <div class="w-3 h-3 bg-pink/40 rounded"></div>
+                  <div class="flex-1"><div class="h-1.5 w-16 bg-white/20 rounded"></div></div>
+                </div>
+                <div class="flex items-center gap-2 bg-white/5 border border-white/10 rounded-lg px-2 py-1.5">
+                  <div class="w-3 h-3 bg-sea/50 rounded"></div>
+                  <div class="flex-1"><div class="h-1.5 w-24 bg-white/20 rounded"></div></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Panel design system -->
+            <div class="absolute left-6 sm:left-12 bottom-10 sm:bottom-12 w-[62%] h-[52%] rounded-2xl bg-black/90 backdrop-blur border border-white/10 shadow-sm">
+              <div class="flex items-center justify-between px-3 py-2 border-b border-white/10">
+                <span class="text-[10px] sm:text-xs tracking-widest text-white/60">DESIGN SYSTEM</span>
+              </div>
+              <div class="p-2 space-y-1.5">
+                <div class="flex items-center gap-2 text-xs bg-pink/10 border border-pink/20 rounded px-2 py-1">
+                  <div class="w-2 h-2 bg-pink rounded-full"></div><span class="text-white/80">Button (12 varian)</span>
+                </div>
+                <div class="flex items-center gap-2 text-xs bg-sea/10 border border-sea/30 rounded px-2 py-1">
+                  <div class="w-2 h-2 bg-sea rounded-full"></div><span class="text-white/80">Form (8 varian)</span>
+                </div>
+                <div class="flex items-center gap-2 text-xs bg-gold/10 border border-gold/20 rounded px-2 py-1">
+                  <div class="w-2 h-2 bg-gold rounded-full"></div><span class="text-white/80">Card (6 varian)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Panel skor -->
+            <div class="absolute left-3 sm:left-6 bottom-3 sm:bottom-4 w-[38%] h-[44%] rounded-2xl bg-black/90 backdrop-blur border border-white/10 shadow-sm">
+              <div class="flex items-center justify-between px-3 py-2 border-b border-white/10">
+                <span class="text-[10px] sm:text-xs tracking-widest text-white/60">LIGHTHOUSE</span>
+              </div>
+              <div class="p-2 space-y-2">
+                <div class="flex items-center gap-1.5"><i data-lucide="gauge" class="w-3 h-3 text-leaf"></i><div class="h-1 w-12 bg-leaf/40 rounded"></div></div>
+                <div class="flex items-center gap-1.5"><i data-lucide="accessibility" class="w-3 h-3 text-white/40"></i><div class="h-1 w-10 bg-white/20 rounded"></div></div>
+                <div class="flex items-center gap-1.5"><i data-lucide="search" class="w-3 h-3 text-white/40"></i><div class="h-1 w-14 bg-white/20 rounded"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Grid fitur -->
+          <div class="grid grid-cols-1 md:grid-cols-2 mb-8 gap-6">
+            <div>
+              <h4 class="text-lg font-semibold text-white tracking-tight font-display">UI Engineering</h4>
+              <p class="mt-2 text-sm text-white/60">React, Next.js, dan Vue — komponen modular yang terukur, teruji, dan siap serah terima.</p>
+            </div>
+            <div>
+              <h4 class="text-lg font-semibold tracking-tight text-white font-display">Design System</h4>
+              <p class="mt-2 text-sm text-white/60">Token terpusat dengan Tailwind &amp; Storybook — satu sumber kebenaran untuk seluruh tim.</p>
+            </div>
+          </div>
+
+          <a href="#proyek" class="inline-flex items-center gap-2 text-xs font-medium text-white/90 hover:text-white">
+            Lihat penerapannya <i data-lucide="arrow-right" class="h-4 w-4"></i>
+          </a>
+        </div>
+      </article>
+    </div>
+
+    <!-- KANAN: copy + daftar + statistik -->
+    <div class="reveal">
+      <p class="font-mono text-xs uppercase tracking-[0.3em] text-gold mb-3">Keahlian</p>
+      <h2 class="text-4xl sm:text-5xl font-semibold text-white tracking-tight font-display transition-colors duration-500">
+        Yang saya kerjakan <span class="serif-accent text-white/60">setiap hari</span>.
+      </h2>
+
+      <div class="mt-8">
+        <div class="border-t border-white/10 pt-6">
+          <h4 class="text-lg font-semibold text-white mb-4 font-display">Empat pilar utama</h4>
+          <div class="space-y-4">
+            <div class="flex items-start gap-3">
+              <div class="flex-shrink-0 w-8 h-8 rounded-full bg-pink/10 flex items-center justify-center mt-0.5">
+                <i data-lucide="layout-template" class="w-4 h-4 text-pink"></i>
+              </div>
+              <div>
+                <h5 class="font-medium text-white">UI Engineering</h5>
+                <p class="text-sm text-white/60 mt-1">Arsitektur komponen React, Next.js, dan Vue dengan TypeScript yang ketat.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="flex-shrink-0 w-8 h-8 rounded-full bg-gold/10 flex items-center justify-center mt-0.5">
+                <i data-lucide="paintbrush" class="w-4 h-4 text-gold"></i>
+              </div>
+              <div>
+                <h5 class="font-medium text-white">Design System</h5>
+                <p class="text-sm text-white/60 mt-1">Tailwind &amp; Storybook — library komponen yang dipakai lintas produk.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="flex-shrink-0 w-8 h-8 rounded-full bg-leaf/10 flex items-center justify-center mt-0.5">
+                <i data-lucide="gauge" class="w-4 h-4 text-leaf"></i>
+              </div>
+              <div>
+                <h5 class="font-medium text-white">Performa Web</h5>
+                <p class="text-sm text-white/60 mt-1">Audit Lighthouse, optimasi bundle, Core Web Vitals hijau di setiap rilis.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="flex-shrink-0 w-8 h-8 rounded-full bg-sea/10 flex items-center justify-center mt-0.5">
+                <i data-lucide="sparkles" class="w-4 h-4 text-sea"></i>
+              </div>
+              <div>
+                <h5 class="font-medium text-white">Animasi &amp; Interaksi</h5>
+                <p class="text-sm text-white/60 mt-1">Motion, GSAP, dan CSS modern — micro-interaction yang bikin produk hidup.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-t border-white/10 pt-6 mt-8">
+        <div class="grid gap-6 sm:grid-cols-2">
+          <div class="flex gap-3 hover:scale-105 transition-transform duration-200 cursor-default items-center">
+            <div>
+              <span class="text-2xl tracking-tight font-display font-medium text-white">98/100</span>
+              <p class="text-xs text-white/60">Rata-rata skor Lighthouse</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 hover:scale-105 transition-transform duration-200 cursor-default">
+            <div>
+              <span class="text-2xl tracking-tight font-display font-medium text-white">60+</span>
+              <p class="text-xs text-white/60">Komponen reusable dibangun</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-t border-white/10 pt-6 mt-8">
+        <a href="#kontak" class="inline-flex items-center justify-center gap-2 h-10 text-sm font-medium text-ink bg-white hover:bg-pink transition rounded-full px-4">
+          Diskusikan kebutuhanmu <i data-lucide="arrow-right" class="h-4 w-4"></i>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 3b · CARA KERJA (feature-section-with-hover-effects, port vanilla) ============ -->
+<section id="cara-kerja" class="py-28 border-t border-line/60">
+  <div class="mx-auto max-w-7xl px-5">
+    <p class="font-mono text-xs uppercase tracking-[0.3em] text-pink mb-3 reveal text-center">Cara saya bekerja</p>
+    <h2 class="font-display text-4xl md:text-5xl font-bold tracking-tight mb-4 reveal text-center">Kenapa bekerja dengan saya.</h2>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-5 mt-10 reveal">
+  <div id="work-rows" class="space-y-4 overflow-hidden">
+<div class="work-row flex gap-4 md:w-[115%] md:-ml-[7.5%] will-change-transform" data-dir="1">
+<div class="feature liquid-glass rounded-2xl bg-panel/30 flex flex-col py-10 relative group/feature shrink-0 w-[17rem] md:w-auto md:flex-1 md:min-w-0">
+      <div class="opacity-0 group-hover/feature:opacity-100 transition duration-200 absolute inset-0 h-full w-full bg-gradient-to-t from-panel to-transparent pointer-events-none"></div>
+      <div class="mb-4 relative z-10 px-10 text-soft"><i data-lucide="terminal" class="h-6 w-6"></i></div>
+      <div class="text-lg font-bold mb-2 relative z-10 px-10">
+        <div class="absolute left-0 inset-y-0 h-6 group-hover/feature:h-8 w-1 rounded-tr-full rounded-br-full bg-line group-hover/feature:bg-pink transition-all duration-200 origin-center"></div>
+        <span class="group-hover/feature:translate-x-2 transition duration-200 inline-block text-white font-display">Dibangun untuk developer</span>
+      </div>
+      <p class="text-sm text-soft max-w-xs relative z-10 px-10">Kode rapi, terdokumentasi, mudah diserahterimakan.</p>
+    </div>
+<div class="feature liquid-glass rounded-2xl bg-panel/30 flex flex-col py-10 relative group/feature shrink-0 w-[17rem] md:w-auto md:flex-1 md:min-w-0">
+      <div class="opacity-0 group-hover/feature:opacity-100 transition duration-200 absolute inset-0 h-full w-full bg-gradient-to-t from-panel to-transparent pointer-events-none"></div>
+      <div class="mb-4 relative z-10 px-10 text-soft"><i data-lucide="mouse-pointer-click" class="h-6 w-6"></i></div>
+      <div class="text-lg font-bold mb-2 relative z-10 px-10">
+        <div class="absolute left-0 inset-y-0 h-6 group-hover/feature:h-8 w-1 rounded-tr-full rounded-br-full bg-line group-hover/feature:bg-pink transition-all duration-200 origin-center"></div>
+        <span class="group-hover/feature:translate-x-2 transition duration-200 inline-block text-white font-display">Mudah digunakan</span>
+      </div>
+      <p class="text-sm text-soft max-w-xs relative z-10 px-10">UI intuitif tanpa perlu manual.</p>
+    </div>
+<div class="feature liquid-glass rounded-2xl bg-panel/30 flex flex-col py-10 relative group/feature shrink-0 w-[17rem] md:w-auto md:flex-1 md:min-w-0">
+      <div class="opacity-0 group-hover/feature:opacity-100 transition duration-200 absolute inset-0 h-full w-full bg-gradient-to-t from-panel to-transparent pointer-events-none"></div>
+      <div class="mb-4 relative z-10 px-10 text-soft"><i data-lucide="badge-dollar-sign" class="h-6 w-6"></i></div>
+      <div class="text-lg font-bold mb-2 relative z-10 px-10">
+        <div class="absolute left-0 inset-y-0 h-6 group-hover/feature:h-8 w-1 rounded-tr-full rounded-br-full bg-line group-hover/feature:bg-pink transition-all duration-200 origin-center"></div>
+        <span class="group-hover/feature:translate-x-2 transition duration-200 inline-block text-white font-display">Harga transparan</span>
+      </div>
+      <p class="text-sm text-soft max-w-xs relative z-10 px-10">Estimasi jelas di awal, tanpa biaya tersembunyi.</p>
+    </div>
+<div class="feature liquid-glass rounded-2xl bg-panel/30 flex flex-col py-10 relative group/feature shrink-0 w-[17rem] md:w-auto md:flex-1 md:min-w-0">
+      <div class="opacity-0 group-hover/feature:opacity-100 transition duration-200 absolute inset-0 h-full w-full bg-gradient-to-t from-panel to-transparent pointer-events-none"></div>
+      <div class="mb-4 relative z-10 px-10 text-soft"><i data-lucide="cloud" class="h-6 w-6"></i></div>
+      <div class="text-lg font-bold mb-2 relative z-10 px-10">
+        <div class="absolute left-0 inset-y-0 h-6 group-hover/feature:h-8 w-1 rounded-tr-full rounded-br-full bg-line group-hover/feature:bg-pink transition-all duration-200 origin-center"></div>
+        <span class="group-hover/feature:translate-x-2 transition duration-200 inline-block text-white font-display">Deploy &amp; uptime</span>
+      </div>
+      <p class="text-sm text-soft max-w-xs relative z-10 px-10">CI/CD, monitoring, dan hosting tertata.</p>
+    </div>
+</div>
+<div class="work-row flex gap-4 md:w-[115%] md:-ml-[7.5%] will-change-transform" data-dir="-1">
+<div class="feature liquid-glass rounded-2xl bg-panel/30 flex flex-col py-10 relative group/feature shrink-0 w-[17rem] md:w-auto md:flex-1 md:min-w-0">
+      <div class="opacity-0 group-hover/feature:opacity-100 transition duration-200 absolute inset-0 h-full w-full bg-gradient-to-b from-panel to-transparent pointer-events-none"></div>
+      <div class="mb-4 relative z-10 px-10 text-soft"><i data-lucide="git-branch" class="h-6 w-6"></i></div>
+      <div class="text-lg font-bold mb-2 relative z-10 px-10">
+        <div class="absolute left-0 inset-y-0 h-6 group-hover/feature:h-8 w-1 rounded-tr-full rounded-br-full bg-line group-hover/feature:bg-pink transition-all duration-200 origin-center"></div>
+        <span class="group-hover/feature:translate-x-2 transition duration-200 inline-block text-white font-display">Kolaboratif</span>
+      </div>
+      <p class="text-sm text-soft max-w-xs relative z-10 px-10">Git flow rapi, code review, komunikasi terbuka.</p>
+    </div>
+<div class="feature liquid-glass rounded-2xl bg-panel/30 flex flex-col py-10 relative group/feature shrink-0 w-[17rem] md:w-auto md:flex-1 md:min-w-0">
+      <div class="opacity-0 group-hover/feature:opacity-100 transition duration-200 absolute inset-0 h-full w-full bg-gradient-to-b from-panel to-transparent pointer-events-none"></div>
+      <div class="mb-4 relative z-10 px-10 text-soft"><i data-lucide="circle-help" class="h-6 w-6"></i></div>
+      <div class="text-lg font-bold mb-2 relative z-10 px-10">
+        <div class="absolute left-0 inset-y-0 h-6 group-hover/feature:h-8 w-1 rounded-tr-full rounded-br-full bg-line group-hover/feature:bg-pink transition-all duration-200 origin-center"></div>
+        <span class="group-hover/feature:translate-x-2 transition duration-200 inline-block text-white font-display">Support responsif</span>
+      </div>
+      <p class="text-sm text-soft max-w-xs relative z-10 px-10">Perbaikan bug cepat setelah rilis.</p>
+    </div>
+<div class="feature liquid-glass rounded-2xl bg-panel/30 flex flex-col py-10 relative group/feature shrink-0 w-[17rem] md:w-auto md:flex-1 md:min-w-0">
+      <div class="opacity-0 group-hover/feature:opacity-100 transition duration-200 absolute inset-0 h-full w-full bg-gradient-to-b from-panel to-transparent pointer-events-none"></div>
+      <div class="mb-4 relative z-10 px-10 text-soft"><i data-lucide="sliders-horizontal" class="h-6 w-6"></i></div>
+      <div class="text-lg font-bold mb-2 relative z-10 px-10">
+        <div class="absolute left-0 inset-y-0 h-6 group-hover/feature:h-8 w-1 rounded-tr-full rounded-br-full bg-line group-hover/feature:bg-pink transition-all duration-200 origin-center"></div>
+        <span class="group-hover/feature:translate-x-2 transition duration-200 inline-block text-white font-display">Revisi terukur</span>
+      </div>
+      <p class="text-sm text-soft max-w-xs relative z-10 px-10">Iterasi cepat sampai hasilnya pas.</p>
+    </div>
+<div class="feature liquid-glass rounded-2xl bg-panel/30 flex flex-col py-10 relative group/feature shrink-0 w-[17rem] md:w-auto md:flex-1 md:min-w-0">
+      <div class="opacity-0 group-hover/feature:opacity-100 transition duration-200 absolute inset-0 h-full w-full bg-gradient-to-b from-panel to-transparent pointer-events-none"></div>
+      <div class="mb-4 relative z-10 px-10 text-soft"><i data-lucide="heart" class="h-6 w-6"></i></div>
+      <div class="text-lg font-bold mb-2 relative z-10 px-10">
+        <div class="absolute left-0 inset-y-0 h-6 group-hover/feature:h-8 w-1 rounded-tr-full rounded-br-full bg-line group-hover/feature:bg-pink transition-all duration-200 origin-center"></div>
+        <span class="group-hover/feature:translate-x-2 transition duration-200 inline-block text-white font-display">Detail &amp; rasa</span>
+      </div>
+      <p class="text-sm text-soft max-w-xs relative z-10 px-10">Micro-interaction yang bikin produk terasa hidup.</p>
+    </div>
+</div>
+  </div>
+  </div>
+</section>
+
+<!-- ================= 4 · PROYEK (bento + glowing effect) ================= -->
+<section id="proyek" class="mx-auto max-w-6xl px-5 py-28 border-t border-line/60">
+  <p class="font-mono text-xs uppercase tracking-[0.3em] text-leaf mb-3 reveal">Proyek pilihan</p>
+  <h2 class="font-display text-4xl md:text-5xl font-bold tracking-tight mb-14 reveal">Karya yang saya banggakan.</h2>
+
+  <ul class="grid grid-cols-1 gap-4 md:grid-cols-12 md:grid-rows-3 xl:max-h-[34rem] xl:grid-rows-2">
+
+    <li class="min-h-[14rem] list-none reveal md:[grid-area:1/1/2/7] xl:[grid-area:1/1/2/5]">
+      <div class="glow-capture liquid-glass relative h-full rounded-[1.25rem] p-2 md:rounded-[1.5rem] md:p-3 bg-panel/20">
+        <div class="glowing-effect" data-glow><div class="glow"></div></div>
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border-[0.75px] border-line bg-panel">
+          <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=900&q=80&auto=format&fit=crop"
+               alt="Etalase toko retail" loading="lazy" class="h-32 w-full object-cover flex-1 min-h-0">
+          <div class="p-5">
+            <h3 class="font-display text-lg md:text-xl font-semibold tracking-[-0.04em]">Lokal — E-commerce UMKM</h3>
+            <p class="mt-1 text-sm text-soft">Storefront Next.js, LCP 1,1 detik.</p>
+          </div>
+        </div>
+      </div>
+    </li>
+
+    <li class="min-h-[14rem] list-none reveal md:[grid-area:1/7/2/13] xl:[grid-area:2/1/3/5]">
+      <div class="glow-capture liquid-glass relative h-full rounded-[1.25rem] p-2 md:rounded-[1.5rem] md:p-3 bg-panel/20">
+        <div class="glowing-effect" data-glow><div class="glow"></div></div>
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border-[0.75px] border-line bg-panel">
+          <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=900&q=80&auto=format&fit=crop"
+               alt="Dashboard analitik di layar" loading="lazy" class="h-32 w-full object-cover flex-1 min-h-0">
+          <div class="p-5">
+            <h3 class="font-display text-lg md:text-xl font-semibold tracking-[-0.04em]">Arus — Dashboard Analitik</h3>
+            <p class="mt-1 text-sm text-soft">40 chart real-time, D3 + React.</p>
+          </div>
+        </div>
+      </div>
+    </li>
+
+    <li class="min-h-[14rem] list-none reveal md:[grid-area:2/1/3/7] xl:[grid-area:1/5/3/8]">
+      <div class="glow-capture liquid-glass relative h-full rounded-[1.25rem] p-2 md:rounded-[1.5rem] md:p-3 bg-panel/20">
+        <div class="glowing-effect" data-glow><div class="glow"></div></div>
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border-[0.75px] border-line bg-panel">
+          <img src="https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=900&q=80&auto=format&fit=crop"
+               alt="Desain antarmuka di layar" loading="lazy" class="w-full object-cover flex-1 min-h-0">
+          <div class="p-5">
+            <h3 class="font-display text-lg md:text-2xl font-semibold tracking-[-0.04em]">Nusantara UI — Design System</h3>
+            <p class="mt-1 text-sm md:text-base text-soft">60+ komponen open-source, 2.000+ developer.</p>
+          </div>
+        </div>
+      </div>
+    </li>
+
+    <li class="min-h-[14rem] list-none reveal md:[grid-area:2/7/3/13] xl:[grid-area:1/8/2/13]">
+      <div class="glow-capture liquid-glass relative h-full rounded-[1.25rem] p-2 md:rounded-[1.5rem] md:p-3 bg-panel/20">
+        <div class="glowing-effect" data-glow><div class="glow"></div></div>
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border-[0.75px] border-line bg-panel">
+          <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=900&q=80&auto=format&fit=crop"
+               alt="Teknologi kesehatan" loading="lazy" class="h-32 w-full object-cover flex-1 min-h-0">
+          <div class="p-5">
+            <h3 class="font-display text-lg md:text-xl font-semibold tracking-[-0.04em]">Sehat+ — PWA Kesehatan</h3>
+            <p class="mt-1 text-sm text-soft">Offline-first untuk klinik daerah.</p>
+          </div>
+        </div>
+      </div>
+    </li>
+
+    <li class="min-h-[14rem] list-none reveal md:[grid-area:3/1/4/13] xl:[grid-area:2/8/3/13]">
+      <div class="glow-capture liquid-glass relative h-full rounded-[1.25rem] p-2 md:rounded-[1.5rem] md:p-3 bg-panel/20">
+        <div class="glowing-effect" data-glow><div class="glow"></div></div>
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border-[0.75px] border-line bg-panel">
+          <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=900&q=80&auto=format&fit=crop"
+               alt="Pemandangan alam untuk situs travel" loading="lazy" class="h-32 w-full object-cover flex-1 min-h-0">
+          <div class="p-5">
+            <h3 class="font-display text-lg md:text-xl font-semibold tracking-[-0.04em]">Kelana — Landing Travel</h3>
+            <p class="mt-1 text-sm text-soft">Scrollytelling WebGL &amp; Motion.</p>
+          </div>
+        </div>
+      </div>
+    </li>
+
+  </ul>
+</section>
+
+<!-- ================= 5 · PENGALAMAN (panel bernomor) ================= -->
+<section id="pengalaman" class="mx-auto max-w-6xl px-5 py-28 border-t border-line/60">
+  <p class="font-mono text-xs uppercase tracking-[0.3em] text-sea mb-3 reveal">Pengalaman</p>
+  <h2 class="font-display text-4xl md:text-5xl font-bold tracking-tight mb-14 reveal">Perjalanan <span class="serif-accent text-white/60">karier</span>.</h2>
+
+  <div class="space-y-4 reveal">
+    <div class="liquid-glass rounded-2xl bg-panel/30 flex items-end justify-between p-6">
+      <h3 class="text-2xl sm:text-3xl tracking-tight font-semibold text-white font-display">Riwayat kerja</h3>
+      <div class="hidden sm:flex items-center gap-2">
+        <a href="#" class="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-medium tracking-tight text-white bg-white/10 hover:bg-white/20 ring-1 ring-white/10">
+          <i data-lucide="download" class="w-3.5 h-3.5"></i><span>Unduh CV</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Row 1 -->
+    <div class="liquid-glass rounded-2xl bg-panel/30 p-6 sm:p-8">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+        <div class="md:col-span-1"><div class="text-3xl sm:text-4xl font-medium tracking-tight text-white/70 tabular-nums font-display">1</div></div>
+        <div class="md:col-span-8">
+          <ul class="space-y-2">
+            <li class="flex items-start gap-2 text-sm text-neutral-300"><i data-lucide="check" class="w-3.5 h-3.5 mt-0.5 text-leaf shrink-0"></i><span>Memimpin migrasi ke Next.js App Router</span></li>
+            <li class="flex items-start gap-2 text-sm text-neutral-300"><i data-lucide="check" class="w-3.5 h-3.5 mt-0.5 text-leaf shrink-0"></i><span>Membangun design system internal (60+ komponen)</span></li>
+            <li class="flex items-start gap-2 text-sm text-neutral-300"><i data-lucide="check" class="w-3.5 h-3.5 mt-0.5 text-leaf shrink-0"></i><span>Mementori 4 engineer junior</span></li>
+          </ul>
+          <div class="mt-4 flex items-center gap-3">
+            <div class="aspect-[16/10] w-28 sm:w-32 rounded-md overflow-hidden ring-1 ring-white/10">
+              <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&q=80&auto=format&fit=crop" alt="Kode di laptop" loading="lazy" class="w-full h-full object-cover">
+            </div>
+            <div class="aspect-[16/10] w-28 sm:w-32 rounded-md overflow-hidden ring-1 ring-white/10">
+              <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=400&q=80&auto=format&fit=crop" alt="Tim bekerja dengan laptop" loading="lazy" class="w-full h-full object-cover">
+            </div>
+          </div>
+        </div>
+        <div class="md:col-span-3 md:text-right">
+          <h4 class="text-lg sm:text-xl tracking-tight font-semibold text-white font-display">Senior Frontend Engineer</h4>
+          <p class="text-xs text-neutral-400 mt-1">TechNova · 2023 — Sekarang</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 2 -->
+    <div class="liquid-glass rounded-2xl bg-panel/30 p-6 sm:p-8">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+        <div class="md:col-span-1"><div class="text-3xl sm:text-4xl font-medium tracking-tight text-white/70 tabular-nums font-display">2</div></div>
+        <div class="md:col-span-8">
+          <ul class="space-y-2">
+            <li class="flex items-start gap-2 text-sm text-neutral-300"><i data-lucide="check" class="w-3.5 h-3.5 mt-0.5 text-leaf shrink-0"></i><span>15+ website klien: brand marketing sampai dashboard SaaS</span></li>
+            <li class="flex items-start gap-2 text-sm text-neutral-300"><i data-lucide="check" class="w-3.5 h-3.5 mt-0.5 text-leaf shrink-0"></i><span>Fokus animasi &amp; performa (skor Lighthouse hijau)</span></li>
+            <li class="flex items-start gap-2 text-sm text-neutral-300"><i data-lucide="check" class="w-3.5 h-3.5 mt-0.5 text-leaf shrink-0"></i><span>Honorable mention Awwwards untuk proyek Kelana</span></li>
+          </ul>
+          <div class="mt-4 flex items-center gap-3">
+            <div class="aspect-[16/10] w-28 sm:w-32 rounded-md overflow-hidden ring-1 ring-white/10">
+              <img src="https://images.unsplash.com/photo-1522542550221-31fd19575a2d?w=400&q=80&auto=format&fit=crop" alt="Meja kerja desainer" loading="lazy" class="w-full h-full object-cover grayscale">
+            </div>
+            <div class="aspect-[16/10] w-28 sm:w-32 rounded-md overflow-hidden ring-1 ring-white/10">
+              <img src="https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=400&q=80&auto=format&fit=crop" alt="Eksplorasi desain" loading="lazy" class="w-full h-full object-cover grayscale">
+            </div>
+          </div>
+        </div>
+        <div class="md:col-span-3 md:text-right">
+          <h4 class="text-lg sm:text-xl tracking-tight font-semibold text-white font-display">Frontend Developer</h4>
+          <p class="text-xs text-neutral-400 mt-1">Studio Pixel · 2021 — 2023</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 3 -->
+    <div class="liquid-glass rounded-2xl bg-panel/30 p-6 sm:p-8">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+        <div class="md:col-span-1"><div class="text-3xl sm:text-4xl font-medium tracking-tight text-white/70 tabular-nums font-display">3</div></div>
+        <div class="md:col-span-8">
+          <ul class="space-y-2">
+            <li class="flex items-start gap-2 text-sm text-neutral-300"><i data-lucide="check" class="w-3.5 h-3.5 mt-0.5 text-leaf shrink-0"></i><span>Mengubah desain Figma menjadi halaman responsif</span></li>
+            <li class="flex items-start gap-2 text-sm text-neutral-300"><i data-lucide="check" class="w-3.5 h-3.5 mt-0.5 text-leaf shrink-0"></i><span>Fundamental aksesibilitas (WCAG)</span></li>
+            <li class="flex items-start gap-2 text-sm text-neutral-300"><i data-lucide="check" class="w-3.5 h-3.5 mt-0.5 text-leaf shrink-0"></i><span>CSS architecture &amp; utility-first workflow</span></li>
+          </ul>
+          <div class="mt-4 flex items-center gap-3">
+            <div class="aspect-[16/10] w-32 sm:w-40 rounded-md overflow-hidden ring-1 ring-white/10">
+              <img src="https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=400&q=80&auto=format&fit=crop" alt="Desain antarmuka" loading="lazy" class="w-full h-full object-cover">
+            </div>
+            <div class="aspect-[16/10] w-32 sm:w-40 rounded-md overflow-hidden ring-1 ring-white/10">
+              <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&q=80&auto=format&fit=crop" alt="Kode di editor" loading="lazy" class="w-full h-full object-cover">
+            </div>
+          </div>
+        </div>
+        <div class="md:col-span-3 md:text-right">
+          <h4 class="text-lg sm:text-xl tracking-tight font-semibold text-white font-display">Junior Web Developer</h4>
+          <p class="text-xs text-neutral-400 mt-1">Kreatif Digital · 2019 — 2021</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="liquid-glass rounded-2xl bg-panel/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6 sm:p-8">
+      <p class="text-sm text-neutral-300">Butuh detail lengkap? CV terbaru siap dikirim dalam 24 jam.</p>
+      <div class="flex items-center gap-3">
+        <a href="#kontak" class="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium tracking-tight text-ink bg-white hover:bg-pink transition-colors">
+          <i data-lucide="calendar" class="w-4 h-4"></i><span>Jadwalkan call</span>
+        </a>
+        <a href="#" class="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium tracking-tight text-white bg-white/10 hover:bg-white/20 ring-1 ring-white/10">
+          <i data-lucide="file-text" class="w-4 h-4"></i><span>Minta CV</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 6 · TESTIMONI (pinned horizontal velocity scroll) ================= -->
+<section id="testimoni" class="relative border-t border-line/60" style="height:320vh">
+  <div class="sticky top-0 h-screen flex flex-col justify-center overflow-hidden">
+    <div class="mx-auto max-w-6xl px-5 w-full mb-10">
+      <p class="font-mono text-xs uppercase tracking-[0.3em] text-gold mb-3">Testimoni</p>
+      <h2 class="font-display text-4xl md:text-5xl font-bold tracking-tight">Kata <span class="serif-accent text-white/60">mereka</span> tentang saya.</h2>
+    </div>
+
+    <div id="h-track" class="flex gap-6 will-change-transform pl-[6vw] pr-[6vw]">
+
+      <figure class="liquid-glass shrink-0 w-[20rem] md:w-[26rem] rounded-3xl p-8 bg-panel/40 flex flex-col justify-between gap-8">
+        <blockquote class="text-lg md:text-xl leading-relaxed text-white/90">"Websitenya bukan cuma cepat — detail animasinya bikin brand kami terasa premium."</blockquote>
+        <figcaption class="flex items-center gap-4">
+          <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&q=80&auto=format&fit=crop" alt="Foto Dimas" loading="lazy" class="h-12 w-12 rounded-full object-cover ring-1 ring-white/10">
+          <div><p class="font-display font-semibold">Dimas Aditya</p><p class="text-sm text-soft">CEO, Lokal</p></div>
+        </figcaption>
+      </figure>
+
+      <figure class="liquid-glass shrink-0 w-[20rem] md:w-[26rem] rounded-3xl p-8 bg-panel/40 flex flex-col justify-between gap-8">
+        <blockquote class="text-lg md:text-xl leading-relaxed text-white/90">"Design system dari Codecuy memangkas waktu rilis fitur kami hampir setengahnya."</blockquote>
+        <figcaption class="flex items-center gap-4">
+          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80&auto=format&fit=crop" alt="Foto Nadia" loading="lazy" class="h-12 w-12 rounded-full object-cover ring-1 ring-white/10">
+          <div><p class="font-display font-semibold">Nadia Kusuma</p><p class="text-sm text-soft">Head of Product, Arus</p></div>
+        </figcaption>
+      </figure>
+
+      <figure class="liquid-glass shrink-0 w-[20rem] md:w-[26rem] rounded-3xl p-8 bg-panel/40 flex flex-col justify-between gap-8">
+        <blockquote class="text-lg md:text-xl leading-relaxed text-white/90">"Komunikasinya jelas, estimasinya jujur, dan hasilnya selalu di atas ekspektasi."</blockquote>
+        <figcaption class="flex items-center gap-4">
+          <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80&auto=format&fit=crop" alt="Foto Bima" loading="lazy" class="h-12 w-12 rounded-full object-cover ring-1 ring-white/10">
+          <div><p class="font-display font-semibold">Bima Saputra</p><p class="text-sm text-soft">Founder, Kelana</p></div>
+        </figcaption>
+      </figure>
+
+      <figure class="liquid-glass shrink-0 w-[20rem] md:w-[26rem] rounded-3xl p-8 bg-panel/40 flex flex-col justify-between gap-8">
+        <blockquote class="text-lg md:text-xl leading-relaxed text-white/90">"Skor Lighthouse kami hijau semua sejak dipegang Codecuy. Konversi ikut naik."</blockquote>
+        <figcaption class="flex items-center gap-4">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80&auto=format&fit=crop" alt="Foto Ayu" loading="lazy" class="h-12 w-12 rounded-full object-cover ring-1 ring-white/10">
+          <div><p class="font-display font-semibold">Ayu Lestari</p><p class="text-sm text-soft">Marketing Lead, Sehat+</p></div>
+        </figcaption>
+      </figure>
+
+      <figure class="liquid-glass shrink-0 w-[20rem] md:w-[26rem] rounded-3xl p-8 bg-panel/40 flex flex-col justify-between gap-8">
+        <blockquote class="text-lg md:text-xl leading-relaxed text-white/90">"Jarang ketemu engineer yang peduli aksesibilitas sedetail ini."</blockquote>
+        <figcaption class="flex items-center gap-4">
+          <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&q=80&auto=format&fit=crop" alt="Foto Raden" loading="lazy" class="h-12 w-12 rounded-full object-cover ring-1 ring-white/10">
+          <div><p class="font-display font-semibold">Raden Wijaya</p><p class="text-sm text-soft">CTO, Nusantara UI</p></div>
+        </figcaption>
+      </figure>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= 7 · KONTAK (split + form) ================= -->
+<section id="kontak" class="border-t border-line/60">
+  <div class="mx-auto max-w-6xl px-5 py-28">
+    <div class="grid md:grid-cols-2 gap-12 items-start">
+
+      <!-- Kiri: heading + info -->
+      <div class="reveal">
+        <p class="font-mono text-xs uppercase tracking-[0.3em] text-pink mb-4">Kontak</p>
+        <h2 class="font-display font-bold tracking-tight text-[clamp(2.25rem,5vw,4rem)] leading-tight">
+          Ceritakan <span class="serif-accent text-white/60">ide kamu</span>,<br>saya yang eksekusi.
+        </h2>
+        <ul class="mt-10 space-y-5">
+          <li class="flex items-center gap-4 text-soft">
+            <span class="liquid-glass rounded-full p-3 inline-flex text-white/80"><i data-lucide="mail" class="h-5 w-5"></i></span>
+            <div><p class="text-white font-medium">halo@codecuy.dev</p><p class="text-sm">Balasan &lt; 24 jam</p></div>
+          </li>
+          <li class="flex items-center gap-4 text-soft">
+            <span class="liquid-glass rounded-full p-3 inline-flex text-white/80"><i data-lucide="map-pin" class="h-5 w-5"></i></span>
+            <div><p class="text-white font-medium">Bekasi, Indonesia</p><p class="text-sm">Remote-friendly, zona WIB</p></div>
+          </li>
+          <li class="flex items-center gap-4 text-soft">
+            <span class="liquid-glass rounded-full p-3 inline-flex text-white/80"><i data-lucide="calendar-check" class="h-5 w-5"></i></span>
+            <div><p class="text-white font-medium">Slot tersedia</p><p class="text-sm">Mulai Agustus 2026</p></div>
+          </li>
+        </ul>
+        <div class="mt-10 flex gap-4">
+          <a href="#" aria-label="GitHub" class="liquid-glass rounded-full p-4 text-white/80 hover:text-white hover:bg-white/5 transition-all inline-flex"><i data-lucide="github" class="h-5 w-5"></i></a>
+          <a href="#" aria-label="LinkedIn" class="liquid-glass rounded-full p-4 text-white/80 hover:text-white hover:bg-white/5 transition-all inline-flex"><i data-lucide="linkedin" class="h-5 w-5"></i></a>
+          <a href="#" aria-label="Dribbble" class="liquid-glass rounded-full p-4 text-white/80 hover:text-white hover:bg-white/5 transition-all inline-flex"><i data-lucide="dribbble" class="h-5 w-5"></i></a>
+        </div>
+      </div>
+
+      <!-- Kanan: form liquid glass -->
+      <div class="glow-capture liquid-glass relative rounded-[1.5rem] p-2 bg-panel/20 reveal">
+        <div class="glowing-effect" data-glow><div class="glow"></div></div>
+        <form id="contact-form" class="relative liquid-glass rounded-2xl bg-panel/50 p-6 md:p-8 space-y-5">
+          <div>
+            <label for="cf-nama" class="block text-sm font-medium text-white/80 mb-2">Nama</label>
+            <input id="cf-nama" type="text" required placeholder="Nama kamu"
+                   class="w-full rounded-xl bg-ink/60 border border-line px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none focus:border-pink transition-colors">
+          </div>
+          <div>
+            <label for="cf-email" class="block text-sm font-medium text-white/80 mb-2">Email</label>
+            <input id="cf-email" type="email" required placeholder="nama@email.com"
+                   class="w-full rounded-xl bg-ink/60 border border-line px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none focus:border-pink transition-colors">
+          </div>
+          <div>
+            <label for="cf-pesan" class="block text-sm font-medium text-white/80 mb-2">Pesan</label>
+            <textarea id="cf-pesan" rows="4" required placeholder="Ceritakan proyek atau ide kamu…"
+                      class="w-full rounded-xl bg-ink/60 border border-line px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none focus:border-pink transition-colors resize-none"></textarea>
+          </div>
+          <button type="submit"
+                  class="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-white text-ink font-semibold px-6 py-3.5 hover:bg-pink transition-colors">
+            Kirim pesan <i data-lucide="send" class="h-4 w-4"></i>
+          </button>
+          <p class="text-xs text-white/40 text-center">Tombol ini membuka aplikasi email kamu dengan pesan yang sudah terisi.</p>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- Spacer setinggi footer supaya konten bisa "terangkat" dan footer terlihat -->
+<div id="footer-spacer" class="h-[75vh]" aria-hidden="true"></div>
+
+<!-- ================= FOOTER (overlapping reveal) ================= -->
+<footer id="site-footer" class="fixed bottom-0 inset-x-0 h-[75vh] z-0 flex flex-col justify-end overflow-hidden bg-[#07080c]">
+  <div class="absolute inset-0 hero-grid opacity-60"></div>
+  <div class="absolute -bottom-40 left-1/2 -translate-x-1/2 w-[70rem] h-[26rem] rounded-full blur-[140px] opacity-15"
+       style="background:conic-gradient(from 90deg,#dd7bbb,#d79f1e,#5a922c,#4c7894,#dd7bbb)"></div>
+
+  <div id="footer-inner" class="relative mx-auto max-w-6xl px-5 w-full pt-20" style="opacity:0; transform:translateY(60px);">
+    <div class="grid md:grid-cols-12 gap-10">
+      <div class="md:col-span-6">
+        <p class="font-mono text-xs uppercase tracking-[0.3em] text-soft mb-4">codecuy.dev</p>
+        <p class="text-soft max-w-sm">Frontend developer di Bekasi, membangun web yang cepat, aksesibel, dan penuh detail.</p>
+      </div>
+      <div class="md:col-span-3">
+        <p class="font-mono text-xs uppercase tracking-[0.3em] text-soft mb-4">Navigasi</p>
+        <ul class="space-y-2 text-soft">
+          <li><a href="#tentang" class="hover:text-white transition-colors">Tentang</a></li>
+          <li><a href="#proyek" class="hover:text-white transition-colors">Proyek</a></li>
+          <li><a href="#testimoni" class="hover:text-white transition-colors">Testimoni</a></li>
+          <li><a href="#kontak" class="hover:text-white transition-colors">Kontak</a></li>
+        </ul>
+      </div>
+      <div class="md:col-span-3">
+        <p class="font-mono text-xs uppercase tracking-[0.3em] text-soft mb-4">Sosial</p>
+        <ul class="space-y-2 text-soft">
+          <li><a href="#" class="hover:text-white transition-colors">GitHub</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">LinkedIn</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">halo@codecuy.dev</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-10 flex items-center justify-between text-sm text-soft border-t border-line/40 pt-6">
+      <p>© 2026 Codecuy</p>
+      <p class="font-mono">HTML + Tailwind + Motion</p>
+    </div>
+  </div>
+
+  <h2 id="footer-wordmark" class="relative font-display font-bold tracking-tighter leading-none text-center select-none pointer-events-none
+             text-[clamp(5rem,18vw,16rem)] bg-gradient-to-b from-white/25 to-white/0 bg-clip-text text-transparent -mb-6 md:-mb-10"
+      style="opacity:0; transform:translateY(80px);">
+    codecuy.dev
+  </h2>
+</footer>
+
+<script>
+/* =====================================================================
+   GLOWING EFFECT — port vanilla JS dari komponen React glowing-effect.tsx
+   Perilaku identik: sudut gradien mengikuti pointer, zona non-aktif di
+   tengah, animasi sudut memakai Motion (easing [0.16, 1, 0.3, 1]).
+   ===================================================================== */
+(function () {
+  const { animate } = window.Motion;
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const items = Array.from(document.querySelectorAll('[data-glow]')).map((el) => ({
+    el,
+    spread: parseFloat(el.dataset.spread || '40'),
+    proximity: parseFloat(el.dataset.proximity || '64'),
+    inactiveZone: parseFloat(el.dataset.inactiveZone || '0.01'),
+    movementDuration: 2,
+    raf: 0,
+    anim: null,
+  }));
+
+  items.forEach((it) => it.el.style.setProperty('--spread', String(it.spread)));
+
+  const last = { x: 0, y: 0 };
+
+  function handleMove(item, e) {
+    if (item.raf) cancelAnimationFrame(item.raf);
+    item.raf = requestAnimationFrame(() => {
+      const element = item.el;
+      const { left, top, width, height } = element.getBoundingClientRect();
+      const mouseX = e ? e.x : last.x;
+      const mouseY = e ? e.y : last.y;
+      if (e) { last.x = mouseX; last.y = mouseY; }
+
+      const center = [left + width * 0.5, top + height * 0.5];
+      const distanceFromCenter = Math.hypot(mouseX - center[0], mouseY - center[1]);
+      const inactiveRadius = 0.5 * Math.min(width, height) * item.inactiveZone;
+
+      if (distanceFromCenter < inactiveRadius) {
+        element.style.setProperty('--active', '0');
+        return;
+      }
+
+      const isActive =
+        mouseX > left - item.proximity &&
+        mouseX < left + width + item.proximity &&
+        mouseY > top - item.proximity &&
+        mouseY < top + height + item.proximity;
+
+      element.style.setProperty('--active', isActive ? '1' : '0');
+      if (!isActive) return;
+
+      const currentAngle = parseFloat(element.style.getPropertyValue('--start')) || 0;
+      const targetAngle = (180 * Math.atan2(mouseY - center[1], mouseX - center[0])) / Math.PI + 90;
+      const angleDiff = ((targetAngle - currentAngle + 180) % 360) - 180;
+      const newAngle = currentAngle + angleDiff;
+
+      if (prefersReduced) {
+        element.style.setProperty('--start', String(newAngle));
+        return;
+      }
+      if (item.anim) item.anim.stop();
+      item.anim = animate(currentAngle, newAngle, {
+        duration: item.movementDuration,
+        ease: [0.16, 1, 0.3, 1],
+        onUpdate: (value) => element.style.setProperty('--start', String(value)),
+      });
+    });
+  }
+
+  document.body.addEventListener('pointermove', (e) => {
+    items.forEach((item) => handleMove(item, e));
+  }, { passive: true });
+
+  window.addEventListener('scroll', () => {
+    items.forEach((item) => handleMove(item));
+  }, { passive: true });
+})();
+
+/* Reveal on scroll */
+(function () {
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((en) => {
+      if (en.isIntersecting) { en.target.classList.add('is-visible'); io.unobserve(en.target); }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+})();
+
+/* Hero card rail — klik untuk fokus satu kartu, klik lagi / di luar untuk reset */
+(function () {
+  const container = document.getElementById('card-grid-container');
+  if (!container) return;
+  const cards = container.querySelectorAll('.card-item');
+  let activeCard = null;
+
+  function resetCards() {
+    cards.forEach((c) => {
+      c.style.filter = '';
+      c.style.opacity = '';
+      c.style.transform = '';
+      c.style.zIndex = '';
+    });
+    activeCard = null;
+  }
+
+  cards.forEach((card) => {
+    card.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (activeCard === card) { resetCards(); return; }
+      cards.forEach((c) => {
+        c.style.filter = 'blur(8px)';
+        c.style.opacity = '0.4';
+        c.style.transform = '';
+        c.style.zIndex = '1';
+        c.style.transition = 'all 0.7s ease-out';
+      });
+      card.style.filter = 'blur(0px)';
+      card.style.opacity = '1';
+      card.style.transform = 'translate(0,0) rotate(0deg) scale(1.15)';
+      card.style.zIndex = '10';
+      activeCard = card;
+    });
+  });
+
+  document.addEventListener('click', (e) => {
+    if (activeCard && !container.contains(e.target)) resetCards();
+  });
+})();
+
+/* =====================================================================
+   TESTIMONI — pinned horizontal scroll + velocity skew (versi stabil)
+   - Posisi dihitung dari offsetTop absolut, bukan getBoundingClientRect
+     berulang (lebih konsisten saat resize / lazy image load)
+   - maxShift dihitung ulang tiap frame supaya aman saat gambar termuat
+   - rAF hanya aktif saat section berada di viewport
+   ===================================================================== */
+(function () {
+  const section = document.getElementById('testimoni');
+  const track = document.getElementById('h-track');
+  if (!section || !track) return;
+
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let sectionTop = 0, sectionHeight = 0;
+  let currentX = 0, skew = 0, lastX = 0;
+  let running = false;
+
+  function measure() {
+    const rect = section.getBoundingClientRect();
+    sectionTop = rect.top + window.scrollY;
+    sectionHeight = section.offsetHeight;
+  }
+
+  function frame() {
+    const vh = window.innerHeight;
+    const total = Math.max(1, sectionHeight - vh);
+    const progress = Math.min(1, Math.max(0, (window.scrollY - sectionTop) / total));
+    const maxShift = Math.max(0, track.scrollWidth - document.documentElement.clientWidth);
+    const targetX = -progress * maxShift;
+
+    if (prefersReduced) {
+      track.style.transform = `translateX(${targetX}px)`;
+    } else {
+      currentX += (targetX - currentX) * 0.1;
+      if (Math.abs(targetX - currentX) < 0.1) currentX = targetX;
+      const velocity = currentX - lastX;
+      lastX = currentX;
+      const targetSkew = Math.max(-5, Math.min(5, velocity * 0.15));
+      skew += (targetSkew - skew) * 0.12;
+      if (Math.abs(skew) < 0.02) skew = 0;
+      track.style.transform = `translateX(${currentX.toFixed(2)}px) skewX(${skew.toFixed(2)}deg)`;
+    }
+
+    // hanya terus animasi jika section masih relevan di viewport
+    const inView = window.scrollY + vh > sectionTop && window.scrollY < sectionTop + sectionHeight;
+    if (inView || Math.abs(skew) > 0.02) {
+      requestAnimationFrame(frame);
+    } else {
+      running = false;
+    }
+  }
+
+  function start() {
+    if (!running) { running = true; requestAnimationFrame(frame); }
+  }
+
+  window.addEventListener('scroll', start, { passive: true });
+  window.addEventListener('resize', () => { measure(); start(); });
+  window.addEventListener('load', () => { measure(); start(); });
+  measure();
+  start();
+})();
+
+/* =====================================================================
+   FOOTER REVEAL — opacity + translateY mengikuti progres scroll
+   Saat spacer mulai terlihat, konten footer memudar masuk (0 → 1)
+   dan naik dari bawah; wordmark raksasa menyusul sedikit lebih lambat.
+   ===================================================================== */
+(function () {
+  const spacer = document.getElementById('footer-spacer');
+  const inner = document.getElementById('footer-inner');
+  const wordmark = document.getElementById('footer-wordmark');
+  if (!spacer || !inner) return;
+
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let ticking = false;
+
+  function apply() {
+    ticking = false;
+    const rect = spacer.getBoundingClientRect();
+    const vh = window.innerHeight;
+    // progress: 0 saat spacer baru menyentuh bawah viewport, 1 saat spacer penuh terlihat
+    const progress = Math.min(1, Math.max(0, (vh - rect.top) / rect.height));
+    const eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+
+    if (prefersReduced) {
+      inner.style.opacity = progress > 0 ? '1' : '0';
+      inner.style.transform = 'none';
+      if (wordmark) { wordmark.style.opacity = progress > 0 ? '1' : '0'; wordmark.style.transform = 'none'; }
+      return;
+    }
+
+    inner.style.opacity = eased.toFixed(3);
+    inner.style.transform = `translateY(${(1 - eased) * 60}px)`;
+    if (wordmark) {
+      const wEased = Math.min(1, Math.max(0, (progress - 0.15) / 0.85));
+      const w = 1 - Math.pow(1 - wEased, 3);
+      wordmark.style.opacity = w.toFixed(3);
+      wordmark.style.transform = `translateY(${(1 - w) * 80}px)`;
+    }
+  }
+
+  function onScroll() {
+    if (!ticking) { ticking = true; requestAnimationFrame(apply); }
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  apply();
+})();
+
+/* =====================================================================
+   CARA KERJA — dua baris kartu bergeser berlawanan arah saat scroll
+   Baris 1 → kanan, baris 2 → kiri, mengikuti posisi section di viewport,
+   dengan lerp halus dan hormat pada prefers-reduced-motion.
+   ===================================================================== */
+(function () {
+  const wrap = document.getElementById('work-rows');
+  if (!wrap) return;
+  const rows = Array.from(wrap.querySelectorAll('.work-row'));
+  if (!rows.length) return;
+
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReduced) return; // biarkan statis
+
+  const state = rows.map(() => ({ current: 0, target: 0 }));
+  let running = false;
+
+  function amplitude() {
+    // buffer aman: baris lebih lebar 15% dari container di desktop
+    return Math.min(90, window.innerWidth * 0.06);
+  }
+
+  function measure() {
+    const rect = wrap.getBoundingClientRect();
+    const vh = window.innerHeight;
+    // progress 0 → 1 selama blok melintasi viewport
+    const progress = Math.min(1, Math.max(0, (vh - rect.top) / (vh + rect.height)));
+    const t = (progress - 0.5) * 2; // -1 … 1
+    rows.forEach((row, i) => {
+      const dir = parseFloat(row.dataset.dir || '1');
+      state[i].target = t * amplitude() * dir;
+    });
+  }
+
+  function frame() {
+    let active = false;
+    rows.forEach((row, i) => {
+      const s = state[i];
+      s.current += (s.target - s.current) * 0.1;
+      if (Math.abs(s.target - s.current) > 0.1) active = true;
+      row.style.transform = `translateX(${s.current.toFixed(2)}px)`;
+    });
+    if (active) requestAnimationFrame(frame);
+    else running = false;
+  }
+
+  function onScroll() {
+    measure();
+    if (!running) { running = true; requestAnimationFrame(frame); }
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  onScroll();
+})();
+
+/* Contact form → buka mailto dengan isi terisi */
+(function () {
+  const form = document.getElementById('contact-form');
+  if (!form) return;
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const nama = document.getElementById('cf-nama').value.trim();
+    const email = document.getElementById('cf-email').value.trim();
+    const pesan = document.getElementById('cf-pesan').value.trim();
+    const subject = encodeURIComponent(`Halo dari ${nama}`);
+    const body = encodeURIComponent(`${pesan}\n\n— ${nama} (${email})`);
+    window.location.href = `mailto:halo@codecuy.dev?subject=${subject}&body=${body}`;
+  });
+})();
+
+/* Lucide icons */
+lucide.createIcons();
+</script>
+</body>
+</html>

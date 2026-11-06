@@ -1,4 +1,10 @@
-import { beginnerPackage, businessPackage, formatRupiah, starterPackage } from "@/lib/commerce";
+import {
+  beginnerPackage,
+  businessPackage,
+  formatRupiah,
+  starterPackage,
+  staticLandingPackage,
+} from "@/lib/commerce";
 
 export const siteConfig = {
   name: "NALARA",
@@ -19,6 +25,11 @@ export function getWhatsAppUrl(number: string, message?: string): string {
 export const defaultWhatsAppMessage =
   "Halo NALARA, saya ingin konsultasi paket pembuatan website untuk bisnis saya. Nama bisnis: ... Jenis produk/jasa: ... Paket yang diminati: ...";
 
+export const getStaticLandingWhatsAppMessage = (templateName?: string) =>
+  templateName
+    ? `Halo NALARA, saya tertarik pesan Paket Landing Page Statis (${formatRupiah(staticLandingPackage.price)}) dengan template "${templateName}". Nama bisnis: ... Jenis produk/jasa: ... Catatan kebutuhan: ...`
+    : `Halo NALARA, saya tertarik pesan Paket Landing Page Statis (${formatRupiah(staticLandingPackage.price)}). Nama bisnis: ... Pilihan template/demo: ... Catatan kebutuhan: ...`;
+
 export const getBeginnerWhatsAppMessage = () =>
   `Halo NALARA, saya tertarik pesan Paket Beginner (${formatRupiah(beginnerPackage.price)}). Nama bisnis: ... Jenis produk/jasa: ... Catatan kebutuhan: ...`;
 
@@ -31,6 +42,11 @@ export const getBusinessWhatsAppMessage = () =>
 export const getConsultationWhatsAppUrl = (number: string = siteConfig.whatsappNumber) =>
   getWhatsAppUrl(number, defaultWhatsAppMessage);
 
+export const getStaticLandingWhatsAppUrl = (
+  number: string = siteConfig.whatsappNumber,
+  templateName?: string
+) => getWhatsAppUrl(number, getStaticLandingWhatsAppMessage(templateName));
+
 export const getBeginnerWhatsAppUrl = (number: string = siteConfig.whatsappNumber) =>
   getWhatsAppUrl(number, getBeginnerWhatsAppMessage());
 
@@ -42,6 +58,7 @@ export const getBusinessWhatsAppUrl = (number: string = siteConfig.whatsappNumbe
 
 // Backward-compatible exports with default number
 export const whatsappUrl = getConsultationWhatsAppUrl(siteConfig.whatsappNumber);
+export const staticLandingWhatsappUrl = getStaticLandingWhatsAppUrl(siteConfig.whatsappNumber);
 export const beginnerWhatsappUrl = getBeginnerWhatsAppUrl(siteConfig.whatsappNumber);
 export const starterWhatsappUrl = getStarterWhatsAppUrl(siteConfig.whatsappNumber);
 export const businessWhatsappUrl = getBusinessWhatsAppUrl(siteConfig.whatsappNumber);

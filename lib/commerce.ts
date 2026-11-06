@@ -1,3 +1,22 @@
+export const staticLandingPackage = {
+  id: "website-static-landing",
+  name: "Landing Page Statis",
+  subtitle: "Template Siap Pakai",
+  description: "Landing page statis cepat saji hemat biaya. Pilih dari 10+ template modern yang telah kami siapkan.",
+  price: 200_000,
+  regularPrice: 350_000,
+  currency: "IDR",
+  badge: "Paling Hemat",
+  features: [
+    "Pilihan 10+ Template HTML Modern (Cek Demo)",
+    "1 Halaman Landing Page Statis Ringan & Cepat",
+    "Desain Responsif (Mobile & Desktop)",
+    "Integrasi Tombol WhatsApp & Media Sosial",
+    "Gratis File Source Code Lengkap (.html & assets)",
+    "Pengerjaan Kilat 1-2 Hari Kerja",
+  ],
+} as const;
+
 export const beginnerPackage = {
   id: "website-beginner",
   name: "Beginner",
@@ -64,13 +83,14 @@ export const businessPackage = {
   ],
 } as const;
 
-export const allPackages = [beginnerPackage, starterPackage, businessPackage] as const;
+export const allPackages = [staticLandingPackage, beginnerPackage, starterPackage, businessPackage] as const;
 
 export function formatRupiah(amount: number) {
   return `Rp${new Intl.NumberFormat("id-ID", { maximumFractionDigits: 0 }).format(amount)}`;
 }
 
 export function getPackageById(packageId: unknown) {
+  if (packageId === staticLandingPackage.id) return staticLandingPackage;
   if (packageId === beginnerPackage.id) return beginnerPackage;
   if (packageId === starterPackage.id) return starterPackage;
   if (packageId === businessPackage.id) return businessPackage;

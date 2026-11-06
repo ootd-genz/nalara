@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codecuy — Luxury Travel, Weddings & Exclusive Stays</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Playfair Display & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet">
+    
+    <!-- Custom styling to match original site typography and visual depth -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FFFFFF;
+            color: #18191C;
+        }
+        .font-editorial {
+            font-family: 'Playfair Display', Georgia, serif;
+        }
+        .editorial-underline {
+            position: relative;
+            display: inline-block;
+        }
+        .editorial-underline::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0px;
+            width: 100%;
+            height: 1.2px;
+            background-color: #18191C;
+            transform: scaleX(1);
+            transform-origin: bottom left;
+            transition: transform 0.5s ease;
+        }
+        .editorial-underline:hover::after {
+            transform: scaleX(0);
+            transform-origin: bottom right;
+        }
+        /* Custom scrollbar for premium editorial look */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FFFFFF;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #E5E7EB;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #BF1826;
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden antialiased selection:bg-[#BF1826] selection:text-white">
+
+    <!-- ================= FLOATING COOKIE WIDGETS ================= -->
+    <!-- Floating Revisit Consent Widget -->
+    <div id="ckyRevisitBtn" class="fixed bottom-6 left-6 z-50 transition-all duration-300 transform hover:scale-105 hidden">
+        <button onclick="openCookieModal()" class="w-12 h-12 bg-[#BF1826] hover:bg-[#8F121C] rounded-full flex items-center justify-center shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-[#BF1826] focus:ring-offset-2" aria-label="Consent Preferences">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='1.5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z'/%3E%3C/svg%3E" alt="Revisit consent button" class="w-6 h-6 invert">
+        </button>
+    </div>
+
+    <!-- Bottom Cookie Consent Banner -->
+    <div id="ckyConsentBanner" class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-100 shadow-2xl z-50 transform translate-y-0 transition-all duration-500 ease-out">
+        <div class="max-w-7xl mx-auto px-6 py-6 md:py-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="text-sm text-[#18191C] max-w-3xl leading-relaxed">
+                We use cookies on our website to give you the most relevant experience by remembering your preferences and repeat visits. By clicking “Accept”, you consent to the use of ALL the cookies. <a href="#" target="_blank" class="underline hover:text-[#BF1826] transition-colors">Cookie Policy</a>
+            </div>
+            <div class="flex items-center gap-4 w-full md:w-auto justify-end">
+                <button onclick="openCookieModal()" class="text-xs uppercase tracking-widest font-semibold text-[#BF1826] hover:text-[#8F121C] py-3 px-6 transition-colors">
+                    Customise
+                </button>
+                <button onclick="acceptAllCookies()" class="bg-[#BF1826] hover:bg-[#8F121C] text-white text-xs uppercase tracking-widest font-semibold py-3 px-8 rounded-[2px] transition-colors shadow-sm">
+                    Accept
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cookie Privacy Center Modal -->
+    <div id="ckyPreferenceModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
+        <div class="bg-white max-w-3xl w-full h-[80vh] flex flex-col justify-between shadow-2xl transform scale-95 transition-transform duration-300">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between p-6 border-b border-gray-100">
+                <h3 class="font-editorial text-2xl font-normal text-[#18191C]">Privacy Overview</h3>
+                <button onclick="closeCookieModal()" class="p-1 hover:opacity-75 transition-opacity">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000000' stroke-width='1.5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M6 18L18 6M6 6l12 12'/%3E%3C/svg%3E" alt="Close" class="w-4 h-4">
+                </button>
+            </div>
+
+            <!-- Modal Content (Scrollable Categories Accordion) -->
+            <div class="p-6 overflow-y-auto space-y-6 flex-grow">
+                <p class="text-sm text-gray-600 leading-relaxed">
+                    This website uses cookies to improve your experience while you navigate through the website. Out of these, the cookies that are categorized as necessary are stored on your browser as they are essential for the working of basic functionalities of the website. We also use third-party cookies that help us analyze and understand how you use this website. These cookies will be stored in your browser only with your consent. You also have the option to opt-out of these cookies. But opting out of some of these cookies may affect your browsing experience.
+                </p>
+
+                <!-- Accordions -->
+                <div class="border-t border-gray-100 space-y-4 pt-4">
+                    <!-- Category: Necessary -->
+                    <div class="border-b border-gray-100 pb-4">
+                        <div class="flex items-center justify-between">
+                            <button onclick="toggleAccordion('necessaryAcc')" class="font-semibold text-sm uppercase tracking-wider text-[#18191C] hover:text-[#BF1826] flex items-center gap-2">
+                                <span>Necessary</span>
+                                <span class="text-[10px] text-green-600 bg-green-50 px-2 py-0.5 font-sans rounded-full">Always Active</span>
+                            </button>
+                        </div>
+                        <div id="necessaryAcc" class="mt-2 text-xs text-gray-500 leading-relaxed">
+                            Necessary cookies are required to enable the basic features of this site, such as providing secure log-in or adjusting your consent preferences. These cookies do not store any personally identifiable data.
+                            <div class="mt-2 p-3 bg-gray-50 text-[11px] italic">No cookies to display.</div>
+                        </div>
+                    </div>
+
+                    <!-- Category: Functional -->
+                    <div class="border-b border-gray-100 pb-4">
+                        <div class="flex items-center justify-between">
+                            <button onclick="toggleAccordion('functionalAcc')" class="font-semibold text-sm uppercase tracking-wider text-[#18191C] hover:text-[#BF1826] flex items-center gap-2">
+                                <span>Functional</span>
+                            </button>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" class="sr-only peer">
+                                <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#BF1826]"></div>
+                            </label>
+                        </div>
+                        <div id="functionalAcc" class="mt-2 text-xs text-gray-500 leading-relaxed hidden">
+                            Functional cookies help perform certain functionalities like sharing the content of the website on social media platforms, collecting feedback, and other third-party features.
+                            <div class="mt-2 p-3 bg-gray-50 text-[11px] italic">No cookies to display.</div>
+                        </div>
+                    </div>
+
+                    <!-- Category: Analytics -->
+                    <div class="border-b border-gray-100 pb-4">
+                        <div class="flex items-center justify-between">
+                            <button onclick="toggleAccordion('analyticsAcc')" class="font-semibold text-sm uppercase tracking-wider text-[#18191C] hover:text-[#BF1826] flex items-center gap-2">
+                                <span>Analytics</span>
+                            </button>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" class="sr-only peer">
+                                <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#BF1826]"></div>
+                            </label>
+                        </div>
+                        <div id="analyticsAcc" class="mt-2 text-xs text-gray-500 leading-relaxed hidden">
+                            Analytical cookies are used to understand how visitors interact with the website. These cookies help provide information on metrics such as the number of visitors, bounce rate, traffic source, etc.
+                            <div class="mt-2 p-3 bg-gray-50 text-[11px] italic">No cookies to display.</div>
+                        </div>
+                    </div>
+
+                    <!-- Category: Performance -->
+                    <div class="border-b border-gray-100 pb-4">
+                        <div class="flex items-center justify-between">
+                            <button onclick="toggleAccordion('performanceAcc')" class="font-semibold text-sm uppercase tracking-wider text-[#18191C] hover:text-[#BF1826] flex items-center gap-2">
+                                <span>Performance</span>
+                            </button>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" class="sr-only peer">
+                                <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#BF1826]"></div>
+                            </label>
+                        </div>
+                        <div id="performanceAcc" class="mt-2 text-xs text-gray-500 leading-relaxed hidden">
+                            Performance cookies are used to understand and analyse the key performance indexes of the website which helps in delivering a better user experience for the visitors.
+                            <div class="mt-2 p-3 bg-gray-50 text-[11px] italic">No cookies to display.</div>
+                        </div>
+                    </div>
+
+                    <!-- Category: Advertisement -->
+                    <div class="border-b border-gray-100 pb-4">
+                        <div class="flex items-center justify-between">
+                            <button onclick="toggleAccordion('advAcc')" class="font-semibold text-sm uppercase tracking-wider text-[#18191C] hover:text-[#BF1826] flex items-center gap-2">
+                                <span>Advertisement</span>
+                            </button>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" class="sr-only peer">
+                                <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#BF1826]"></div>
+                            </label>
+                        </div>
+                        <div id="advAcc" class="mt-2 text-xs text-gray-500 leading-relaxed hidden">
+                            Advertisement cookies are used to provide visitors with customised advertisements based on the pages you visited previously and to analyse the effectiveness of the ad campaigns.
+                            <div class="mt-2 p-3 bg-gray-50 text-[11px] italic">No cookies to display.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-6 border-t border-gray-100 flex flex-col sm:flex-row items-center gap-4 justify-end">
+                <button onclick="savePreferences()" class="w-full sm:w-auto text-xs uppercase tracking-widest font-semibold text-[#BF1826] border border-[#BF1826] hover:bg-gray-50 py-3.5 px-8 transition-colors">
+                    Save My Preferences
+                </button>
+                <button onclick="acceptAllCookies()" class="w-full sm:w-auto bg-[#BF1826] hover:bg-[#8F121C] text-white text-xs uppercase tracking-widest font-semibold py-3.5 px-8 rounded-[2px] transition-colors shadow-sm">
+                    Accept
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ================= BRAND HEADER (SPLIT NAV) ================= -->
+    <header class="w-full max-w-7xl mx-auto px-6 py-8 relative z-40">
+        <div class="hidden lg:grid grid-cols-3 items-center">
+            <!-- Left Navigation Menu -->
+            <nav class="flex items-center gap-8">
+                <div class="relative group">
+                    <span class="absolute -top-3 left-1/2 -translate-x-1/2 w-1 h-1 bg-[#BF1826] rounded-full"></span>
+                    <a href="#collections-section" class="text-[12px] font-semibold tracking-[0.2em] uppercase text-[#18191C] hover:text-[#BF1826] transition-colors">Collections</a>
+                </div>
+                <a href="#vanity-section" class="text-[12px] font-semibold tracking-[0.2em] uppercase text-gray-500 hover:text-[#BF1826] transition-colors">Vanity</a>
+                <a href="#escapes-section" class="text-[12px] font-semibold tracking-[0.2em] uppercase text-gray-500 hover:text-[#BF1826] transition-colors">Escapes</a>
+            </nav>
+
+            <!-- Centered Editorial Brand Mark -->
+            <div class="flex justify-center">
+                <a href="#" class="flex flex-col items-center group">
+                    <!-- Standard SVG Path - Brand Mark -->
+                    <svg width="36" height="36" viewBox="0 0 40 40" fill="none" class="group-hover:rotate-12 transition-transform duration-700">
+                        <path d="M20 0C8.99136 0 0 8.99135 0 20C0 31.0086 8.99136 40 20 40C31.0086 40 40 31.0086 40 20C40 8.99135 31.0086 0 20 0ZM20 39.1931C9.39482 39.1931 0.806917 30.6052 0.806917 20C0.806917 9.39481 9.39482 0.806916 20 0.806916C30.6052 0.806916 39.1931 9.39481 39.1931 20C39.1931 30.6052 30.6052 39.1931 20 39.1931Z" fill="#18191C"></path>
+                        <path d="M17.5196 12.2203L22.9951 12.7967C23.6291 12.8543 24.6089 12.5085 25.07 11.7592C24.6665 11.9898 23.9749 12.105 23.3985 12.0474L18.0383 11.471C17.4043 11.4134 16.4245 11.7592 15.9634 12.5085C16.3092 12.2779 17.0008 12.1627 17.5196 12.2203Z" fill="#18191C"></path>
+                        <path d="M16.5414 13.7174L22.0169 14.2937C22.6509 14.3514 23.6308 14.0056 24.0919 13.2563C23.6884 13.4868 22.9968 13.6021 22.4204 13.5445L17.0602 12.9681C16.4262 12.9105 15.4463 13.2563 14.9852 14.0056C15.3311 13.775 15.9651 13.6597 16.5414 13.7174Z" fill="#18191C"></path>
+                        <path d="M23.9171 16.8872V22.5356V22.5932C23.9171 23.1696 23.7442 23.6883 23.4561 24.2071L24.7241 26.3973V17.233C24.7817 16.7719 24.897 16.3108 25.0699 15.9073L25.2428 15.5615C24.4935 15.6192 23.9171 16.1955 23.9171 16.8872Z" fill="#18191C"></path>
+                        <path d="M24.0914 27.3204L19.9992 19.4242L18.0395 15.5625H17.1173L19.9992 21.1533L23.8032 28.5308H25.2441C24.783 28.2426 24.3219 27.8392 24.0914 27.3204Z" fill="#18191C"></path>
+                        <path d="M20.0001 22.939L16.196 15.5615H14.7551C15.2162 15.8497 15.6197 16.2532 15.9079 16.7719V16.8295L20.0001 24.7258L21.9597 28.5875H22.8819L20.0001 22.939Z" fill="#18191C"></path>
+                        <path d="M16.0808 27.2044V21.556V21.4984C16.0808 20.922 16.2537 20.4033 16.5419 19.8845L15.2739 17.6943V26.8586C15.2162 27.3197 15.101 27.7808 14.928 28.1842L14.7551 28.5301C15.5044 28.5301 16.0808 27.9537 16.0808 27.2044Z" fill="#18191C"></path>
+                    </svg>
+                    <span class="text-[10px] tracking-[0.3em] font-bold uppercase mt-1">Codecuy</span>
+                </a>
+            </div>
+
+            <!-- Right Navigation Menu -->
+            <nav class="flex items-center justify-end gap-8">
+                <a href="#weddings-section" class="text-[12px] font-semibold tracking-[0.2em] uppercase text-gray-500 hover:text-[#BF1826] transition-colors">Weddings</a>
+                <a href="#founder-section" class="text-[12px] font-semibold tracking-[0.2em] uppercase text-gray-500 hover:text-[#BF1826] transition-colors">Our Soul</a>
+                <a href="#ambassadors-section" class="text-[12px] font-semibold tracking-[0.2em] uppercase text-gray-500 hover:text-[#BF1826] transition-colors">Get Inspired!</a>
+            </nav>
+        </div>
+
+        <!-- Mobile Header (Visible on small screens) -->
+        <div class="flex lg:hidden items-center justify-between">
+            <a href="#" class="flex items-center gap-3">
+                <div class="w-10 h-10 border border-[#18191C] rounded-full flex items-center justify-center font-editorial italic text-lg">N</div>
+                <span class="text-[11px] tracking-[0.25em] font-bold uppercase text-[#18191C]">Codecuy</span>
+            </a>
+            <button id="mobileMenuTrigger" class="text-[#18191C] focus:outline-none p-2" aria-label="Open Menu">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 7h16M4 14h16"/>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobileDrawer" class="fixed inset-0 bg-white z-50 transform translate-x-full transition-transform duration-500 ease-in-out lg:hidden flex flex-col justify-between">
+        <div>
+            <div class="flex items-center justify-between p-6 border-b border-gray-100">
+                <span class="font-editorial text-xl italic font-semibold">Codecuy</span>
+                <button id="closeMobileDrawer" class="p-2 text-[#18191C] focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <nav class="flex flex-col gap-6 p-8">
+                <a href="#collections-section" onclick="closeDrawer()" class="text-sm font-semibold tracking-[0.2em] uppercase text-[#18191C] hover:text-[#BF1826]">Collections</a>
+                <a href="#vanity-section" onclick="closeDrawer()" class="text-sm font-semibold tracking-[0.2em] uppercase text-gray-500 hover:text-[#BF1826]">Vanity</a>
+                <a href="#escapes-section" onclick="closeDrawer()" class="text-sm font-semibold tracking-[0.2em] uppercase text-gray-500 hover:text-[#BF1826]">Escapes</a>
+                <a href="#weddings-section" onclick="closeDrawer()" class="text-sm font-semibold tracking-[0.2em] uppercase text-gray-500 hover:text-[#BF1826]">Weddings</a>
+                <a href="#founder-section" onclick="closeDrawer()" class="text-sm font-semibold tracking-[0.2em] uppercase text-gray-500 hover:text-[#BF1826]">Our Soul</a>
+                <a href="#ambassadors-section" onclick="closeDrawer()" class="text-sm font-semibold tracking-[0.2em] uppercase text-gray-500 hover:text-[#BF1826]">Get Inspired!</a>
+            </nav>
+        </div>
+        <div class="p-8 bg-gray-50 border-t border-gray-100">
+            <p class="text-xs text-gray-500 leading-relaxed">
+                123 Example Avenue, Suite 4<br>
+                10001 Example City<br>
+                Phone: <span class="text-[#BF1826] font-medium">+1 555.010.0134</span>
+            </p>
+        </div>
+    </div>
+
+
+    <!-- ================= SECTION 1: EDITORIAL HERO ================= -->
+    <section class="max-w-7xl mx-auto px-6 py-8 md:py-16">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            <!-- Left Portrait Panel -->
+            <div class="lg:col-span-3 hidden lg:flex flex-col gap-12">
+                <div class="relative overflow-hidden group">
+                    <img src="https://picsum.photos/seed/spain-hero-costa-brava-sunset/800/600" alt="Coastal sunset" class="w-full object-cover aspect-[3/4] grayscale-[10%] hover:grayscale-0 transition-all duration-[1s] group-hover:scale-105">
+                    <div class="absolute bottom-4 left-4 bg-white/80 backdrop-blur-sm px-3 py-1.5 text-[10px] uppercase tracking-widest text-[#18191C]">Costa Brava</div>
+                </div>
+                <div class="relative overflow-hidden group">
+                    <img src="https://picsum.photos/seed/spain-hero-andalusia-architecture/800/600" alt="Southern European architecture" class="w-full object-cover aspect-[3/4] grayscale-[10%] hover:grayscale-0 transition-all duration-[1s] group-hover:scale-105">
+                    <div class="absolute bottom-4 left-4 bg-white/80 backdrop-blur-sm px-3 py-1.5 text-[10px] uppercase tracking-widest text-[#18191C]">Seville</div>
+                </div>
+            </div>
+
+            <!-- Central Majestic Typography Section -->
+            <div class="lg:col-span-6 flex flex-col items-center text-center px-4">
+                
+                <!-- Micro Media Player Wrapper -->
+                <div class="w-full max-w-[320px] aspect-[16/10] overflow-hidden relative mb-12 shadow-sm">
+                    <img src="https://picsum.photos/seed/spain-hero-ocean-view/800/600" alt="Ocean view" class="w-full h-full object-cover">
+                    <!-- Overlay Overlay -->
+                    <div class="absolute inset-0 bg-[#18191C]/35 flex flex-col items-center justify-center p-4">
+                        <div class="w-10 h-10 rounded-full border border-white/80 flex items-center justify-center text-white font-editorial text-base bg-white/10 backdrop-blur-md mb-2">
+                            N
+                        </div>
+                        <span class="text-[8px] tracking-[0.3em] text-white font-bold uppercase">Codecuy</span>
+                    </div>
+                </div>
+
+                <h1 class="font-editorial text-[36px] sm:text-[44px] md:text-[54px] leading-[1.12] text-[#18191C] font-normal max-w-2xl">
+                    Your trusted partner for
+                    <a href="#" class="editorial-underline">travel</a>,
+                    <a href="#" class="editorial-underline">weddings</a>
+                    & <em class="font-editorial italic text-[#BF1826] font-medium">exclusive luxury</em>
+                    <a href="#" class="editorial-underline">stays</a>
+                    in Spain & Portugal
+                </h1>
+
+                <button onclick="toggleInquiryModal(true)" class="mt-12 bg-[#BF1826] hover:bg-[#8F121C] text-white text-[12px] font-semibold tracking-[0.2em] uppercase py-4 px-10 rounded-[2px] transition-colors focus:outline-none focus:ring-2 focus:ring-[#BF1826] focus:ring-offset-2">
+                    Let us know!
+                </button>
+
+                <!-- Center Miniature Landscape Area -->
+                <div class="w-full max-w-[480px] aspect-[16/10] overflow-hidden mt-16 relative group shadow-sm">
+                    <!-- Elegant simulated video component -->
+                    <div class="absolute inset-0 bg-black/10 z-10 flex items-center justify-center">
+                        <span class="text-white text-[10px] tracking-widest uppercase font-semibold border border-white/50 px-4 py-2 bg-black/20 backdrop-blur-sm">Exclusive Preview</span>
+                    </div>
+                    <img src="https://picsum.photos/seed/spain-hero-iberian-scenery/1600/900" alt="Coastal scenery" class="w-full h-full object-cover">
+                </div>
+            </div>
+
+            <!-- Right Portrait Panel -->
+            <div class="lg:col-span-3 hidden lg:flex flex-col gap-12 mt-16">
+                <div class="relative overflow-hidden group">
+                    <img src="https://picsum.photos/seed/spain-hero-algarve-coast/800/600" alt="Coastal getaway" class="w-full object-cover aspect-[3/4] grayscale-[10%] hover:grayscale-0 transition-all duration-[1s] group-hover:scale-105">
+                    <div class="absolute bottom-4 left-4 bg-white/80 backdrop-blur-sm px-3 py-1.5 text-[10px] uppercase tracking-widest text-[#18191C]">Algarve</div>
+                </div>
+                <div class="relative overflow-hidden group">
+                    <!-- Standard placeholder with fallback theme -->
+                    <div class="w-full aspect-[3/4] bg-neutral-100 flex flex-col items-center justify-center p-6 text-center border border-gray-100">
+                        <span class="font-editorial italic text-[#BF1826] text-xl mb-1">Live your moments</span>
+                        <p class="text-[10px] uppercase tracking-wider text-gray-400">Madrid Selection</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ================= SECTION 2: THE MANIFESTO ================= -->
+    <section class="bg-gray-50 py-20 border-y border-gray-100">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <span class="text-[#BF1826] text-[10px] uppercase tracking-[0.3em] font-semibold block mb-4">Codecuy</span>
+            <h2 class="font-editorial text-3xl sm:text-4xl md:text-5xl font-normal leading-[1.15] text-[#18191C] mb-8">
+                Live your <em class="italic font-editorial font-medium text-[#BF1826]">unique moments</em> with Codecuy
+            </h2>
+            <p class="text-base md:text-lg text-gray-600 font-light leading-relaxed max-w-2xl mx-auto mb-10">
+                We design tailor-made experiences, from dreamlike weddings to unforgettable escapes, all set in the heart and soul of Spain and Portugal. With a refined local touch, we believe true luxury is in the details, and every moment feels real. That’s where true luxury lives.
+            </p>
+            <a href="#" class="inline-block border-b border-[#BF1826] pb-1 text-[#BF1826] text-xs font-bold uppercase tracking-widest hover:text-[#18191C] hover:border-[#18191C] transition-colors">
+                Let's go!
+            </a>
+        </div>
+    </section>
+
+
+    <!-- ================= SECTION 3: CURATED COLLECTION ================= -->
+    <section id="collections-section" class="max-w-7xl mx-auto px-6 py-24">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+            
+            <!-- Left Info Panel -->
+            <div class="lg:col-span-5 space-y-8">
+                <span class="text-[#BF1826] text-[10px] uppercase tracking-[0.3em] font-bold block">What and Where?</span>
+                <h3 class="font-editorial text-4xl sm:text-5xl font-normal leading-tight">
+                    Curated <br><em class="font-editorial italic font-medium text-[#BF1826]">Collection</em>
+                </h3>
+                <p class="text-gray-600 leading-relaxed text-sm md:text-base font-light">
+                    At Codecuy, we believe that the way you experience a place matters just as much as where you go. Savor the flavors of our rich gastronomy, connect with centuries-old traditions, and uncover the hidden stories that make each destination unique.
+                </p>
+                <div class="flex items-center gap-4 pt-4">
+                    <a href="#" class="bg-[#18191C] text-white hover:bg-[#BF1826] text-xs uppercase tracking-widest font-semibold py-3.5 px-8 transition-colors">
+                        Spain
+                    </a>
+                    <a href="#" class="border border-[#18191C] text-[#18191C] hover:bg-gray-50 text-xs uppercase tracking-widest font-semibold py-3.5 px-8 transition-colors">
+                        Portugal
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right Collage Panel (Asymmetric Editorial Style Grid) -->
+            <div class="lg:col-span-7 grid grid-cols-2 gap-4">
+                <div class="space-y-4">
+                    <div class="relative overflow-hidden group aspect-square">
+                        <img src="https://picsum.photos/seed/spain-collection-wine/800/600" alt="Wine collection" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    </div>
+                    <div class="relative overflow-hidden group aspect-[4/5]">
+                        <img src="https://picsum.photos/seed/spain-collection-historic-street/800/600" alt="Historic street" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    </div>
+                </div>
+                <div class="space-y-4 pt-12">
+                    <div class="relative overflow-hidden group aspect-[4/5]">
+                        <img src="https://picsum.photos/seed/spain-collection-bespoke-suit/800/600" alt="Bespoke suit" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    </div>
+                    <div class="relative overflow-hidden group aspect-video">
+                        <img src="https://picsum.photos/seed/spain-collection-landscape/800/600" alt="Landscape" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ================= SECTION 4: SIGNATURE VANITY ================= -->
+    <section id="vanity-section" class="bg-gray-50 py-24 border-y border-gray-100">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+                
+                <!-- Left Collage Panel (Asymmetric Editorial Style Grid) -->
+                <div class="lg:col-span-7 grid grid-cols-2 gap-4 order-2 lg:order-1">
+                    <div class="space-y-4 pt-12">
+                        <div class="relative overflow-hidden group aspect-square">
+                            <img src="https://picsum.photos/seed/spain-vanity-elena-estaun-craft/800/600" alt="Artisan craft workshop" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        </div>
+                        <div class="relative overflow-hidden group aspect-[3/4]">
+                            <img src="https://picsum.photos/seed/spain-vanity-andoni-portrait/800/600" alt="Chef portrait" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="relative overflow-hidden group aspect-[3/4]">
+                            <img src="https://picsum.photos/seed/spain-vanity-historic-plaza/800/600" alt="Historic plaza" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        </div>
+                        <div class="relative overflow-hidden group aspect-video">
+                            <img src="https://picsum.photos/seed/spain-vanity-gastronomy/800/600" alt="Gastronomy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Info Panel -->
+                <div class="lg:col-span-5 space-y-8 order-1 lg:order-2 lg:pl-8">
+                    <span class="text-[#BF1826] text-[10px] uppercase tracking-[0.3em] font-bold block">Elevated Experiences</span>
+                    <h3 class="font-editorial text-4xl sm:text-5xl font-normal leading-tight">
+                        Signature <br><em class="font-editorial italic font-medium text-[#BF1826]">Vanity</em>
+                    </h3>
+                    <p class="text-gray-600 leading-relaxed text-sm md:text-base font-light">
+                        Every journey carries its own signature — personality, temperament, individuality, uniqueness. Ours are imagined as living works of art, shaped by the hands of innovative chefs, pioneering artists, or top fashion designers. No two are ever alike, each crafted to be as unforgettable as the traveler it was created for.
+                    </p>
+                    <div class="pt-4">
+                        <a href="#" class="bg-[#18191C] text-white hover:bg-[#BF1826] text-xs uppercase tracking-widest font-semibold py-4 px-10 transition-colors inline-block">
+                            Discover
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ================= SECTION 5: AUTHENTIC ESCAPES ================= -->
+    <section id="escapes-section" class="max-w-7xl mx-auto px-6 py-24">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+            
+            <!-- Left Info Panel -->
+            <div class="lg:col-span-5 space-y-8">
+                <span class="text-[#BF1826] text-[10px] uppercase tracking-[0.3em] font-bold block">Not Just a Stay</span>
+                <h3 class="font-editorial text-4xl sm:text-5xl font-normal leading-tight">
+                    Authentic <br><em class="font-editorial italic font-medium text-[#BF1826]">Escapes</em>
+                </h3>
+                <p class="text-gray-600 leading-relaxed text-sm md:text-base font-light">
+                    Indulge in the ultimate escape with our handpicked selection of unique stays, whether it’s a secluded oceanfront retreat, a family-owned luxury hotel, or a charming urban hideaway, each experience is designed for authenticity and a true sense of local style.
+                </p>
+                <div class="pt-4">
+                    <a href="#" class="bg-[#18191C] text-white hover:bg-[#BF1826] text-xs uppercase tracking-widest font-semibold py-4 px-10 transition-colors inline-block">
+                        Discover
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right Collage Panel (Asymmetric Editorial Style Grid) -->
+            <div class="lg:col-span-7 grid grid-cols-2 gap-4">
+                <div class="space-y-4">
+                    <div class="relative overflow-hidden group aspect-square">
+                        <img src="https://picsum.photos/seed/spain-escapes-ocean-cliff-stay/800/600" alt="Ocean cliff stay" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    </div>
+                    <div class="relative overflow-hidden group aspect-[4/5]">
+                        <img src="https://picsum.photos/seed/spain-escapes-artisan-villa/800/600" alt="Artisan villa" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    </div>
+                </div>
+                <div class="space-y-4 pt-12">
+                    <div class="relative overflow-hidden group aspect-[4/5]">
+                        <img src="https://picsum.photos/seed/spain-escapes-heritage-interior/800/600" alt="Heritage interior" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    </div>
+                    <div class="relative overflow-hidden group aspect-video">
+                        <img src="https://picsum.photos/seed/spain-escapes-quiet-cove-stay/800/600" alt="Quiet cove stay" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ================= SECTION 6: EXCLUSIVE WEDDINGS ================= -->
+    <section id="weddings-section" class="bg-gray-50 py-24 border-y border-gray-100">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+                
+                <!-- Left Collage Panel (Asymmetric Editorial Style Grid) -->
+                <div class="lg:col-span-7 grid grid-cols-2 gap-4 order-2 lg:order-1">
+                    <div class="space-y-4 pt-12">
+                        <div class="relative overflow-hidden group aspect-square">
+                            <img src="https://picsum.photos/seed/spain-weddings-coastal-ceremony/800/600" alt="Coastal wedding ceremony" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        </div>
+                        <div class="relative overflow-hidden group aspect-[3/4]">
+                            <img src="https://picsum.photos/seed/spain-weddings-mysterious-bride/800/600" alt="Bride portrait with veil" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="relative overflow-hidden group aspect-[3/4]">
+                            <img src="https://picsum.photos/seed/spain-weddings-beautiful-bride/800/600" alt="Bride portrait" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        </div>
+                        <div class="relative overflow-hidden group aspect-video">
+                            <img src="https://picsum.photos/seed/spain-weddings-golden-ring/800/600" alt="Wedding ring and accessories" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Info Panel -->
+                <div class="lg:col-span-5 space-y-8 order-1 lg:order-2 lg:pl-8">
+                    <span class="text-[#BF1826] text-[10px] uppercase tracking-[0.3em] font-bold block">Love, Love, Love</span>
+                    <h3 class="font-editorial text-4xl sm:text-5xl font-normal leading-tight">
+                        Exclusive <br><em class="font-editorial italic font-medium text-[#BF1826]">Weddings</em>
+                    </h3>
+                    <p class="text-gray-600 leading-relaxed text-sm md:text-base font-light">
+                        Celebrate your love story in the romantic settings of Spain and Portugal’s most unique destinations. From meticulous planning to flawless execution, we craft every detail of your special day to create unforgettable moments that you and your guests will treasure forever.
+                    </p>
+                    <div class="pt-4">
+                        <a href="#" class="bg-[#18191C] text-white hover:bg-[#BF1826] text-xs uppercase tracking-widest font-semibold py-4 px-10 transition-colors inline-block">
+                            Discover
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ================= SECTION 7: FOUNDER & CEO ================= -->
+    <section id="founder-section" class="max-w-7xl mx-auto px-6 py-24">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <!-- Image Frame -->
+            <div class="lg:col-span-4 flex justify-center">
+                <div class="relative overflow-hidden w-full max-w-[340px] aspect-[2/3] shadow-sm">
+                    <img src="https://picsum.photos/seed/codecuy-founder-portrait/800/600" alt="Founder portrait" class="w-full h-full object-cover">
+                </div>
+            </div>
+            <!-- Letter / Quote Panel -->
+            <div class="lg:col-span-8 space-y-6">
+                <span class="text-[#BF1826] text-[10px] uppercase tracking-[0.3em] font-bold block">Our Soul</span>
+                <p class="font-editorial text-xl sm:text-2xl md:text-3xl font-light italic leading-relaxed text-gray-700">
+                    "I’m an entrepreneur, a businesswoman, and the CEO of the most beautiful company I never even dreamed I could create: Codecuy.
+                    This isn’t just a career choice — it is a calling. My vocation for service revealed itself early on, and I simply followed where it led me. I’ve shaped this path through experience, guided by my values, inspired by my team, enriched by my clients, and constantly fueled by the generosity of this destination I love."
+                </p>
+                <div class="pt-4">
+                    <h5 class="font-editorial text-lg text-[#18191C] font-semibold">Abene Mendizabal</h5>
+                    <span class="text-[11px] uppercase tracking-widest text-gray-400 font-semibold block mt-1">Founder & CEO</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ================= SECTION 8: AMBASSADORS ================= -->
+    <section id="ambassadors-section" class="bg-neutral-900 text-white py-24">
+        <div class="max-w-7xl mx-auto px-6">
+            <!-- Section Header -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-16 border-b border-white/10 pb-12">
+                <div class="lg:col-span-5">
+                    <span class="text-[#BF1826] text-[10px] uppercase tracking-[0.3em] font-bold block mb-4">Ambassadors</span>
+                    <h3 class="font-editorial text-4xl sm:text-5xl font-normal leading-tight text-white">
+                        The Visionaries
+                    </h3>
+                </div>
+                <div class="lg:col-span-7">
+                    <p class="text-gray-400 text-sm md:text-base font-light leading-relaxed max-w-xl">
+                        Codecuy is also defined by the stories inspired by our ambassadors, all of them creators, visionaries, and icons in their fields. Most importantly, they all share with us their vision of sophistication, cultural excellence, and impeccable taste.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Ambassadors Responsive Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+
+                <!-- Ambassador 1 -->
+                <a href="#" class="group block space-y-4">
+                    <div class="relative aspect-square overflow-hidden bg-neutral-800">
+                        <img src="https://picsum.photos/seed/codecuy-ambassador-elena-estaun/800/600" alt="Ambassador portrait" class="w-full h-full object-cover transition-all duration-[1s] group-hover:scale-105 group-hover:opacity-75">
+                    </div>
+                    <div class="space-y-1">
+                        <h4 class="font-editorial text-lg text-white font-medium">Elena Estaun</h4>
+                        <span class="text-[10px] uppercase tracking-widest text-[#BF1826] font-semibold block">Bold Visionary</span>
+                        <p class="text-xs text-gray-500 font-light pt-2 leading-relaxed">
+                            Urban - Transgressive - Handmade Nature - Ethnic
+                        </p>
+                        <span class="text-[10px] uppercase tracking-wider font-bold text-white group-hover:text-[#BF1826] transition-colors block pt-2">Discover Vip Experience &rarr;</span>
+                    </div>
+                </a>
+
+                <!-- Ambassador 2 -->
+                <a href="#" class="group block space-y-4">
+                    <div class="relative aspect-square overflow-hidden bg-neutral-800">
+                        <img src="https://picsum.photos/seed/codecuy-ambassador-andoni/800/600" alt="Ambassador portrait" class="w-full h-full object-cover transition-all duration-[1s] group-hover:scale-105 group-hover:opacity-75">
+                    </div>
+                    <div class="space-y-1">
+                        <h4 class="font-editorial text-lg text-white font-medium">Andoni Luis Aduriz</h4>
+                        <span class="text-[10px] uppercase tracking-widest text-[#BF1826] font-semibold block">2 * Michelin Star Chef</span>
+                        <p class="text-xs text-gray-500 font-light pt-2 leading-relaxed">
+                            Freedom - Chaos - Impossible - Courage - Possible - Roots
+                        </p>
+                        <span class="text-[10px] uppercase tracking-wider font-bold text-white group-hover:text-[#BF1826] transition-colors block pt-2">Discover Vip Experience &rarr;</span>
+                    </div>
+                </a>
+
+                <!-- Ambassador 3 -->
+                <a href="#" class="group block space-y-4">
+                    <div class="relative aspect-square overflow-hidden bg-neutral-800">
+                        <img src="https://picsum.photos/seed/codecuy-ambassador-fran-rivera/800/600" alt="Ambassador portrait" class="w-full h-full object-cover transition-all duration-[1s] group-hover:scale-105 group-hover:opacity-75">
+                    </div>
+                    <div class="space-y-1">
+                        <h4 class="font-editorial text-lg text-white font-medium">Fran Rivera Ordoñez</h4>
+                        <span class="text-[10px] uppercase tracking-widest text-[#BF1826] font-semibold block">Legendary matador</span>
+                        <p class="text-xs text-gray-500 font-light pt-2 leading-relaxed">
+                            Fear - Courage - Devotion Force - Respect - Valor
+                        </p>
+                        <span class="text-[10px] uppercase tracking-wider font-bold text-white group-hover:text-[#BF1826] transition-colors block pt-2">Discover Vip Experience &rarr;</span>
+                    </div>
+                </a>
+
+                <!-- Ambassador 4 -->
+                <a href="#" class="group block space-y-4">
+                    <div class="relative aspect-square overflow-hidden bg-neutral-800">
+                        <img src="https://picsum.photos/seed/codecuy-ambassador-yolancris/800/600" alt="Ambassador portrait" class="w-full h-full object-cover transition-all duration-[1s] group-hover:scale-105 group-hover:opacity-75">
+                    </div>
+                    <div class="space-y-1">
+                        <h4 class="font-editorial text-lg text-white font-medium">YolanCris</h4>
+                        <span class="text-[10px] uppercase tracking-widest text-[#BF1826] font-semibold block">Boho Chic Artisans</span>
+                        <p class="text-xs text-gray-500 font-light pt-2 leading-relaxed">
+                            Intuition - Haute Couture - Innovation Artisanal - Individuality
+                        </p>
+                        <span class="text-[10px] uppercase tracking-wider font-bold text-white group-hover:text-[#BF1826] transition-colors block pt-2">Discover Vip Experience &rarr;</span>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ================= SECTION 9: OUR DESTINATIONS ================= -->
+    <section class="max-w-7xl mx-auto px-6 py-24">
+        
+        <!-- Section Header -->
+        <div class="text-center max-w-2xl mx-auto mb-20 space-y-4">
+            <span class="text-[#BF1826] text-[10px] uppercase tracking-[0.3em] font-bold block">Our destinations</span>
+            <h3 class="font-editorial text-4xl sm:text-5xl font-normal leading-tight text-[#18191C]">
+                Discover the true <em class="font-editorial italic font-medium text-[#BF1826]">luxury</em> of Spain & Portugal
+            </h3>
+            <p class="text-gray-500 text-sm md:text-base font-light">
+                Every destination we choose reflects the essence of refined travel – authentic, memorable, and deeply rooted in the soul of Spain and Portugal.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+            
+            <!-- SPAIN CATEGORY CARD -->
+            <div class="space-y-8">
+                <!-- Image Mosaic Grid (Large Highlight) -->
+                <div class="relative overflow-hidden aspect-[4/3] group shadow-sm bg-neutral-100">
+                    <img src="https://picsum.photos/seed/spain-destination-salamanca-azulejo/1600/900" alt="Spanish tiled architecture" class="w-full h-full object-cover transition-all duration-[1.5s] group-hover:scale-105">
+                    <div class="absolute inset-0 bg-[#18191C]/25 flex flex-col justify-between p-8 text-white">
+                        <span class="text-[10px] uppercase tracking-[0.3em] font-bold">Spain</span>
+                        <div class="space-y-2">
+                            <h4 class="font-editorial text-3xl font-normal text-white">Iberia's Heart</h4>
+                            <p class="text-xs text-white/80 tracking-wider uppercase font-medium">Explore &rarr;</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Regions List & Mosaic Previews -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 items-start">
+                    <div class="space-y-4">
+                        <h5 class="text-xs uppercase tracking-[0.2em] font-bold text-[#18191C] border-b border-gray-100 pb-2">Destinations</h5>
+                        <ul class="space-y-3">
+                            <li><a href="#" class="text-sm text-gray-600 hover:text-[#BF1826] transition-colors flex items-center gap-1"><span>&bull;</span> Andalusia</a></li>
+                            <li><a href="#" class="text-sm text-gray-600 hover:text-[#BF1826] transition-colors flex items-center gap-1"><span>&bull;</span> Balearic Islands</a></li>
+                            <li><a href="#" class="text-sm text-gray-600 hover:text-[#BF1826] transition-colors flex items-center gap-1"><span>&bull;</span> Barcelona & Mediterranean</a></li>
+                            <li><a href="#" class="text-sm text-gray-600 hover:text-[#BF1826] transition-colors flex items-center gap-1"><span>&bull;</span> Basque Country & Northern</a></li>
+                            <li><a href="#" class="text-sm text-gray-600 hover:text-[#BF1826] transition-colors flex items-center gap-1"><span>&bull;</span> Madrid & Central</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Tiny mosaic preview images -->
+                    <div class="grid grid-cols-2 gap-2">
+                        <img src="https://picsum.photos/seed/spain-mosaic-antequera-sunset/300/300" alt="Spanish town at sunset" class="w-full aspect-square object-cover grayscale hover:grayscale-0 transition-all">
+                        <img src="https://picsum.photos/seed/spain-mosaic-patio/300/300" alt="Spanish patio" class="w-full aspect-square object-cover grayscale hover:grayscale-0 transition-all">
+                        <img src="https://picsum.photos/seed/spain-mosaic-costa-brava-village/300/300" alt="Coastal village" class="w-full aspect-square object-cover grayscale hover:grayscale-0 transition-all">
+                        <img src="https://picsum.photos/seed/spain-mosaic-gaztelugatxe-bridge/300/300" alt="Stone bridge over the sea" class="w-full aspect-square object-cover grayscale hover:grayscale-0 transition-all">
+                    </div>
+                </div>
+            </div>
+
+            <!-- PORTUGAL CATEGORY CARD -->
+            <div class="space-y-8">
+                <!-- Image Mosaic Grid (Large Highlight) -->
+                <div class="relative overflow-hidden aspect-[4/3] group shadow-sm bg-neutral-100">
+                    <img src="https://picsum.photos/seed/portugal-destination-azulejo-tile/1600/900" alt="Portuguese tiled architecture" class="w-full h-full object-cover transition-all duration-[1.5s] group-hover:scale-105">
+                    <div class="absolute inset-0 bg-[#18191C]/25 flex flex-col justify-between p-8 text-white">
+                        <span class="text-[10px] uppercase tracking-[0.3em] font-bold">Portugal</span>
+                        <div class="space-y-2">
+                            <h4 class="font-editorial text-3xl font-normal text-white">Atlantic Winds</h4>
+                            <p class="text-xs text-white/80 tracking-wider uppercase font-medium">Explore &rarr;</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Regions List & Mosaic Previews -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 items-start">
+                    <div class="space-y-4">
+                        <h5 class="text-xs uppercase tracking-[0.2em] font-bold text-[#18191C] border-b border-gray-100 pb-2">Destinations</h5>
+                        <ul class="space-y-3">
+                            <li><a href="#" class="text-sm text-gray-600 hover:text-[#BF1826] transition-colors flex items-center gap-1"><span>&bull;</span> Algarve</a></li>
+                            <li><a href="#" class="text-sm text-gray-600 hover:text-[#BF1826] transition-colors flex items-center gap-1"><span>&bull;</span> Lisbon & Alentejo</a></li>
+                            <li><a href="#" class="text-sm text-gray-600 hover:text-[#BF1826] transition-colors flex items-center gap-1"><span>&bull;</span> Porto & Douro</a></li>
+                            <li><a href="#" class="text-sm text-gray-600 hover:text-[#BF1826] transition-colors flex items-center gap-1"><span>&bull;</span> The Azores</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Tiny mosaic preview images -->
+                    <div class="grid grid-cols-2 gap-2">
+                        <img src="https://picsum.photos/seed/portugal-mosaic-praia-da-marinha/300/300" alt="Coastal beach cove" class="w-full aspect-square object-cover grayscale hover:grayscale-0 transition-all">
+                        <img src="https://picsum.photos/seed/portugal-mosaic-lisbon-tram/300/300" alt="Vintage tram in the city" class="w-full aspect-square object-cover grayscale hover:grayscale-0 transition-all">
+                        <img src="https://picsum.photos/seed/portugal-mosaic-porto-douro-river/300/300" alt="River bridge" class="w-full aspect-square object-cover grayscale hover:grayscale-0 transition-all">
+                        <img src="https://picsum.photos/seed/portugal-mosaic-sintra-castle/300/300" alt="Hilltop castle" class="w-full aspect-square object-cover grayscale hover:grayscale-0 transition-all">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ================= EDITROLLER FOOTER & CONTACT ================= -->
+    <footer class="bg-neutral-50 border-t border-gray-100 pt-24 pb-12">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 pb-16 border-b border-gray-200/60">
+                
+                <!-- Let's make it happen! CTA block -->
+                <div class="lg:col-span-6 space-y-6">
+                    <span class="text-[#BF1826] text-[10px] uppercase tracking-[0.3em] font-bold block">Contact</span>
+                    <h2 class="font-editorial text-4xl sm:text-5xl md:text-6xl font-normal leading-none text-[#18191C]">
+                        Let´s make <br><em class="font-editorial italic font-medium text-[#BF1826]">it happen</em>
+                    </h2>
+                    <p class="text-sm text-gray-500 font-light leading-relaxed max-w-md">
+                        At Codecuy, we believe every journey should feel personal and unforgettable. From soulful stays to singular experiences, our collection across Spain and Portugal is designed to speak to the heart. From the first spark of inspiration to the smallest detail, we take care of everything, so you can simply live the moments that matter most.
+                    </p>
+                    <div class="pt-4">
+                        <button onclick="toggleInquiryModal(true)" class="bg-[#18191C] hover:bg-[#BF1826] text-white text-[12px] font-semibold tracking-[0.2em] uppercase py-4 px-10 rounded-[2px] transition-colors shadow-sm">
+                            Contact
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Footer details & address -->
+                <div class="lg:col-span-6 flex flex-col justify-between gap-12 lg:pl-16">
+                    <div class="space-y-4">
+                        <h4 class="font-editorial text-xl italic font-semibold text-[#BF1826]">Codecuy</h4>
+                        <p class="text-sm text-gray-600 font-light leading-relaxed">
+                            123 Example Avenue, Suite 4<br>
+                            10001 Example City<br>
+                            Phone: <a href="#" class="text-[#18191C] font-semibold hover:text-[#BF1826] transition-colors">+1 555.010.0134</a>
+                        </p>
+                    </div>
+
+                    <!-- Social Icons -->
+                    <div class="flex items-center gap-6">
+                        <a href="#" target="_blank" class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:text-[#BF1826] hover:border-[#BF1826] transition-all">
+                            FB
+                        </a>
+                        <a href="#" target="_blank" class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:text-[#BF1826] hover:border-[#BF1826] transition-all">
+                            IG
+                        </a>
+                        <a href="#" target="_blank" class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:text-[#BF1826] hover:border-[#BF1826] transition-all">
+                            LN
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Affiliation Logos -->
+            <div class="py-12 flex flex-wrap items-center justify-center sm:justify-start gap-12 border-b border-gray-200/60 opacity-60">
+                <img src="https://picsum.photos/seed/codecuy-partner-logo-1/300/100" alt="Partner logo" class="h-10 object-contain grayscale hover:grayscale-0 transition-all">
+                <img src="https://picsum.photos/seed/codecuy-partner-logo-2/300/100" alt="Partner logo" class="h-10 object-contain grayscale hover:grayscale-0 transition-all">
+                <img src="https://picsum.photos/seed/codecuy-partner-logo-3/300/100" alt="Partner logo" class="h-10 object-contain grayscale hover:grayscale-0 transition-all">
+            </div>
+
+            <!-- Lower Footer Legal Coordinates -->
+            <div class="pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <span class="text-xs text-gray-400">&copy; 2026 Codecuy. All Rights Reserved.</span>
+                <div class="flex items-center gap-6">
+                    <a href="#" class="text-xs text-gray-400 hover:text-[#BF1826] transition-colors">Privacy Policy</a>
+                    <a href="#" class="text-xs text-gray-400 hover:text-[#BF1826] transition-colors">Legal Notice</a>
+                    <a href="#" class="text-xs text-gray-400 hover:text-[#BF1826] transition-colors">Terms & Conditions</a>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+
+
+    <!-- ================= INQUIRY MODAL (BESPOKE POPUP FORM) ================= -->
+    <div id="inquiryModal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
+        <!-- Modal Content Container -->
+        <div class="bg-white max-w-lg w-full p-8 md:p-10 relative transform scale-95 transition-transform duration-300">
+            <!-- Close Trigger -->
+            <button onclick="toggleInquiryModal(false)" class="absolute top-6 right-6 text-gray-400 hover:text-black transition-colors" aria-label="Close Inquiry Form">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+
+            <!-- Letterhead Branding -->
+            <div class="text-center mb-8">
+                <span class="font-editorial text-2xl italic font-semibold text-[#BF1826]">Codecuy</span>
+                <h3 class="font-editorial text-2xl font-normal mt-2">Let Us Crate Your Dream Stay</h3>
+                <p class="text-[12px] text-gray-500 mt-2">Beri tahu kami preferensi perjalanan eksklusif Anda di Semenanjung Iberia.</p>
+            </div>
+
+            <!-- Contact Form -->
+            <form id="contactForm" onsubmit="submitForm(event)" class="space-y-5">
+                <div>
+                    <label class="block text-[10px] font-semibold uppercase tracking-wider text-gray-700 mb-1.5">Nama Lengkap</label>
+                    <input type="text" required class="w-full border-b border-gray-300 focus:border-[#BF1826] py-2 px-1 text-sm outline-none transition-colors" placeholder="Masukkan nama Anda">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-semibold uppercase tracking-wider text-gray-700 mb-1.5">Email</label>
+                    <input type="email" required class="w-full border-b border-gray-300 focus:border-[#BF1826] py-2 px-1 text-sm outline-none transition-colors" placeholder="nama@domain.com">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-semibold uppercase tracking-wider text-gray-700 mb-1.5">Tipe Pengalaman</label>
+                    <select class="w-full border-b border-gray-300 focus:border-[#BF1826] py-2 px-1 text-sm outline-none transition-colors bg-white">
+                        <option>Exclusive Travel Vacation</option>
+                        <option>Luxury Wedding Curation</option>
+                        <option>Exclusive Private Stays</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-semibold uppercase tracking-wider text-gray-700 mb-1.5">Catatan Khusus</label>
+                    <textarea class="w-full border-b border-gray-300 focus:border-[#BF1826] py-2 px-1 text-sm outline-none transition-colors resize-none h-20" placeholder="Jelaskan impian liburan/pernikahan Anda..."></textarea>
+                </div>
+
+                <button type="submit" class="w-full bg-[#BF1826] hover:bg-[#8F121C] text-white text-xs uppercase tracking-widest font-semibold py-4 transition-colors duration-300 mt-6 shadow-sm">
+                    Send Inquiry
+                </button>
+            </form>
+
+            <!-- Thank You / Success State inside Modal -->
+            <div id="thankYouState" class="hidden text-center py-8">
+                <div class="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                </div>
+                <h4 class="font-editorial text-2xl font-normal text-[#18191C]">Thank You</h4>
+                <p class="text-sm text-gray-500 mt-2 max-w-sm mx-auto leading-relaxed">Inquiry Anda telah kami terima secara eksklusif. Perencana personal kami akan segera menghubungi Anda dalam waktu 24 jam.</p>
+                <button onclick="toggleInquiryModal(false)" class="mt-8 border border-[#18191C] hover:bg-[#18191C] hover:text-white text-[10px] tracking-widest uppercase font-semibold py-3 px-8 transition-colors">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ================= DETAILED FUNCTIONAL JAVASCRIPT ================= -->
+    <script>
+        // DOM ELEMENTS
+        const ckyConsentBanner = document.getElementById('ckyConsentBanner');
+        const ckyPreferenceModal = document.getElementById('ckyPreferenceModal');
+        const ckyRevisitBtn = document.getElementById('ckyRevisitBtn');
+        const mobileDrawer = document.getElementById('mobileDrawer');
+        const mobileMenuTrigger = document.getElementById('mobileMenuTrigger');
+        const closeMobileDrawer = document.getElementById('closeMobileDrawer');
+        const inquiryModal = document.getElementById('inquiryModal');
+        const contactForm = document.getElementById('contactForm');
+        const thankYouState = document.getElementById('thankYouState');
+
+        // ================= MOBILE DRAWER MECHANICS =================
+        mobileMenuTrigger.addEventListener('click', () => {
+            mobileDrawer.classList.remove('translate-x-full');
+        });
+
+        closeMobileDrawer.addEventListener('click', () => {
+            mobileDrawer.classList.add('translate-x-full');
+        });
+
+        function closeDrawer() {
+            mobileDrawer.classList.add('translate-x-full');
+        }
+
+        // ================= ACCORDION ANIMATIONS =================
+        function toggleAccordion(id) {
+            const acc = document.getElementById(id);
+            if (acc.classList.contains('hidden')) {
+                acc.classList.remove('hidden');
+            } else {
+                acc.classList.add('hidden');
+            }
+        }
+
+        // ================= COOKIE SESSIONS MECHANICS =================
+        // Automatically check if cookie preference is already set in Session / Local Memory
+        window.onload = function() {
+            const cookieSet = localStorage.getItem('cky_consent_preference');
+            if (cookieSet) {
+                ckyConsentBanner.classList.add('translate-y-full');
+                ckyRevisitBtn.classList.remove('hidden');
+            } else {
+                ckyConsentBanner.classList.remove('translate-y-full');
+                ckyRevisitBtn.classList.add('hidden');
+            }
+        };
+
+        function acceptAllCookies() {
+            localStorage.setItem('cky_consent_preference', 'accepted');
+            // Animate banner away
+            ckyConsentBanner.classList.add('translate-y-full');
+            closeCookieModal();
+            // Show floating reopen badge
+            setTimeout(() => {
+                ckyRevisitBtn.classList.remove('hidden');
+            }, 600);
+        }
+
+        function savePreferences() {
+            localStorage.setItem('cky_consent_preference', 'customised');
+            ckyConsentBanner.classList.add('translate-y-full');
+            closeCookieModal();
+            setTimeout(() => {
+                ckyRevisitBtn.classList.remove('hidden');
+            }, 600);
+        }
+
+        function openCookieModal() {
+            ckyPreferenceModal.classList.remove('opacity-0', 'pointer-events-none');
+            ckyPreferenceModal.querySelector('.cky-preference-center').classList.remove('scale-95');
+        }
+
+        function closeCookieModal() {
+            ckyPreferenceModal.classList.add('opacity-0', 'pointer-events-none');
+            ckyPreferenceModal.querySelector('.cky-preference-center').classList.add('scale-95');
+        }
+
+        // ================= CONTACT / INQUIRY MODAL MECHANICS =================
+        function toggleInquiryModal(show) {
+            if (show) {
+                inquiryModal.classList.remove('opacity-0', 'pointer-events-none');
+                inquiryModal.querySelector('div').classList.remove('scale-95');
+                // Reset internal state
+                contactForm.classList.remove('hidden');
+                thankYouState.classList.add('hidden');
+            } else {
+                inquiryModal.classList.add('opacity-0', 'pointer-events-none');
+                inquiryModal.querySelector('div').classList.add('scale-95');
+            }
+        }
+
+        function submitForm(e) {
+            e.preventDefault();
+            // Transitions beautifully to thank you state
+            contactForm.classList.add('hidden');
+            thankYouState.classList.remove('hidden');
+        }
+
+        // Close modal when backdrop clicked
+        inquiryModal.addEventListener('click', (e) => {
+            if (e.target === inquiryModal) {
+                toggleInquiryModal(false);
+            }
+        });
+    </script>
+</body>
+</html>

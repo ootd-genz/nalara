@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>codecuy | Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              ink: '#0c0c0c', 'ink-soft': '#141416', paper: '#ece7dd',
+              'paper-ink': '#1a1714', mist: '#d7e2ea', ember: '#ff5a1f', 'ember-deep': '#c2410c',
+            },
+            fontFamily: { sans: ['Kanit', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
+          },
+        },
+      }
+    </script>
+    <style>
+      * { box-sizing: border-box; }
+      html, body { background: #0c0c0c; color: #d7e2ea; font-family: 'Kanit', sans-serif; }
+      ::selection { background: #ff5a1f; color: #fff; }
+      .hero-heading { background: linear-gradient(180deg, #5a5e66 0%, #e8e2d5 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+      .heading-ember { background: linear-gradient(180deg, #ff8a4c 0%, #ff5a1f 60%, #c2410c 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+      .grain::after { content: ''; position: fixed; inset: 0; z-index: 60; pointer-events: none; opacity: 0.05; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+      .edge-fade { -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent); mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent); }
+      .marquee-row { display: flex; gap: 0.75rem; width: max-content; }
+      @keyframes marquee-left { from { transform: translateX(0); } to { transform: translateX(-33.333%); } }
+      @keyframes marquee-right { from { transform: translateX(-33.333%); } to { transform: translateX(0); } }
+      .anim-left { animation: marquee-left 45s linear infinite; }
+      .anim-right { animation: marquee-right 45s linear infinite; }
+      .text-mega { font-size: 21vw; line-height: 0.75; letter-spacing: -0.04em; }
+      [data-reveal] { opacity: 0; }
+      [data-letter] { opacity: 0; }
+    </style>
+  </head>
+  <body class="grain bg-ink text-mist font-sans antialiased overflow-x-clip">
+    <!-- SiteHeader -->
+    <header id="top" class="fixed inset-x-0 top-0 z-50" data-reveal data-y="-20">
+      <div class="flex items-center justify-between px-6 md:px-10 pt-6 md:pt-8">
+        <a href="#top" class="flex items-baseline gap-1 text-mist text-xl md:text-2xl font-black uppercase tracking-tight">
+          codecuy<span class="text-ember">°</span>
+        </a>
+        <div class="hidden md:flex items-center gap-2 rounded-full border border-mist/15 bg-white/[0.02] px-4 py-1.5 backdrop-blur-sm">
+          <span class="relative flex w-2 h-2">
+            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex w-2 h-2 rounded-full bg-emerald-400"></span>
+          </span>
+          <span class="text-mist/70 text-xs font-medium uppercase tracking-widest">Frontend Developer</span>
+        </div>
+        <nav class="flex items-center gap-5 sm:gap-7 lg:gap-9">
+          <a href="#projects" class="group relative text-mist font-medium uppercase tracking-wider text-sm md:text-base">Work<span class="absolute -bottom-1 left-0 h-px w-0 bg-ember transition-all duration-300 group-hover:w-full"></span></a>
+          <a href="#services" class="group relative text-mist font-medium uppercase tracking-wider text-sm md:text-base">Services<span class="absolute -bottom-1 left-0 h-px w-0 bg-ember transition-all duration-300 group-hover:w-full"></span></a>
+          <a href="#about" class="group relative text-mist font-medium uppercase tracking-wider text-sm md:text-base">About<span class="absolute -bottom-1 left-0 h-px w-0 bg-ember transition-all duration-300 group-hover:w-full"></span></a>
+          <a href="#contact" class="group relative text-mist font-medium uppercase tracking-wider text-sm md:text-base">Contact<span class="absolute -bottom-1 left-0 h-px w-0 bg-ember transition-all duration-300 group-hover:w-full"></span></a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="relative h-screen flex flex-col pt-28 md:pt-32" style="overflow-x: clip;">
+      <div class="flex justify-between items-center px-6 md:px-10 z-20" data-reveal data-y="-16" data-delay="0.1">
+        <span class="text-mist/50 text-xs sm:text-sm font-medium uppercase tracking-[0.25em]">Based in Jakarta, working worldwide</span>
+        <span class="hidden sm:inline text-mist/50 text-xs sm:text-sm font-medium uppercase tracking-[0.25em]">Portfolio / Vol. 26</span>
+      </div>
+
+      <div class="overflow-hidden mt-auto">
+        <h1 class="font-black uppercase tracking-tight leading-none whitespace-nowrap w-full text-center text-[10.5vw] sm:text-[11vw] md:text-[11.5vw] lg:text-[12.5vw]" data-reveal data-y="40" data-delay="0.15">
+          <span class="hero-heading">Hi, i&apos;m </span><span class="heading-ember">codecuy</span>
+        </h1>
+      </div>
+
+      <div class="mt-auto flex justify-between items-end px-6 md:px-10 pb-7 sm:pb-8 md:pb-10 z-20">
+        <p class="text-mist font-light uppercase tracking-wide leading-snug max-w-[160px] sm:max-w-[220px] md:max-w-[260px]" style="font-size: clamp(0.75rem, 1.4vw, 1.5rem);" data-reveal data-y="20" data-delay="0.35">
+          a frontend developer turning ideas into fast, accessible and polished interfaces
+        </p>
+
+        <div class="hidden lg:flex flex-col items-center gap-2 text-mist/40" data-reveal data-y="0" data-delay="0.45">
+          <span class="text-[0.65rem] uppercase tracking-[0.3em]">Scroll</span>
+          <i data-lucide="arrow-down" class="w-4 h-4 animate-bounce"></i>
+        </div>
+
+        <div data-reveal data-y="20" data-delay="0.5">
+          <a href="#contact" class="group inline-flex items-center gap-2 rounded-full text-white font-medium uppercase tracking-widest px-7 py-3 sm:px-9 sm:py-3.5 md:px-11 md:py-4 text-xs sm:text-sm md:text-base transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5"
+            style="background: linear-gradient(135deg, #ff8a4c 0%, #ff5a1f 48%, #c2410c 100%); box-shadow: 0 8px 30px -8px rgba(255,90,31,0.55), inset 0 1px 0 rgba(255,255,255,0.35), inset 0 0 0 1px rgba(255,255,255,0.12);">
+            Contact Me
+            <i data-lucide="arrow-up-right" class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Marquee -->
+    <section class="bg-ink pt-24 sm:pt-32 md:pt-40 pb-10 overflow-hidden">
+      <div class="flex items-center justify-between gap-4 px-6 md:px-10 mb-10 sm:mb-14">
+        <span class="text-mist/50 text-xs sm:text-sm font-medium uppercase tracking-[0.3em]">Selected frontend work</span>
+        <span class="text-mist/50 text-xs sm:text-sm font-medium uppercase tracking-[0.3em]">2021 to 2026</span>
+      </div>
+      <div class="edge-fade flex flex-col gap-3 overflow-hidden">
+        <div class="marquee-row anim-left" data-row="1"></div>
+        <div class="marquee-row anim-right" data-row="2"></div>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="relative min-h-screen flex flex-col items-center justify-center px-5 sm:px-8 md:px-10 py-20 bg-ink overflow-hidden">
+      <div class="relative z-10 flex flex-col items-center gap-16 sm:gap-20 md:gap-24">
+        <div class="flex flex-col items-center gap-10 sm:gap-14 md:gap-16">
+          <h2 class="hero-heading font-black uppercase leading-none tracking-tight text-center" style="font-size: clamp(3rem, 12vw, 160px);" data-reveal data-y="40">About me</h2>
+
+          <p data-animtext class="text-mist font-medium text-center leading-relaxed max-w-[560px]" style="font-size: clamp(1rem, 2vw, 1.35rem);"></p>
+
+          <div class="flex flex-wrap justify-center gap-x-10 gap-y-6 sm:gap-x-16" data-reveal data-y="24" data-delay="0.1">
+            <div class="flex flex-col items-center"><span class="heading-ember font-black leading-none" style="font-size: clamp(2rem, 5vw, 3.5rem);">3+</span><span class="mt-1 text-mist/50 text-xs sm:text-sm font-medium uppercase tracking-widest">Years with React</span></div>
+            <div class="flex flex-col items-center"><span class="heading-ember font-black leading-none" style="font-size: clamp(2rem, 5vw, 3.5rem);">80+</span><span class="mt-1 text-mist/50 text-xs sm:text-sm font-medium uppercase tracking-widest">Projects shipped</span></div>
+            <div class="flex flex-col items-center"><span class="heading-ember font-black leading-none" style="font-size: clamp(2rem, 5vw, 3.5rem);">30+</span><span class="mt-1 text-mist/50 text-xs sm:text-sm font-medium uppercase tracking-widest">Happy clients</span></div>
+          </div>
+        </div>
+
+        <a href="#contact" class="group inline-flex items-center gap-2 rounded-full text-white font-medium uppercase tracking-widest px-7 py-3 sm:px-9 sm:py-3.5 md:px-11 md:py-4 text-xs sm:text-sm md:text-base transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5"
+          style="background: linear-gradient(135deg, #ff8a4c 0%, #ff5a1f 48%, #c2410c 100%); box-shadow: 0 8px 30px -8px rgba(255,90,31,0.55), inset 0 1px 0 rgba(255,255,255,0.35), inset 0 0 0 1px rgba(255,255,255,0.12);">
+          Let's work together
+          <i data-lucide="arrow-up-right" class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"></i>
+        </a>
+      </div>
+    </section>
+
+    <!-- Services -->
+    <section id="services" class="bg-paper text-paper-ink rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32">
+      <div class="flex items-center justify-center gap-3 mb-6">
+        <span class="w-1.5 h-1.5 rounded-full bg-ember"></span>
+        <span class="text-paper-ink/50 text-xs sm:text-sm font-medium uppercase tracking-[0.3em]">What I do</span>
+      </div>
+      <h2 class="font-black uppercase text-center mb-16 sm:mb-20 md:mb-28" style="font-size: clamp(3rem, 12vw, 160px);">Services</h2>
+      <div class="max-w-5xl mx-auto" data-services></div>
+    </section>
+
+    <!-- Projects -->
+    <section id="projects" class="relative z-10 bg-ink rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 px-5 sm:px-8 md:px-10 pt-20 sm:pt-24 md:pt-32 pb-32">
+      <div class="flex items-center justify-center gap-3 mb-6">
+        <span class="w-1.5 h-1.5 rounded-full bg-ember"></span>
+        <span class="text-mist/50 text-xs sm:text-sm font-medium uppercase tracking-[0.3em]">Selected work</span>
+      </div>
+      <h2 class="hero-heading font-black uppercase leading-none tracking-tight text-center mb-16 sm:mb-20 md:mb-28" style="font-size: clamp(3rem, 12vw, 160px);">Projects</h2>
+      <div data-cards></div>
+    </section>
+
+    <!-- Showcase -->
+    <section id="showcase" class="relative w-full min-h-screen flex flex-col overflow-hidden">
+      <header class="relative z-20 pt-6 px-6 md:px-16">
+        <!-- Wordmark -->
+        <div aria-label="codecuy" class="text-mega font-black lowercase tracking-tight w-full flex items-end justify-center" data-wordmark></div>
+
+        <!-- sub-nav -->
+        <div class="flex justify-between items-start mt-8 text-[10px] md:text-[11px] tracking-[0.2em] uppercase">
+          <div class="w-[15%] text-mist leading-relaxed" data-reveal data-y="20"><p>React</p><p>TypeScript</p><p>Web</p></div>
+          <div class="hidden md:flex w-[5%] justify-center pt-1" data-reveal data-y="20"><i data-lucide="arrow-right" class="w-3.5 h-3.5 text-mist/40"></i></div>
+          <p class="flex-1 md:flex-none md:w-[30%] text-mist/70 leading-relaxed" data-reveal data-y="20">Building fast, accessible and delightful web interfaces with React, TypeScript and a love for detail.</p>
+          <div class="hidden md:flex w-[5%] justify-center pt-1" data-reveal data-y="20"><i data-lucide="arrow-right" class="w-3.5 h-3.5 text-mist/40"></i></div>
+          <ul class="hidden md:block w-[15%] text-mist space-y-1" data-reveal data-y="20">
+            <li><a href="#projects" class="transition-colors hover:text-ember">Work</a></li>
+            <li><a href="#services" class="transition-colors hover:text-ember">Services</a></li>
+            <li><a href="#about" class="transition-colors hover:text-ember">About</a></li>
+            <li><a href="#contact" class="transition-colors hover:text-ember">Contact</a></li>
+          </ul>
+          <button type="button" aria-label="Toggle menu" data-burger class="group relative z-[60] md:hidden flex flex-col gap-[6px] pt-1">
+            <span data-bar="1" class="h-[1.5px] bg-mist transition-all duration-300 w-8 group-hover:w-6"></span>
+            <span data-bar="2" class="h-[1.5px] bg-mist transition-all duration-300 w-8 group-hover:w-10"></span>
+          </button>
+        </div>
+      </header>
+
+      <!-- mobile menu -->
+      <div data-menu class="hidden md:hidden relative z-30 bg-ink border-b border-mist/10 shadow-xl px-6 py-8">
+        <ul class="space-y-6 text-sm tracking-[0.2em] uppercase text-mist">
+          <li><a href="#projects" class="hover:text-ember">Work</a></li>
+          <li><a href="#services" class="hover:text-ember">Services</a></li>
+          <li><a href="#about" class="hover:text-ember">About</a></li>
+          <li><a href="#contact" class="hover:text-ember">Contact</a></li>
+        </ul>
+      </div>
+
+      <!-- body -->
+      <div class="relative z-10 flex-1 flex justify-between items-start px-10 md:px-16 pb-24 md:pb-32">
+        <div class="mt-16 sm:mt-20 md:mt-24 max-w-sm">
+          <div class="flex items-center gap-3 text-[11px] tracking-[0.25em] uppercase text-mist/50" data-reveal data-y="20"><span>01</span><span class="h-px w-12 bg-mist/25"></span><span>Intro</span></div>
+          <h2 class="mt-5 text-[3rem] md:text-[4.5rem] font-black tracking-tight leading-[0.95] uppercase text-mist" data-reveal data-y="20">Built <span class="text-ember">for</span> the web</h2>
+          <p class="mt-5 max-w-xs text-sm md:text-[15px] text-mist/60 leading-relaxed" data-reveal data-y="20">Browse interfaces engineered for speed, accessibility and detail, built to be remembered.</p>
+          <div class="mt-8" data-reveal data-y="20">
+            <a href="#collection" class="group relative inline-flex items-center gap-3 overflow-hidden rounded-md border border-ember/60 bg-ink-soft px-6 py-3.5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_rgba(255,90,31,0.5)] active:translate-y-0 active:shadow-none">
+              <span class="absolute inset-0 -translate-x-[101%] bg-ember transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-0"></span>
+              <i data-lucide="sparkles" class="relative z-10 w-[18px] h-[18px] text-mist transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-12 group-hover:-translate-y-1 group-hover:text-ink"></i>
+              <span class="relative z-10 text-[15px] font-medium text-mist transition-colors duration-300 group-hover:text-ink">View Work</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="hidden md:flex flex-col gap-8 w-[200px] mt-16 md:mt-24" data-reveal data-y="20" data-delay="0.2">
+          <div>
+            <p class="text-[10px] font-bold tracking-widest uppercase text-mist">Featured Project</p>
+            <p class="mt-2 text-[12px] text-mist/60 leading-[1.6]">Nextlevel Dashboard<br />Client, 2025</p>
+          </div>
+          <div class="flex flex-col gap-4">
+            <div><p class="text-[10px] tracking-widest uppercase text-mist/50">Projects</p><p class="text-[13px] font-medium text-mist">80+</p></div>
+            <div><p class="text-[10px] tracking-widest uppercase text-mist/50">Experience</p><p class="text-[13px] font-medium text-mist">3 yrs</p></div>
+          </div>
+          <a href="#collection" class="group flex items-center gap-3">
+            <span class="flex w-10 h-10 items-center justify-center rounded-full border border-mist/40 transition-colors group-hover:border-ember group-hover:bg-ember"><i data-lucide="plus" class="w-4 h-4 text-mist transition-colors group-hover:text-ink"></i></span>
+            <span class="text-[10px] tracking-widest uppercase font-bold text-mist">View Details</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Explore -->
+    <section id="explore" class="relative w-full min-h-[75vh] md:min-h-screen bg-paper text-paper-ink flex flex-col items-center pt-24 md:pt-32 pb-0 z-20 rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px]">
+      <p class="text-[10px] md:text-[11px] tracking-[0.2em] mb-12" data-reveal data-y="20"><span class="text-paper-ink/50">[ 02 ]</span> <span class="text-paper-ink font-bold uppercase">What I Do</span></p>
+      <h2 class="px-6 text-center text-[2.2rem] md:text-[3.5rem] lg:text-[4.2rem] leading-[1.1] font-medium tracking-tight text-paper-ink max-w-[1000px]" data-reveal data-y="40">Turning bold ideas into fast, accessible web<br class="hidden md:block" /> interfaces that refuse to blend in.</h2>
+      <div class="flex flex-wrap justify-center gap-3 md:gap-4 mt-12 mb-10 md:mb-24 px-6" data-pills></div>
+      <div class="min-h-[60px] md:min-h-[120px]"></div>
+      <div class="hidden md:flex absolute bottom-0 inset-x-0 justify-between px-8 md:px-16 pb-8 md:pb-12 pointer-events-none text-[10px] tracking-widest uppercase text-paper-ink/50 font-medium">
+        <span>We don't just write code.</span><span>codecuy © 2026</span>
+      </div>
+    </section>
+
+    <!-- Collection -->
+    <section id="collection" class="relative w-full bg-ink text-mist flex flex-col z-30">
+      <div class="relative z-10 px-8 md:px-16 pt-32 md:pt-48 mb-16 flex flex-col xl:flex-row justify-between gap-10">
+        <h2 class="text-[1.8rem] md:text-[3rem] lg:text-[3.8rem] xl:text-[4rem] leading-[1.15] font-medium tracking-tight text-mist max-w-4xl" data-reveal data-y="30">
+          Shipped from years of
+          <span class="inline-flex gap-2 md:gap-3 align-middle mx-2 md:mx-4 -translate-y-[4px]">
+            <span class="flex w-10 h-10 md:w-14 md:h-14 items-center justify-center rounded-full border border-mist/25 bg-ink-soft text-mist/50 transition-colors hover:bg-mist hover:text-ink hover:border-mist"><i data-lucide="code" class="w-[22px] h-[22px]"></i></span>
+            <span class="flex w-10 h-10 md:w-14 md:h-14 items-center justify-center rounded-full border border-mist/25 bg-ink-soft text-mist/50 transition-colors hover:bg-mist hover:text-ink hover:border-mist"><i data-lucide="zap" class="w-[22px] h-[22px]"></i></span>
+            <span class="flex w-10 h-10 md:w-14 md:h-14 items-center justify-center rounded-full border border-mist/25 bg-ink-soft text-mist/50 transition-colors hover:bg-mist hover:text-ink hover:border-mist"><i data-lucide="layout-dashboard" class="w-[22px] h-[22px]"></i></span>
+          </span>
+          curiosity &amp; code.
+        </h2>
+        <div class="xl:text-right xl:max-w-xs" data-reveal data-y="30" data-delay="0.1">
+          <p class="text-[9px] md:text-[10px] tracking-widest text-mist/40 uppercase mb-6 leading-relaxed">We don't just ship features<br />we craft experiences worth remembering</p>
+          <div class="flex flex-wrap xl:justify-end gap-2">
+            <span class="rounded-full border border-mist/25 px-5 py-2 text-[9px] tracking-widest uppercase text-mist/70 transition-colors hover:bg-mist hover:text-ink hover:border-mist">Fast</span>
+            <span class="rounded-full border border-mist/25 px-5 py-2 text-[9px] tracking-widest uppercase text-mist/70 transition-colors hover:bg-mist hover:text-ink hover:border-mist">Accessible</span>
+            <span class="rounded-full border border-mist/25 px-5 py-2 text-[9px] tracking-widest uppercase text-mist/70 transition-colors hover:bg-mist hover:text-ink hover:border-mist">Polished</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="relative z-10 h-px bg-mist/15"></div>
+      <div class="relative z-10 flex flex-col md:flex-row">
+        <!-- left -->
+        <div class="md:w-[35%] border-b md:border-b-0 md:border-r border-mist/15 min-h-[400px] md:min-h-[500px] flex flex-col">
+          <div class="p-8 text-mist/40 text-xl tracking-[0.3em]">∗∗∗</div>
+          <div class="relative flex-1">
+            <img data-chap-img alt="" class="absolute inset-0 m-auto w-[80%] h-[80%] object-contain mix-blend-lighten" />
+          </div>
+          <div class="p-8 flex items-end gap-1 text-[10px] tracking-widest uppercase">
+            <span data-counter class="text-[#888]">03</span>
+            <span class="text-[#333]">/</span>
+            <span class="text-[#888]" data-total>05</span>
+          </div>
+        </div>
+        <!-- right -->
+        <div class="md:w-[65%] flex flex-col">
+          <div class="border-b border-mist/15 p-8 flex items-center justify-between text-[10px] tracking-widest uppercase text-mist/40">
+            <span>Design with intent. Build with soul.</span>
+            <span data-chap-label class="text-ember">Chapter 03</span>
+          </div>
+          <ul data-chap-list></ul>
+        </div>
+      </div>
+
+      <div class="relative z-10 h-px bg-mist/15"></div>
+      <div class="relative z-10 px-8 py-8 text-[10px] tracking-widest uppercase text-mist/50 bg-ink">Building for the modern web</div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="relative bg-ink px-5 sm:px-8 md:px-10 pt-24 sm:pt-28 md:pt-36 pb-10">
+      <div class="max-w-6xl mx-auto">
+        <p class="text-mist/40 font-medium uppercase tracking-[0.3em] text-xs sm:text-sm mb-6" data-reveal data-y="40">(Got a project?)</p>
+        <a href="mailto:hello@codecuy.dev" class="group block hero-heading font-black uppercase leading-[0.9] tracking-tight" style="font-size: clamp(2.5rem, 11vw, 150px);" data-reveal data-y="40" data-delay="0.1">
+          Let's build<br />
+          <span class="inline-flex items-center gap-3 sm:gap-6">something <i data-lucide="arrow-up-right" class="w-[0.7em] h-[0.7em] text-ember transition-transform duration-500 group-hover:translate-x-2 group-hover:-translate-y-2"></i></span>
+        </a>
+        <a href="mailto:hello@codecuy.dev" class="inline-block mt-8 text-mist text-lg sm:text-2xl md:text-3xl font-light lowercase tracking-tight border-b border-mist/30 pb-1 transition-colors hover:border-ember hover:text-ember" data-reveal data-y="30" data-delay="0.2">hello@codecuy.dev</a>
+      </div>
+      <div class="max-w-6xl mx-auto mt-20 sm:mt-28 md:mt-36 pt-8 border-t border-mist/10 flex flex-col sm:flex-row gap-6 sm:gap-4 items-start sm:items-center justify-between">
+        <span class="text-mist/40 text-xs sm:text-sm uppercase tracking-widest">© 2026 codecuy°, Frontend Developer</span>
+        <div class="flex flex-wrap gap-x-6 gap-y-2">
+          <a href="#" class="text-mist/60 text-xs sm:text-sm uppercase tracking-widest transition-colors hover:text-ember">GitHub</a>
+          <a href="#" class="text-mist/60 text-xs sm:text-sm uppercase tracking-widest transition-colors hover:text-ember">LinkedIn</a>
+          <a href="#" class="text-mist/60 text-xs sm:text-sm uppercase tracking-widest transition-colors hover:text-ember">X / Twitter</a>
+          <a href="#" class="text-mist/60 text-xs sm:text-sm uppercase tracking-widest transition-colors hover:text-ember">CodePen</a>
+        </div>
+        <a href="#top" class="text-mist/40 text-xs sm:text-sm uppercase tracking-widest transition-colors hover:text-mist">Back to top ↑</a>
+      </div>
+    </footer>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/motion@11/dist/motion.js"></script>
+
+    <script>
+      (function () {
+        const { animate, inView } = window.Motion
+        lucide.createIcons()
+
+        document.querySelectorAll('[data-reveal]').forEach((el) => {
+          const y = parseFloat(el.dataset.y ?? '20')
+          const delay = parseFloat(el.dataset.delay ?? '0')
+          inView(
+            el,
+            () => {
+              animate(el, { opacity: [0, 1], y: [y, 0] }, { duration: 0.7, delay, ease: [0.25, 0.1, 0.25, 1] })
+            },
+            { amount: 0.05 },
+          )
+        })
+      })();
+    </script>
+
+    <script>
+      (function () {
+        const { animate, inView, scroll } = window.Motion
+
+        // --- Marquee brand logos (Simple Icons CDN) ---
+        const brand = (slug, color) => `https://cdn.simpleicons.org/${slug}${color ? '/' + color : ''}`
+        const LOGOS = [
+          brand('react'), brand('typescript'), brand('javascript'), brand('nextdotjs', 'white'),
+          brand('tailwindcss'), brand('vuedotjs'), brand('nodedotjs'), brand('graphql'), brand('redux'),
+          brand('vite'), brand('sass'), brand('html5'), brand('css'), brand('figma'), brand('git'),
+          brand('storybook'), brand('jest'), brand('framer'), brand('vercel', 'white'), brand('webpack'),
+          brand('reactrouter'),
+        ]
+        const tile = (src) =>
+          `<div class="shrink-0 flex items-center justify-center rounded-2xl border border-mist/10 bg-ink-soft transition-colors hover:border-mist/30" style="width:220px;height:150px"><img src="${src}" alt="" loading="lazy" class="h-12 w-12 md:h-16 md:w-16 object-contain"></div>`
+        const row1 = [...LOGOS.slice(0, 11), ...LOGOS.slice(0, 11), ...LOGOS.slice(0, 11)]
+        const row2 = [...LOGOS.slice(11), ...LOGOS.slice(11), ...LOGOS.slice(11)]
+        document.querySelector('[data-row="1"]').innerHTML = row1.map(tile).join('')
+        document.querySelector('[data-row="2"]').innerHTML = row2.map(tile).join('')
+
+        // --- AnimatedText (char-by-char scroll reveal) ---
+        const ABOUT_TEXT =
+          "I'm codecuy, a frontend developer who has spent the last three years building fast, accessible interfaces with React, TypeScript and a sharp eye for detail. I work best with teams shipping products that need to feel as good as they look. Let's build something worth remembering."
+        const p = document.querySelector('[data-animtext]')
+        const frag = document.createDocumentFragment()
+        const chars = []
+        for (const ch of ABOUT_TEXT) {
+          if (ch === ' ') { frag.appendChild(document.createTextNode(' ')); continue }
+          const s = document.createElement('span')
+          s.textContent = ch
+          s.style.opacity = '0.15'
+          s.style.transition = 'opacity 0.15s linear'
+          frag.appendChild(s)
+          chars.push(s)
+        }
+        p.appendChild(frag)
+        scroll(
+          (progress) => {
+            const revealed = chars.length * progress
+            chars.forEach((c, i) => { c.style.opacity = i < revealed ? '1' : '0.15' })
+          },
+          { target: p, offset: ['start 0.8', 'end 0.2'] },
+        )
+
+        lucide.createIcons()
+        document.querySelectorAll('[data-reveal]').forEach((el) => {
+          const y = parseFloat(el.dataset.y ?? '20')
+          const delay = parseFloat(el.dataset.delay ?? '0')
+          inView(el, () => { animate(el, { opacity: [0, 1], y: [y, 0] }, { duration: 0.7, delay, ease: [0.25, 0.1, 0.25, 1] }) }, { amount: 0.1 })
+        })
+      })();
+    </script>
+
+    <script>
+      (function () {
+        const { animate, inView, scroll } = window.Motion
+
+        // --- Services ---
+        const SERVICES = [
+          { number: '01', name: 'Frontend Development', description: 'Building production-grade interfaces with React, Next.js and TypeScript, component-driven, type-safe and maintainable at scale.' },
+          { number: '02', name: 'UI Engineering', description: 'Translating designs into pixel-perfect, responsive layouts with clean, semantic and accessible markup that holds up everywhere.' },
+          { number: '03', name: 'Performance', description: 'Optimizing load times, rendering and Core Web Vitals so every page feels instant and every interaction stays smooth.' },
+          { number: '04', name: 'Design Systems', description: 'Crafting scalable component libraries and design tokens that keep products consistent and teams shipping faster.' },
+          { number: '05', name: 'Motion & Interaction', description: 'Adding purposeful animation and micro-interactions with Framer Motion to bring interfaces to life without hurting performance.' },
+        ]
+        document.querySelector('[data-services]').innerHTML = SERVICES.map((s, i) => `
+          <div data-reveal data-delay="${i * 0.1}" class="group relative flex items-start gap-5 sm:gap-8 md:gap-12 py-8 sm:py-10 md:py-12" style="border-top:1px solid rgba(26,23,20,0.15)">
+            <span class="font-black leading-none shrink-0 text-paper-ink/30 transition-colors duration-300 group-hover:text-ember" style="font-size: clamp(3rem, 10vw, 140px);">${s.number}</span>
+            <div class="flex flex-col gap-3 sm:gap-4 pt-1 flex-1">
+              <h3 class="font-medium uppercase leading-tight transition-transform duration-300 group-hover:translate-x-2" style="font-size: clamp(1rem, 2.2vw, 2.1rem);">${s.name}</h3>
+              <p class="font-light leading-relaxed max-w-2xl opacity-60" style="font-size: clamp(0.85rem, 1.6vw, 1.25rem);">${s.description}</p>
+            </div>
+            <i data-lucide="arrow-up-right" class="hidden sm:block w-8 h-8 md:w-10 md:h-10 shrink-0 self-center text-transparent -translate-x-3 transition-all duration-300 group-hover:text-ember group-hover:translate-x-0"></i>
+          </div>`).join('')
+
+        // --- Projects (sticky stacking) ---
+        const u = (id, w) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=75`
+        const PROJECTS = [
+          { number: '01', name: 'Nextlevel Dashboard', category: 'Client', year: '2025', tags: ['React', 'Next.js', 'Tailwind'], col1: [u('1481487196290-c152efe083f5', 900), u('1558655146-9f40138edfeb', 900)], col2: u('1586717791821-3f44a563fa4c', 1000) },
+          { number: '02', name: 'Aura Design System', category: 'Personal', year: '2025', tags: ['React', 'Storybook', 'TypeScript'], col1: [u('1586953208448-b95a79798f07', 900), u('1498050108023-c5249f4df085', 900)], col2: u('1551650975-87deedd944c3', 1000) },
+          { number: '03', name: 'Solaris Web App', category: 'Client', year: '2026', tags: ['Next.js', 'TypeScript', 'Tailwind'], col1: [u('1559526324-4b87b5e36e44', 900), u('1620712943543-bcc4688e7485', 900)], col2: u('1618788372246-79faff0c3742', 1000) },
+        ]
+        const total = PROJECTS.length
+        const round = 'rounded-[40px] sm:rounded-[50px] md:rounded-[60px]'
+        document.querySelector('[data-cards]').innerHTML = PROJECTS.map((p, i) => `
+          <div class="h-[85vh] sticky top-24 md:top-32 flex justify-center">
+            <div data-card class="relative w-full max-w-6xl ${round} border border-mist/15 p-4 sm:p-6 md:p-8 origin-top shadow-[0_-20px_60px_-30px_rgba(0,0,0,0.8)]" style="background:#141416; top:${i * 28}px">
+              <div class="flex items-center justify-between gap-4 flex-wrap mb-4 sm:mb-6 md:mb-8">
+                <div class="flex items-center gap-4 sm:gap-6 md:gap-8">
+                  <span class="text-mist/25 font-black leading-none" style="font-size: clamp(3rem, 10vw, 140px);">${p.number}</span>
+                  <div class="flex flex-col gap-1 sm:gap-2">
+                    <span class="text-ember font-medium uppercase tracking-[0.25em] text-xs sm:text-sm">${p.category} · ${p.year}</span>
+                    <h3 class="text-mist font-medium uppercase leading-tight" style="font-size: clamp(1.1rem, 2.4vw, 2.2rem);">${p.name}</h3>
+                    <div class="hidden sm:flex flex-wrap gap-2 mt-1">${p.tags.map((t) => `<span class="rounded-full border border-mist/20 px-3 py-0.5 text-[0.65rem] uppercase tracking-widest text-mist/60">${t}</span>`).join('')}</div>
+                  </div>
+                </div>
+                <a href="#projects" class="group inline-flex items-center gap-2 rounded-full border border-mist/40 text-mist font-medium uppercase tracking-widest px-6 py-2.5 sm:px-8 sm:py-3 text-xs sm:text-sm transition-colors duration-300 hover:border-ember hover:text-ember">Live Project <i data-lucide="arrow-up-right" class="w-4 h-4"></i></a>
+              </div>
+              <div class="flex gap-3 sm:gap-4 md:gap-5">
+                <div class="flex flex-col gap-3 sm:gap-4 md:gap-5" style="width:40%">
+                  <img src="${p.col1[0]}" alt="" loading="lazy" class="w-full object-cover ${round}" style="height: clamp(130px, 16vw, 230px);">
+                  <img src="${p.col1[1]}" alt="" loading="lazy" class="w-full object-cover ${round}" style="height: clamp(160px, 22vw, 340px);">
+                </div>
+                <div class="relative" style="width:60%">
+                  <img src="${p.col2}" alt="" loading="lazy" class="absolute inset-0 w-full h-full object-cover ${round}">
+                </div>
+              </div>
+            </div>
+          </div>`).join('')
+
+        const cards = [...document.querySelectorAll('[data-card]')]
+        const container = document.querySelector('[data-cards]')
+        cards.forEach((c) => (c.style.transformOrigin = 'top'))
+        scroll(
+          (progress) => {
+            cards.forEach((card, i) => {
+              const targetScale = 1 - (total - 1 - i) * 0.03
+              const start = i / total
+              const localP = Math.min(Math.max((progress - start) / (1 - start), 0), 1)
+              card.style.transform = `scale(${1 - (1 - targetScale) * localP})`
+            })
+          },
+          { target: container, offset: ['start start', 'end end'] },
+        )
+
+        lucide.createIcons()
+        document.querySelectorAll('[data-reveal]').forEach((el) => {
+          const y = parseFloat(el.dataset.y ?? '30')
+          const delay = parseFloat(el.dataset.delay ?? '0')
+          inView(el, () => { animate(el, { opacity: [0, 1], y: [y, 0] }, { duration: 0.7, delay, ease: [0.25, 0.1, 0.25, 1] }) }, { amount: 0.1 })
+        })
+      })();
+    </script>
+
+    <script>
+      (function () {
+        const { animate, inView, stagger } = window.Motion
+
+        // Wordmark letters with non-clipping mask boxes
+        const WORD = 'codecuy'
+        document.querySelector('[data-wordmark]').innerHTML = [...WORD]
+          .map((ch) => `<span class="inline-flex overflow-hidden pt-[0.12em] pb-[0.18em] -mt-[0.12em] -mb-[0.18em]"><span data-letter class="hero-heading inline-block leading-[0.9]">${ch}</span></span>`)
+          .join('')
+
+        // Explore pills
+        const PILLS = [
+          { icon: 'code', label: 'React' }, { icon: 'braces', label: 'TypeScript' },
+          { icon: 'layout-dashboard', label: 'UI Engineering' }, { icon: 'zap', label: 'Performance' },
+          { icon: 'sparkles', label: 'Motion' },
+        ]
+        document.querySelector('[data-pills]').innerHTML = PILLS.map((p) => `
+          <button type="button" data-reveal data-y="16" class="group flex items-center gap-2 rounded-full border border-paper-ink/25 bg-white/50 backdrop-blur-sm px-5 py-2.5 text-[11px] font-medium uppercase tracking-wider text-paper-ink/80 transition-colors hover:border-paper-ink hover:bg-paper-ink hover:text-paper"><i data-lucide="${p.icon}" class="w-3.5 h-3.5"></i>${p.label}</button>`).join('')
+
+        lucide.createIcons()
+
+        // Animate wordmark on view
+        const letters = document.querySelectorAll('[data-letter]')
+        inView(document.querySelector('[data-wordmark]'), () => {
+          animate(letters, { opacity: [0, 1], y: [120, 0] }, { duration: 1.2, delay: stagger(0.06), ease: [0.16, 1, 0.3, 1] })
+        }, { amount: 0.2 })
+
+        // Generic reveals
+        document.querySelectorAll('[data-reveal]').forEach((el) => {
+          const y = parseFloat(el.dataset.y ?? '20')
+          const delay = parseFloat(el.dataset.delay ?? '0')
+          inView(el, () => { animate(el, { opacity: [0, 1], y: [y, 0] }, { duration: 0.7, delay, ease: [0.25, 0.1, 0.25, 1] }) }, { amount: 0.1 })
+        })
+
+        // Hamburger
+        const burger = document.querySelector('[data-burger]')
+        const menu = document.querySelector('[data-menu]')
+        const bar1 = document.querySelector('[data-bar="1"]')
+        const bar2 = document.querySelector('[data-bar="2"]')
+        let open = false
+        burger.addEventListener('click', () => {
+          open = !open
+          menu.classList.toggle('hidden', !open)
+          bar1.className = `h-[1.5px] bg-mist transition-all duration-300 ${open ? 'w-8 translate-y-[7.5px] rotate-45' : 'w-8 group-hover:w-6'}`
+          bar2.className = `h-[1.5px] bg-mist transition-all duration-300 ${open ? 'w-8 -rotate-45' : 'w-8 group-hover:w-10'}`
+        })
+      })();
+    </script>
+
+    <script>
+      (function () {
+        const { animate, inView } = window.Motion
+
+        const u = (id, w) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=75`
+        const CHAPTERS = [
+          { name: 'Nextlevel Dashboard', image: u('1467232004584-a241de8bcf5d', 900) },
+          { name: 'Aura Design System', image: u('1559028012-481c04fa702d', 900) },
+          { name: 'Solaris Web App', image: u('1559028006-448665bd7c7f', 900) },
+          { name: 'Orbit Web3 App', image: u('1517292987719-0369a794ec0f', 900) },
+          { name: 'Lumina UI Kit', image: u('1545235617-9465d2a55698', 900) },
+        ]
+        const pad = (n) => String(n).padStart(2, '0')
+        const img = document.querySelector('[data-chap-img]')
+        const counter = document.querySelector('[data-counter]')
+        const label = document.querySelector('[data-chap-label]')
+        const list = document.querySelector('[data-chap-list]')
+        document.querySelector('[data-total]').textContent = pad(CHAPTERS.length)
+
+        list.innerHTML = CHAPTERS.map((c, i) => `
+          <li class="border-b border-mist/10 px-8">
+            <button type="button" data-chap="${i}" class="group flex w-full items-center justify-between py-8 text-left transition-colors text-[#444] hover:text-[#999]">
+              <span class="text-2xl md:text-[2rem] font-medium tracking-tight">${c.name}</span>
+              <span data-arrow class="opacity-0 transition-opacity"><i data-lucide="arrow-up-right" class="w-[22px] h-[22px] text-mist/50"></i></span>
+            </button>
+          </li>`).join('')
+
+        let active = 2
+        function render(i, withTransition) {
+          active = i
+          counter.textContent = pad(i + 1)
+          label.textContent = 'Chapter ' + pad(i + 1)
+          list.querySelectorAll('button[data-chap]').forEach((b, bi) => {
+            const on = bi === i
+            b.className = `group flex w-full items-center justify-between py-8 text-left transition-colors ${on ? 'text-mist' : 'text-[#444] hover:text-[#999]'}`
+            b.querySelector('[data-arrow]').style.opacity = on ? '1' : '0'
+          })
+          if (withTransition && img.src) {
+            animate(img, { opacity: [1, 0], filter: ['blur(0px)', 'blur(6px)'], scale: [1, 1.05] }, { duration: 0.25 }).finished.then(() => {
+              img.src = CHAPTERS[i].image
+              animate(img, { opacity: [0, 1], filter: ['blur(6px)', 'blur(0px)'], scale: [1.05, 1] }, { duration: 0.5, ease: [0.16, 1, 0.3, 1] })
+            })
+          } else {
+            img.src = CHAPTERS[i].image
+          }
+        }
+        render(active, false)
+
+        list.querySelectorAll('button[data-chap]').forEach((b) =>
+          b.addEventListener('click', () => render(Number(b.dataset.chap), true)),
+        )
+        setInterval(() => render((active + 1) % CHAPTERS.length, true), 3500)
+
+        lucide.createIcons()
+        document.querySelectorAll('[data-reveal]').forEach((el) => {
+          const y = parseFloat(el.dataset.y ?? '30')
+          const delay = parseFloat(el.dataset.delay ?? '0')
+          inView(el, () => { animate(el, { opacity: [0, 1], y: [y, 0] }, { duration: 0.7, delay, ease: [0.25, 0.1, 0.25, 1] }) }, { amount: 0.1 })
+        })
+      })();
+    </script>
+  </body>
+</html>

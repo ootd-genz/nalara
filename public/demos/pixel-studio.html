@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="id" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codecuy - Design Partner Who Ships, Concept to Code</title>
+    
+    <!-- Premium Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        studio: {
+                            black: '#000000',
+                            card: '#090909',
+                            muted: '#888888',
+                            border: '#1f1f1f',
+                            accent: '#F7F8F8',
+                            specRed: '#E11D48',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #000000;
+            color: #F7F8F8;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Dot Grid Blueprint Background */
+        .dot-grid {
+            background-size: 24px 24px;
+            background-image: radial-gradient(circle, #161616 1px, transparent 1px);
+            transition: all 0.3s ease;
+        }
+        
+        .blueprint-active .dot-grid {
+            background-image: radial-gradient(circle, rgba(225, 29, 72, 0.15) 1px, transparent 1px);
+        }
+
+        /* Precision Dashed Borders */
+        .dashed-outline {
+            border: 1px dashed #2a2a2a;
+        }
+        
+        .blueprint-active .dashed-outline {
+            border-color: #e11d48 !important;
+            border-style: solid !important;
+        }
+
+        /* Image scroll snap properties */
+        .snap-x-container {
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .snap-x-item {
+            scroll-snap-align: start;
+        }
+
+        /* Custom scrollbar hiding */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="relative min-h-screen dot-grid flex flex-col justify-between selection:bg-neutral-800 selection:text-white">
+
+    <!-- Figma Style floating control center -->
+    <div class="fixed top-4 right-4 z-50 flex items-center gap-1.5 bg-neutral-900/90 backdrop-blur-md p-1 rounded-full border border-neutral-800 shadow-2xl">
+        <button id="btn-preview" class="px-4 py-1.5 rounded-full text-[11px] font-bold tracking-wider transition-all duration-200 bg-white text-black shadow-lg">
+            PREVIEW
+        </button>
+        <button id="btn-specs" class="px-4 py-1.5 rounded-full text-[11px] font-bold tracking-wider transition-all duration-200 text-neutral-400 hover:text-white flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span>
+            FIGMA SPECS
+        </button>
+    </div>
+
+    <!-- Header Navigation Section -->
+    <header class="w-full max-w-7xl mx-auto px-6 md:px-12 py-8 relative z-20">
+        <nav class="flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center">
+                <a href="#" class="group flex items-center gap-2" aria-label="Codecuy Home">
+                    <svg class="h-10 w-auto transition-transform duration-300 group-hover:scale-105" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="120" height="40" rx="12" fill="#FFFFFF"/>
+                        <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-family="'Inter', sans-serif" font-weight="900" font-size="13" fill="#000000" letter-spacing="1">CODECUY</text>
+                    </svg>
+                </a>
+            </div>
+
+            <ul class="flex flex-wrap justify-center items-center gap-8 text-[11px] font-bold tracking-[0.15em] text-studio-muted">
+                <li><a href="#work" class="hover:text-white transition-colors duration-200">WORK</a></li>
+                <li><a href="#services" class="hover:text-white transition-colors duration-200">SERVICES</a></li>
+                <li><a href="#information" class="hover:text-white transition-colors duration-200">INFORMATION</a></li>
+                <li><a href="#contact" class="hover:text-white transition-colors duration-200">CONTACT</a></li>
+            </ul>
+
+            <div class="flex items-center gap-6 text-[11px] font-bold tracking-[0.15em] text-studio-muted">
+                <a href="#" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors duration-200">TWITTER</a>
+                <a href="mailto:hello@codecuy.com" class="hover:text-white transition-colors duration-200">EMAIL</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="w-full max-w-7xl mx-auto px-6 md:px-12 py-12 flex-grow flex flex-col justify-center relative z-10">
+        
+        <!-- Hero Section -->
+        <section class="py-16 md:py-24 max-w-5xl relative">
+            <h1 class="text-[38px] sm:text-[54px] md:text-[72px] font-semibold leading-[1.05] tracking-[-0.02em] text-studio-accent text-left mb-10 relative">
+                Design partner who ships, concept to code.
+                <span class="spec-underline absolute bottom-0 left-0 w-full h-[1px] bg-rose-500/50 hidden"></span>
+            </h1>
+
+            <div class="flex flex-wrap items-center gap-4 relative">
+                <!-- Figma Specs Info Box for Hero spacing -->
+                <div class="spec-guide absolute -top-8 left-0 text-[10px] text-rose-500 font-mono hidden">gap-4 (16px)</div>
+                
+                <button onclick="openBooking('General Consultation')" class="px-6 h-12 bg-white text-black font-semibold text-xs tracking-widest uppercase rounded-full flex items-center justify-between gap-6 transition-all duration-300 hover:bg-neutral-200 active:scale-95 group">
+                    <span>Let's talk</span>
+                    <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </button>
+                <button onclick="copyEmail()" class="px-6 h-12 bg-neutral-900 border border-neutral-800 text-white font-semibold text-xs tracking-widest uppercase rounded-full flex items-center justify-between gap-4 transition-all duration-300 hover:bg-neutral-800 active:scale-95">
+                    <span>Copy Email</span>
+                    <svg class="w-4 h-4 text-studio-muted" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/>
+                    </svg>
+                </button>
+            </div>
+        </section>
+
+        <!-- Work Grid Section -->
+        <section id="work" class="py-16 md:py-24 border-t border-neutral-900">
+            <div class="flex items-center justify-between mb-16 relative">
+                <span class="relative block w-fit border border-dashed border-white/10 px-3 py-1.5 text-[10px] font-bold tracking-[0.2em] text-white uppercase select-none">
+                    <span class="absolute w-1 h-1 bg-white border border-black -top-0.5 -left-0.5"></span>
+                    <span class="absolute w-1 h-1 bg-white border border-black -top-0.5 -right-0.5"></span>
+                    <span class="absolute w-1 h-1 bg-white border border-black -bottom-0.5 -left-0.5"></span>
+                    <span class="absolute w-1 h-1 bg-white border border-black -bottom-0.5 -right-0.5"></span>
+                    PROJECTS
+                </span>
+            </div>
+
+            <!-- Detailed cascading project feed -->
+            <div class="space-y-32">
+
+                <!-- Arclight -->
+                <article class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start group">
+                    <div class="lg:col-span-4 lg:sticky lg:top-32 space-y-4">
+                        <div class="flex items-baseline gap-3">
+                            <h2 class="text-2xl font-bold text-white">Arclight</h2>
+                            <span class="text-xs text-studio-muted">Photo effects</span>
+                        </div>
+                        <p class="text-sm text-studio-muted leading-relaxed">Photo effects, right in the browser.</p>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-bold tracking-widest uppercase text-studio-accent hover:text-white group-hover:translate-x-1 transition-all duration-300">
+                            VIEW PROJECT
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </a>
+                    </div>
+                    <div class="lg:col-span-8 relative">
+                        <div class="relative rounded-2xl overflow-hidden dashed-outline p-2 bg-studio-card/30">
+                            <img src="https://picsum.photos/seed/arclight-preview/1200/800" alt="Arclight photo effects tool preview" class="w-full h-auto rounded-xl object-cover transition-transform duration-500 group-hover:scale-[1.01]" onerror="this.src='https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=1200&q=80'">
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Fernweh -->
+                <article class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start group">
+                    <div class="lg:col-span-4 lg:sticky lg:top-32 space-y-4">
+                        <div class="flex items-baseline gap-3">
+                            <h2 class="text-2xl font-bold text-white">Fernweh</h2>
+                            <span class="text-xs text-studio-muted">Generative Patterns</span>
+                        </div>
+                        <p class="text-sm text-studio-muted leading-relaxed">Abstract patterns for design and web.</p>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-bold tracking-widest uppercase text-studio-accent hover:text-white group-hover:translate-x-1 transition-all duration-300">
+                            VIEW PROJECT
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </a>
+                    </div>
+                    <div class="lg:col-span-8 relative">
+                        <div class="relative rounded-2xl overflow-hidden dashed-outline p-2 bg-studio-card/30">
+                            <img src="https://picsum.photos/seed/fernweh-preview/1200/800" alt="Fernweh generative pattern toolkit preview" class="w-full h-auto rounded-xl object-cover transition-transform duration-500 group-hover:scale-[1.01]">
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Nova (Carousel) -->
+                <article class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start group">
+                    <div class="lg:col-span-4 lg:sticky lg:top-32 space-y-4">
+                        <div class="flex items-baseline gap-3">
+                            <h2 class="text-2xl font-bold text-white">Nova</h2>
+                            <span class="text-xs text-studio-muted">Enterprise AI</span>
+                        </div>
+                        <p class="text-sm text-studio-muted leading-relaxed">An enterprise platform for AI agents.</p>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-bold tracking-widest uppercase text-studio-accent hover:text-white group-hover:translate-x-1 transition-all duration-300">
+                            VIEW PROJECT
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </a>
+                    </div>
+                    <div class="lg:col-span-8 relative space-y-4">
+                        <!-- Horizontal Snap Scroll Showcase -->
+                        <div class="relative rounded-2xl overflow-hidden dashed-outline p-2 bg-studio-card/30">
+                            <div class="flex overflow-x-auto snap-x-container no-scrollbar gap-4 py-2">
+                                <div class="snap-x-item shrink-0 w-full md:w-[90%]">
+                                    <img src="https://picsum.photos/seed/nova-signin/800/600" alt="Nova sign-in screen" class="w-full h-auto rounded-xl border border-white/5">
+                                </div>
+                                <div class="snap-x-item shrink-0 w-full md:w-[90%]">
+                                    <img src="https://picsum.photos/seed/nova-accounts/800/600" alt="Nova account picker" class="w-full h-auto rounded-xl border border-white/5">
+                                </div>
+                                <div class="snap-x-item shrink-0 w-full md:w-[90%]">
+                                    <img src="https://picsum.photos/seed/nova-helpdesk/800/600" alt="Nova helpdesk" class="w-full h-auto rounded-xl border border-white/5">
+                                </div>
+                                <div class="snap-x-item shrink-0 w-full md:w-[90%]">
+                                    <img src="https://picsum.photos/seed/nova-dashboard/800/600" alt="Nova dashboard preview" class="w-full h-auto rounded-xl border border-white/5">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Hub (Large Carousel) -->
+                <article class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start group">
+                    <div class="lg:col-span-4 lg:sticky lg:top-32 space-y-4">
+                        <div class="flex items-baseline gap-3">
+                            <h2 class="text-2xl font-bold text-white">Hub</h2>
+                            <span class="text-xs text-studio-muted">SaaS Platform</span>
+                        </div>
+                        <p class="text-sm text-studio-muted leading-relaxed">Customer management platform for SaaS teams.</p>
+                        <button onclick="openBooking('Hub Platform Inquiry')" class="inline-flex items-center gap-1.5 text-xs font-bold tracking-widest uppercase text-studio-accent hover:text-white group-hover:translate-x-1 transition-all duration-300">
+                            LET'S TALK
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </button>
+                    </div>
+                    <div class="lg:col-span-8 relative space-y-4">
+                        <div class="relative rounded-2xl overflow-hidden dashed-outline p-2 bg-studio-card/30">
+                            <div class="flex overflow-x-auto snap-x-container no-scrollbar gap-4 py-2">
+                                <div class="snap-x-item shrink-0 w-full md:w-[95%]">
+                                    <img src="https://picsum.photos/seed/hub-dashboard/800/600" alt="Hub dashboard" class="w-full h-auto rounded-xl border border-white/5">
+                                </div>
+                                <div class="snap-x-item shrink-0 w-full md:w-[95%]">
+                                    <img src="https://picsum.photos/seed/hub-accounts/800/600" alt="Hub accounts" class="w-full h-auto rounded-xl border border-white/5">
+                                </div>
+                                <div class="snap-x-item shrink-0 w-full md:w-[95%]">
+                                    <img src="https://picsum.photos/seed/hub-account-products/800/600" alt="Hub renewal products" class="w-full h-auto rounded-xl border border-white/5">
+                                </div>
+                                <div class="snap-x-item shrink-0 w-full md:w-[95%]">
+                                    <img src="https://picsum.photos/seed/hub-products/800/600" alt="Hub products view" class="w-full h-auto rounded-xl border border-white/5">
+                                </div>
+                                <div class="snap-x-item shrink-0 w-full md:w-[95%]">
+                                    <img src="https://picsum.photos/seed/hub-billing/800/600" alt="Hub billing view" class="w-full h-auto rounded-xl border border-white/5">
+                                </div>
+                                <div class="snap-x-item shrink-0 w-full md:w-[95%]">
+                                    <img src="https://picsum.photos/seed/hub-infrastructure/800/600" alt="Hub infrastructure" class="w-full h-auto rounded-xl border border-white/5">
+                                </div>
+                                <div class="snap-x-item shrink-0 w-full md:w-[95%]">
+                                    <img src="https://picsum.photos/seed/hub-search/800/600" alt="Hub global account search" class="w-full h-auto rounded-xl border border-white/5">
+                                </div>
+                                <div class="snap-x-item shrink-0 w-full md:w-[95%]">
+                                    <img src="https://picsum.photos/seed/hub-new-account/800/600" alt="Hub onboarding flow" class="w-full h-auto rounded-xl border border-white/5">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Resolve (AI Helpdesk) -->
+                <article class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start group">
+                    <div class="lg:col-span-4 lg:sticky lg:top-32 space-y-4">
+                        <div class="flex items-baseline gap-3">
+                            <h2 class="text-2xl font-bold text-white">Resolve</h2>
+                            <span class="text-xs text-studio-muted">Agentic AI</span>
+                        </div>
+                        <p class="text-sm text-studio-muted leading-relaxed">Helpdesk designed for the Agentic AI era.</p>
+                        <button onclick="openBooking('Resolve Collaboration')" class="inline-flex items-center gap-1.5 text-xs font-bold tracking-widest uppercase text-studio-accent hover:text-white group-hover:translate-x-1 transition-all duration-300">
+                            LET'S TALK
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </button>
+                    </div>
+                    <div class="lg:col-span-8 relative space-y-4">
+                        <div class="relative rounded-2xl overflow-hidden dashed-outline p-2 bg-studio-card/30">
+                            <div class="flex overflow-x-auto snap-x-container no-scrollbar gap-4 py-2">
+                                <div class="snap-x-item shrink-0 w-full md:w-[95%]">
+                                    <img src="https://picsum.photos/seed/resolve-1/800/600" alt="Resolve ticket view" class="w-full h-auto rounded-xl border border-white/5">
+                                </div>
+                                <div class="snap-x-item shrink-0 w-full md:w-[95%]">
+                                    <img src="https://picsum.photos/seed/resolve-2/800/600" alt="Resolve overdue ticket draft" class="w-full h-auto rounded-xl border border-white/5">
+                                </div>
+                                <div class="snap-x-item shrink-0 w-full md:w-[95%]">
+                                    <img src="https://picsum.photos/seed/resolve-3/800/600" alt="Resolve summary" class="w-full h-auto rounded-xl border border-white/5">
+                                </div>
+                                <div class="snap-x-item shrink-0 w-full md:w-[95%]">
+                                    <img src="https://picsum.photos/seed/resolve-4/800/600" alt="Resolve conversation" class="w-full h-auto rounded-xl border border-white/5">
+                                </div>
+                                <div class="snap-x-item shrink-0 w-full md:w-[95%]">
+                                    <img src="https://picsum.photos/seed/resolve-5/800/600" alt="Resolve knowledge base" class="w-full h-auto rounded-xl border border-white/5">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Lumen -->
+                <article class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start group">
+                    <div class="lg:col-span-4 lg:sticky lg:top-32 space-y-4">
+                        <div class="flex items-baseline gap-3">
+                            <h2 class="text-2xl font-bold text-white">Lumen</h2>
+                            <span class="text-xs text-studio-muted">CX Platform</span>
+                        </div>
+                        <p class="text-sm text-studio-muted leading-relaxed">The Full-Stack CX Platform.</p>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-bold tracking-widest uppercase text-studio-accent hover:text-white group-hover:translate-x-1 transition-all duration-300">
+                            VIEW PROJECT
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </a>
+                    </div>
+                    <div class="lg:col-span-8 relative space-y-4">
+                        <div class="relative rounded-2xl overflow-hidden dashed-outline p-2 bg-studio-card/30">
+                            <div class="flex overflow-x-auto snap-x-container no-scrollbar gap-4 py-2">
+                                <div class="snap-x-item shrink-0 w-full md:w-[95%]">
+                                    <img src="https://picsum.photos/seed/lumen-1/800/600" alt="Lumen softphone layout" class="w-full h-auto rounded-xl border border-white/5">
+                                </div>
+                                <div class="snap-x-item shrink-0 w-full md:w-[95%]">
+                                    <img src="https://picsum.photos/seed/lumen-2/800/600" alt="Lumen sign in specs" class="w-full h-auto rounded-xl border border-white/5">
+                                </div>
+                                <div class="snap-x-item shrink-0 w-full md:w-[95%]">
+                                    <img src="https://picsum.photos/seed/lumen-3/800/600" alt="Lumen reports" class="w-full h-auto rounded-xl border border-white/5">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Tlkn -->
+                <article class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start group">
+                    <div class="lg:col-span-4 lg:sticky lg:top-32 space-y-4">
+                        <div class="flex items-baseline gap-3">
+                            <h2 class="text-2xl font-bold text-white">Tlkn</h2>
+                            <span class="text-xs text-studio-muted">Voice App</span>
+                        </div>
+                        <p class="text-sm text-studio-muted leading-relaxed">Privacy-first HD voice calling.</p>
+                        <button onclick="openBooking('Tlkn Project')" class="inline-flex items-center gap-1.5 text-xs font-bold tracking-widest uppercase text-studio-accent hover:text-white group-hover:translate-x-1 transition-all duration-300">
+                            LET'S TALK
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </button>
+                    </div>
+                    <div class="lg:col-span-8 relative">
+                        <div class="relative rounded-2xl overflow-hidden dashed-outline p-2 bg-studio-card/30">
+                            <img src="https://picsum.photos/seed/tlkn-preview/1200/800" alt="Tlkn preview" class="w-full h-auto rounded-xl object-cover transition-transform duration-500 group-hover:scale-[1.01]">
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Fable -->
+                <article class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start group">
+                    <div class="lg:col-span-4 lg:sticky lg:top-32 space-y-4">
+                        <div class="flex items-baseline gap-3">
+                            <h2 class="text-2xl font-bold text-white">Fable</h2>
+                            <span class="text-xs text-studio-muted">Team Collab</span>
+                        </div>
+                        <p class="text-sm text-studio-muted leading-relaxed">Chat, calls, and docs in one place for modern teams.</p>
+                        <button onclick="openBooking('Fable Platform Build')" class="inline-flex items-center gap-1.5 text-xs font-bold tracking-widest uppercase text-studio-accent hover:text-white group-hover:translate-x-1 transition-all duration-300">
+                            LET'S TALK
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </button>
+                    </div>
+                    <div class="lg:col-span-8 relative space-y-4">
+                        <div class="relative rounded-2xl overflow-hidden dashed-outline p-2 bg-studio-card/30">
+                            <div class="flex overflow-x-auto snap-x-container no-scrollbar gap-4 py-2">
+                                <div class="snap-x-item shrink-0 w-full md:w-[95%]">
+                                    <img src="https://picsum.photos/seed/tribe-document-management/800/600" alt="Fable documents view" class="w-full h-auto rounded-xl border border-white/5">
+                                </div>
+                                <div class="snap-x-item shrink-0 w-full md:w-[95%]">
+                                    <img src="https://picsum.photos/seed/tribe-1/800/600" alt="Fable mobile view" class="w-full h-auto rounded-xl border border-white/5">
+                                </div>
+                                <div class="snap-x-item shrink-0 w-full md:w-[95%]">
+                                    <img src="https://picsum.photos/seed/tribe-2/800/600" alt="Fable AI assistant svelte code" class="w-full h-auto rounded-xl border border-white/5">
+                                </div>
+                                <div class="snap-x-item shrink-0 w-full md:w-[95%]">
+                                    <img src="https://picsum.photos/seed/tribe-3/800/600" alt="Fable feed layout" class="w-full h-auto rounded-xl border border-white/5">
+                                </div>
+                                <div class="snap-x-item shrink-0 w-full md:w-[95%]">
+                                    <img src="https://picsum.photos/seed/tribe-4/800/600" alt="Fable status and call share" class="w-full h-auto rounded-xl border border-white/5">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Ledgerly -->
+                <article class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start group">
+                    <div class="lg:col-span-4 lg:sticky lg:top-32 space-y-4">
+                        <div class="flex items-baseline gap-3">
+                            <h2 class="text-2xl font-bold text-white">Ledgerly</h2>
+                            <span class="text-xs text-studio-muted">Fintech App</span>
+                        </div>
+                        <p class="text-sm text-studio-muted leading-relaxed">Tax filing, simplified for Germany.</p>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-bold tracking-widest uppercase text-studio-accent hover:text-white group-hover:translate-x-1 transition-all duration-300">
+                            VIEW PROJECT
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </a>
+                    </div>
+                    <div class="lg:col-span-8 relative space-y-4">
+                        <div class="relative rounded-2xl overflow-hidden dashed-outline p-2 bg-studio-card/30">
+                            <div class="flex overflow-x-auto snap-x-container no-scrollbar gap-4 py-2">
+                                <div class="snap-x-item shrink-0 w-full md:w-[95%]">
+                                    <img src="https://picsum.photos/seed/tax-germany-1/800/600" alt="Ledgerly layout" class="w-full h-auto rounded-xl border border-white/5">
+                                </div>
+                                <div class="snap-x-item shrink-0 w-full md:w-[95%]">
+                                    <img src="https://picsum.photos/seed/tax-germany-bookkeeping/800/600" alt="Ledgerly bookkeeping" class="w-full h-auto rounded-xl border border-white/5">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Tax Check -->
+                <article class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start group">
+                    <div class="lg:col-span-4 lg:sticky lg:top-32 space-y-4">
+                        <div class="flex items-baseline gap-3">
+                            <h2 class="text-2xl font-bold text-white">Tax Check</h2>
+                            <span class="text-xs text-studio-muted">Risk Engine</span>
+                        </div>
+                        <p class="text-sm text-studio-muted leading-relaxed">Spot risky clients before they cost you.</p>
+                        <button onclick="openBooking('Tax Check platform')" class="inline-flex items-center gap-1.5 text-xs font-bold tracking-widest uppercase text-studio-accent hover:text-white group-hover:translate-x-1 transition-all duration-300">
+                            LET'S TALK
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </button>
+                    </div>
+                    <div class="lg:col-span-8 relative space-y-4">
+                        <div class="relative rounded-2xl overflow-hidden dashed-outline p-2 bg-studio-card/30">
+                            <div class="flex overflow-x-auto snap-x-container no-scrollbar gap-4 py-2">
+                                <div class="snap-x-item shrink-0 w-full md:w-[95%]">
+                                    <img src="https://picsum.photos/seed/tax-check-1/800/600" alt="Tax Check insights" class="w-full h-auto rounded-xl border border-white/5">
+                                </div>
+                                <div class="snap-x-item shrink-0 w-full md:w-[95%]">
+                                    <img src="https://picsum.photos/seed/tax-check-2/800/600" alt="Tax Check cases risk" class="w-full h-auto rounded-xl border border-white/5">
+                                </div>
+                                <div class="snap-x-item shrink-0 w-full md:w-[95%]">
+                                    <img src="https://picsum.photos/seed/tax-check-3/800/600" alt="Tax Check score profile" class="w-full h-auto rounded-xl border border-white/5">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Playground (Multi-shot Gallery) -->
+                <article class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start group">
+                    <div class="lg:col-span-4 lg:sticky lg:top-32 space-y-4">
+                        <div class="flex items-baseline gap-3">
+                            <h2 class="text-2xl font-bold text-white">Playground</h2>
+                            <span class="text-xs text-studio-muted">Experiments</span>
+                        </div>
+                        <p class="text-sm text-studio-muted leading-relaxed">Side experiments and product explorations.</p>
+                        <button onclick="openBooking('Playground Exploration')" class="inline-flex items-center gap-1.5 text-xs font-bold tracking-widest uppercase text-studio-accent hover:text-white group-hover:translate-x-1 transition-all duration-300">
+                            LET'S TALK
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </button>
+                    </div>
+                    <div class="lg:col-span-8 relative space-y-4">
+                        <div class="relative rounded-2xl overflow-hidden dashed-outline p-2 bg-studio-card/30">
+                            <div class="flex overflow-x-auto snap-x-container no-scrollbar gap-4 py-2">
+                                <div class="snap-x-item shrink-0 w-full md:w-[95%]">
+                                    <img src="https://picsum.photos/seed/group-call-ui/800/600" alt="Group video call exploration" class="w-full h-auto rounded-xl border border-white/5">
+                                </div>
+                                <div class="snap-x-item shrink-0 w-full md:w-[95%]">
+                                    <img src="https://picsum.photos/seed/app-installation-ui/800/600" alt="App install flow exploration" class="w-full h-auto rounded-xl border border-white/5">
+                                </div>
+                                <div class="snap-x-item shrink-0 w-full md:w-[95%]">
+                                    <img src="https://picsum.photos/seed/claude-memory-explore/800/600" alt="Claude memory interaction explore" class="w-full h-auto rounded-xl border border-white/5">
+                                </div>
+                                <div class="snap-x-item shrink-0 w-full md:w-[95%]">
+                                    <img src="https://picsum.photos/seed/photography-portfolio/800/600" alt="Photography portfolio construct" class="w-full h-auto rounded-xl border border-white/5">
+                                </div>
+                                <div class="snap-x-item shrink-0 w-full md:w-[95%]">
+                                    <img src="https://picsum.photos/seed/sleep-app/800/600" alt="Sleep tracking design explore" class="w-full h-auto rounded-xl border border-white/5">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- Testimonial Section -->
+        <section class="py-16 md:py-24 border-t border-neutral-900">
+            <div class="max-w-4xl mx-auto flex flex-col items-center text-center space-y-8 relative">
+                <span class="relative block w-fit border border-dashed border-white/10 px-3 py-1.5 text-[10px] font-bold tracking-[0.2em] text-white uppercase select-none">
+                    <span class="absolute w-1 h-1 bg-white border border-black -top-0.5 -left-0.5"></span>
+                    <span class="absolute w-1 h-1 bg-white border border-black -top-0.5 -right-0.5"></span>
+                    <span class="absolute w-1 h-1 bg-white border border-black -bottom-0.5 -left-0.5"></span>
+                    <span class="absolute w-1 h-1 bg-white border border-black -bottom-0.5 -right-0.5"></span>
+                    KIND WORDS
+                </span>
+
+                <blockquote class="text-xl sm:text-2xl md:text-3xl font-normal leading-relaxed text-studio-accent max-w-3xl">
+                    “I had a memorable time working with Alex; his grasp on UI and UX design theory was evident. He was a notable asset to the tlkn app with relentless motivation towards creating a perfect product.”
+                </blockquote>
+
+                <div class="flex items-center gap-4 text-left">
+                    <img src="https://picsum.photos/seed/raja-sandhu-avatar/200/200" alt="Raja Sandhu profile" class="w-12 h-12 rounded-full border border-white/10 object-cover" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80'">
+                    <div>
+                        <h4 class="text-sm font-semibold text-white">Raja Sandhu</h4>
+                        <p class="text-xs text-studio-muted">Co-Founder, tlkn Inc.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services & Subscriptions Section -->
+        <section id="services" class="py-16 md:py-24 border-t border-neutral-900">
+            <div class="mb-16 space-y-4">
+                <span class="relative block w-fit border border-dashed border-white/10 px-3 py-1.5 text-[10px] font-bold tracking-[0.2em] text-white uppercase select-none">
+                    <span class="absolute w-1 h-1 bg-white border border-black -top-0.5 -left-0.5"></span>
+                    <span class="absolute w-1 h-1 bg-white border border-black -top-0.5 -right-0.5"></span>
+                    <span class="absolute w-1 h-1 bg-white border border-black -bottom-0.5 -left-0.5"></span>
+                    <span class="absolute w-1 h-1 bg-white border border-black -bottom-0.5 -right-0.5"></span>
+                    SERVICES &amp; PRICING
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-semibold leading-snug tracking-tight text-white max-w-2xl">
+                    A sprint to ship one thing well, or a retainer for everything after.
+                </h2>
+            </div>
+
+            <!-- Two Pricing Tier cards -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+                
+                <!-- SPRINT -->
+                <div class="pricing-card relative rounded-3xl bg-studio-card/80 backdrop-blur-md border border-neutral-900 p-8 md:p-12 flex flex-col justify-between hover:bg-neutral-900/60 transition-all duration-300 group">
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-3">2-week design sprint</h3>
+                        <p class="text-sm text-studio-muted mb-8 leading-relaxed max-w-sm">
+                            One focused build. A landing page, dashboard, brand starter, or up to 8 mobile screens.
+                        </p>
+                        
+                        <div class="flex items-baseline gap-2 mb-10 pb-8 border-b border-neutral-900">
+                            <span class="text-4xl md:text-5xl font-bold text-white">$2,500</span>
+                            <span class="text-xs text-studio-muted">One-time price</span>
+                        </div>
+
+                        <ul class="space-y-4 mb-12">
+                            <li class="flex items-center gap-3 text-sm text-neutral-300">
+                                <span class="text-studio-muted group-hover:text-white transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                </span>
+                                Landing page that converts
+                            </li>
+                            <li class="flex items-center gap-3 text-sm text-neutral-300">
+                                <span class="text-studio-muted group-hover:text-white transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                </span>
+                                Dashboard built for daily use
+                            </li>
+                            <li class="flex items-center gap-3 text-sm text-neutral-300">
+                                <span class="text-studio-muted group-hover:text-white transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                </span>
+                                Mobile app, up to 8 screens
+                            </li>
+                            <li class="flex items-center gap-3 text-sm text-neutral-300">
+                                <span class="text-studio-muted group-hover:text-white transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                </span>
+                                Pitch deck to win the round
+                            </li>
+                        </ul>
+                    </div>
+
+                    <button onclick="openBooking('2-week design sprint')" class="w-full bg-white text-black font-semibold text-xs tracking-widest uppercase rounded-full py-4 px-6 flex justify-between items-center transition-all duration-300 hover:bg-neutral-200 active:scale-95 group/btn">
+                        <span>Let's talk</span>
+                        <svg class="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                </div>
+
+                <!-- RETAINER -->
+                <div class="pricing-card relative rounded-3xl bg-studio-card/80 backdrop-blur-md border border-neutral-900 p-8 md:p-12 flex flex-col justify-between hover:bg-neutral-900/60 transition-all duration-300 group">
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-3">Ongoing partnership</h3>
+                        <p class="text-sm text-studio-muted mb-8 leading-relaxed max-w-sm">
+                            A dedicated design team. Unlimited output. Design, strategy, and no-code delivery — on retainer.
+                        </p>
+                        
+                        <div class="flex items-baseline gap-2 mb-10 pb-8 border-b border-neutral-900">
+                            <span class="text-4xl md:text-5xl font-bold text-white">$5,000</span>
+                            <span class="text-xs text-studio-muted">/month</span>
+                        </div>
+
+                        <ul class="space-y-4 mb-12">
+                            <li class="flex items-center gap-3 text-sm text-neutral-300">
+                                <span class="text-studio-muted group-hover:text-white transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                </span>
+                                Work directly with the founder, no handoffs
+                            </li>
+                            <li class="flex items-center gap-3 text-sm text-neutral-300">
+                                <span class="text-studio-muted group-hover:text-white transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                </span>
+                                Unlimited design requests &amp; revisions
+                            </li>
+                            <li class="flex items-center gap-3 text-sm text-neutral-300">
+                                <span class="text-studio-muted group-hover:text-white transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                </span>
+                                48-hour turnarounds, weekdays
+                            </li>
+                            <li class="flex items-center gap-3 text-sm text-neutral-300">
+                                <span class="text-studio-muted group-hover:text-white transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                </span>
+                                Weekly strategy calls + Slack integration
+                            </li>
+                        </ul>
+                    </div>
+
+                    <button onclick="openBooking('Ongoing partnership')" class="w-full bg-white text-black font-semibold text-xs tracking-widest uppercase rounded-full py-4 px-6 flex justify-between items-center transition-all duration-300 hover:bg-neutral-200 active:scale-95 group/btn">
+                        <span>Let's talk</span>
+                        <svg class="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Information & About Me Section -->
+        <section id="information" class="py-16 md:py-24 border-t border-neutral-900">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div class="lg:col-span-7 space-y-8">
+                    <span class="relative block w-fit border border-dashed border-white/10 px-3 py-1.5 text-[10px] font-bold tracking-[0.2em] text-white uppercase select-none">
+                        <span class="absolute w-1 h-1 bg-white border border-black -top-0.5 -left-0.5"></span>
+                        <span class="absolute w-1 h-1 bg-white border border-black -top-0.5 -right-0.5"></span>
+                        <span class="absolute w-1 h-1 bg-white border border-black -bottom-0.5 -left-0.5"></span>
+                        <span class="absolute w-1 h-1 bg-white border border-black -bottom-0.5 -right-0.5"></span>
+                        ABOUT ME
+                    </span>
+                    <h2 class="text-3xl md:text-5xl font-semibold leading-tight text-white tracking-tight">Alex Rivera</h2>
+                    <div class="space-y-6 text-base text-studio-muted leading-relaxed max-w-xl">
+                        <p>I'm a designer and frontend developer building products for AI and SaaS companies, with over a decade of shipping from zero to scale.</p>
+                        <p>I work across product design, design systems, and frontend engineering — handling every layer from problem to production code myself.</p>
+                        <p>Codecuy is how I take on independent work. A small number of projects, where standards are high and outcomes matter.</p>
+                    </div>
+                </div>
+                <div class="lg:col-span-5 relative">
+                    <div class="relative rounded-2xl overflow-hidden dashed-outline p-2 bg-studio-card/30">
+                        <img src="https://picsum.photos/seed/founder-portrait/600/800" alt="Alex Rivera profile portrait" class="w-full h-auto rounded-xl object-cover grayscale brightness-90 hover:grayscale-0 transition-all duration-500" onerror="this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80'">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive FAQ Accordion -->
+        <section class="py-16 md:py-24 border-t border-neutral-900">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                <div class="lg:col-span-4 space-y-4">
+                    <span class="relative block w-fit border border-dashed border-white/10 px-3 py-1.5 text-[10px] font-bold tracking-[0.2em] text-white uppercase select-none">
+                        <span class="absolute w-1 h-1 bg-white border border-black -top-0.5 -left-0.5"></span>
+                        <span class="absolute w-1 h-1 bg-white border border-black -top-0.5 -right-0.5"></span>
+                        <span class="absolute w-1 h-1 bg-white border border-black -bottom-0.5 -left-0.5"></span>
+                        <span class="absolute w-1 h-1 bg-white border border-black -bottom-0.5 -right-0.5"></span>
+                        FAQ
+                    </span>
+                    <h2 class="text-3xl font-semibold text-white tracking-tight">Questions, answered.</h2>
+                </div>
+                
+                <div class="lg:col-span-8 space-y-4">
+                    <!-- Q1 -->
+                    <div class="faq-item border border-neutral-900 rounded-2xl bg-studio-card/40 transition-colors">
+                        <button onclick="toggleFaq(this)" class="w-full px-6 py-5 flex justify-between items-center text-left text-white font-medium text-sm md:text-base focus:outline-none">
+                            <span>How fast can we start?</span>
+                            <svg class="w-5 h-5 text-studio-muted transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+                            <p class="px-6 pb-5 text-sm text-studio-muted leading-relaxed">
+                                Most engagements kick off within a week. Sprints get a fixed start date; retainers begin the Monday after onboarding.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Q2 -->
+                    <div class="faq-item border border-neutral-900 rounded-2xl bg-studio-card/40 transition-colors">
+                        <button onclick="toggleFaq(this)" class="w-full px-6 py-5 flex justify-between items-center text-left text-white font-medium text-sm md:text-base focus:outline-none">
+                            <span>What does a typical retainer week look like?</span>
+                            <svg class="w-5 h-5 text-studio-muted transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+                            <p class="px-6 pb-5 text-sm text-studio-muted leading-relaxed">
+                                Async by default — requests come in via a shared board, designs ship in 48 hours, and we hold one strategy call a week. Slack is open for anything in between.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Q3 -->
+                    <div class="faq-item border border-neutral-900 rounded-2xl bg-studio-card/40 transition-colors">
+                        <button onclick="toggleFaq(this)" class="w-full px-6 py-5 flex justify-between items-center text-left text-white font-medium text-sm md:text-base focus:outline-none">
+                            <span>Who owns the work?</span>
+                            <svg class="w-5 h-5 text-studio-muted transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+                            <p class="px-6 pb-5 text-sm text-studio-muted leading-relaxed">
+                                You do. Source files, code, and rights transfer on delivery. No lock-in to proprietary tooling.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Q4 -->
+                    <div class="faq-item border border-neutral-900 rounded-2xl bg-studio-card/40 transition-colors">
+                        <button onclick="toggleFaq(this)" class="w-full px-6 py-5 flex justify-between items-center text-left text-white font-medium text-sm md:text-base focus:outline-none">
+                            <span>Can a sprint roll into a retainer?</span>
+                            <svg class="w-5 h-5 text-studio-muted transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+                            <p class="px-6 pb-5 text-sm text-studio-muted leading-relaxed">
+                                Yes. The sprint price credits toward your first month if you continue within 30 days.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Q5 -->
+                    <div class="faq-item border border-neutral-900 rounded-2xl bg-studio-card/40 transition-colors">
+                        <button onclick="toggleFaq(this)" class="w-full px-6 py-5 flex justify-between items-center text-left text-white font-medium text-sm md:text-base focus:outline-none">
+                            <span>What if a sprint needs more than two weeks?</span>
+                            <svg class="w-5 h-5 text-studio-muted transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+                            <p class="px-6 pb-5 text-sm text-studio-muted leading-relaxed">
+                                We scope tightly up front so it usually doesn't. If scope grows, we'll quote a second sprint rather than stretch the first.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Available Opportunities & Links -->
+        <section id="contact" class="py-16 md:py-24 border-t border-neutral-900">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                <div class="lg:col-span-5 space-y-6">
+                    <span class="relative block w-fit border border-dashed border-white/10 px-3 py-1.5 text-[10px] font-bold tracking-[0.2em] text-white uppercase select-none">
+                        <span class="absolute w-1 h-1 bg-white border border-black -top-0.5 -left-0.5"></span>
+                        <span class="absolute w-1 h-1 bg-white border border-black -top-0.5 -right-0.5"></span>
+                        <span class="absolute w-1 h-1 bg-white border border-black -bottom-0.5 -left-0.5"></span>
+                        <span class="absolute w-1 h-1 bg-white border border-black -bottom-0.5 -right-0.5"></span>
+                        CONNECT
+                    </span>
+                    <h2 class="text-3xl md:text-4xl font-semibold leading-tight text-white tracking-tight">Available for new opportunities</h2>
+                    <p class="text-sm text-studio-muted leading-relaxed max-w-sm">
+                        Have a project in mind, want a second pair of eyes on something, or just want to say hi — my inbox is open and I usually reply the same day.
+                    </p>
+                </div>
+
+                <!-- Connect Links Grid -->
+                <div class="lg:col-span-7 grid grid-cols-2 md:grid-cols-3 gap-6 items-start">
+                    <a href="mailto:hello@codecuy.com" class="dashed-outline rounded-xl p-4 flex flex-col justify-between h-28 hover:bg-neutral-950 transition-colors">
+                        <span class="text-xs text-studio-muted uppercase font-bold tracking-wider">Email</span>
+                        <span class="text-sm font-semibold text-white truncate">hello@codecuy.com</span>
+                    </a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="dashed-outline rounded-xl p-4 flex flex-col justify-between h-28 hover:bg-neutral-950 transition-colors">
+                        <span class="text-xs text-studio-muted uppercase font-bold tracking-wider">Twitter</span>
+                        <span class="text-sm font-semibold text-white">@codecuy</span>
+                    </a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="dashed-outline rounded-xl p-4 flex flex-col justify-between h-28 hover:bg-neutral-950 transition-colors">
+                        <span class="text-xs text-studio-muted uppercase font-bold tracking-wider">LinkedIn</span>
+                        <span class="text-sm font-semibold text-white">codecuy</span>
+                    </a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="dashed-outline rounded-xl p-4 flex flex-col justify-between h-28 hover:bg-neutral-950 transition-colors">
+                        <span class="text-xs text-studio-muted uppercase font-bold tracking-wider">Instagram</span>
+                        <span class="text-sm font-semibold text-white">codecuy.official</span>
+                    </a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="dashed-outline rounded-xl p-4 flex flex-col justify-between h-28 hover:bg-neutral-950 transition-colors">
+                        <span class="text-xs text-studio-muted uppercase font-bold tracking-wider">Behance</span>
+                        <span class="text-sm font-semibold text-white">codecuy</span>
+                    </a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="dashed-outline rounded-xl p-4 flex flex-col justify-between h-28 hover:bg-neutral-950 transition-colors">
+                        <span class="text-xs text-studio-muted uppercase font-bold tracking-wider">Savee</span>
+                        <span class="text-sm font-semibold text-white">codecuy</span>
+                    </a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="dashed-outline rounded-xl p-4 flex flex-col justify-between h-28 hover:bg-neutral-950 transition-colors">
+                        <span class="text-xs text-studio-muted uppercase font-bold tracking-wider">Cosmos</span>
+                        <span class="text-sm font-semibold text-white">codecuy</span>
+                    </a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="dashed-outline rounded-xl p-4 flex flex-col justify-between h-28 hover:bg-neutral-950 transition-colors">
+                        <span class="text-xs text-studio-muted uppercase font-bold tracking-wider">Resume</span>
+                        <span class="text-sm font-semibold text-white flex items-center gap-1.5">
+                            PDF Download
+                            <svg class="w-3.5 h-3.5 text-studio-muted" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal Form (Replacing generic alerts/prompts) -->
+    <div id="booking-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
+        <div class="bg-neutral-950 border border-neutral-800 p-8 rounded-3xl max-w-md w-full relative shadow-2xl">
+            <div class="flex justify-between items-start mb-6">
+                <div>
+                    <h3 class="text-xl font-bold text-white">Let's build together</h3>
+                    <p class="text-xs text-studio-muted mt-1">Tier: <span id="selected-tier" class="text-white font-semibold">Custom</span></p>
+                </div>
+                <button onclick="closeBooking()" class="text-neutral-500 hover:text-white transition-colors" aria-label="Close modal">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+
+            <form id="booking-form" class="space-y-4" onsubmit="handleFormSubmit(event)">
+                <div>
+                    <label class="block text-[10px] font-bold tracking-wider text-studio-muted mb-2 uppercase">Full Name</label>
+                    <input required type="text" class="w-full bg-neutral-900 border border-neutral-800 rounded-lg py-3 px-4 text-white text-sm focus:outline-none focus:border-white transition-all">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold tracking-wider text-studio-muted mb-2 uppercase">Email Address</label>
+                    <input required type="email" class="w-full bg-neutral-900 border border-neutral-800 rounded-lg py-3 px-4 text-white text-sm focus:outline-none focus:border-white transition-all">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold tracking-wider text-studio-muted mb-2 uppercase">Project Brief</label>
+                    <textarea rows="3" class="w-full bg-neutral-900 border border-neutral-800 rounded-lg py-3 px-4 text-white text-sm focus:outline-none focus:border-white transition-all resize-none" placeholder="What are we building?"></textarea>
+                </div>
+                <button type="submit" class="w-full bg-white text-black font-bold text-xs tracking-widest py-3.5 rounded-full mt-4 hover:bg-neutral-200 transition-colors uppercase">
+                    SEND PROPOSAL
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification Block -->
+    <div id="toast-notif" class="fixed bottom-6 right-6 z-50 bg-neutral-900 border border-neutral-800 text-white px-6 py-4 rounded-xl shadow-2xl transform translate-y-24 opacity-0 transition-all duration-300 flex items-center gap-3">
+        <svg id="toast-icon-success" class="w-5 h-5 text-green-500 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        <span id="toast-text" class="text-xs font-semibold tracking-wide">Action completed successfully!</span>
+    </div>
+
+    <!-- Footer Copyright Section -->
+    <footer class="w-full max-w-7xl mx-auto px-6 md:px-12 py-10 relative z-20">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-semibold tracking-[0.15em] text-studio-muted">
+            <div>© 2026 CODECUY</div>
+            <div class="flex gap-6">
+                <a href="#" class="hover:text-white transition-colors">PRIVACY POLICY</a>
+                <a href="#" class="hover:text-white transition-colors">TERMS OF SERVICE</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive Logic Script -->
+    <script>
+        const btnPreview = document.getElementById('btn-preview');
+        const btnSpecs = document.getElementById('btn-specs');
+        const body = document.body;
+
+        const modal = document.getElementById('booking-modal');
+        const selectedTierSpan = document.getElementById('selected-tier');
+        const toast = document.getElementById('toast-notif');
+        const toastText = document.getElementById('toast-text');
+        const toastIconSuccess = document.getElementById('toast-icon-success');
+
+        // Toggle Specs view
+        btnSpecs.addEventListener('click', () => {
+            body.classList.add('blueprint-active');
+            btnSpecs.className = "px-4 py-1.5 rounded-full text-[11px] font-bold tracking-wider transition-all duration-200 bg-rose-600 text-white shadow-lg flex items-center gap-1.5";
+            btnPreview.className = "px-4 py-1.5 rounded-full text-[11px] font-bold tracking-wider transition-all duration-200 text-neutral-400 hover:text-white";
+            document.querySelectorAll('.spec-guide, .spec-underline').forEach(el => el.classList.remove('hidden'));
+        });
+
+        btnPreview.addEventListener('click', () => {
+            body.classList.remove('blueprint-active');
+            btnPreview.className = "px-4 py-1.5 rounded-full text-[11px] font-bold tracking-wider transition-all duration-200 bg-white text-black shadow-lg";
+            btnSpecs.className = "px-4 py-1.5 rounded-full text-[11px] font-bold tracking-wider transition-all duration-200 text-neutral-400 hover:text-white flex items-center gap-1.5";
+            document.querySelectorAll('.spec-guide, .spec-underline').forEach(el => el.classList.add('hidden'));
+        });
+
+        // FAQ Toggle
+        function toggleFaq(btn) {
+            const faqContent = btn.nextElementSibling;
+            const faqIcon = btn.querySelector('svg');
+            
+            // Close other FAQ items
+            document.querySelectorAll('.faq-content').forEach(item => {
+                if (item !== faqContent) {
+                    item.style.maxHeight = null;
+                    item.previousElementSibling.querySelector('svg').classList.remove('rotate-180');
+                }
+            });
+
+            if (faqContent.style.maxHeight) {
+                faqContent.style.maxHeight = null;
+                faqIcon.classList.remove('rotate-180');
+            } else {
+                faqContent.style.maxHeight = faqContent.scrollHeight + "px";
+                faqIcon.classList.add('rotate-180');
+            }
+        }
+
+        // Copy email logic with toast message
+        function copyEmail() {
+            const email = "hello@codecuy.com";
+            const dummy = document.createElement("textarea");
+            document.body.appendChild(dummy);
+            dummy.value = email;
+            dummy.select();
+            document.execCommand("copy");
+            document.body.removeChild(dummy);
+
+            showToast("Email address copied to clipboard!");
+        }
+
+        // Show custom toast notification
+        function showToast(message) {
+            toastText.innerText = message;
+            toastIconSuccess.classList.remove('hidden');
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            
+            setTimeout(() => {
+                toast.classList.add('translate-y-24', 'opacity-0');
+            }, 3500);
+        }
+
+        // Modal Controls
+        function openBooking(tierName) {
+            selectedTierSpan.innerText = tierName;
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+        }
+
+        function closeBooking() {
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            document.getElementById('booking-form').reset();
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            closeBooking();
+            showToast("Proposal sent successfully! I will reply soon.");
+        }
+    </script>
+</body>
+</html>

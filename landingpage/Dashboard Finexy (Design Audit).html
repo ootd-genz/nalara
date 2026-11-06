@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finexy — FinTech Dashboard</title>
+    <!-- Tailwind CSS v3 CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Inter Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            orange: '#FF5A1F',
+                            'orange-hover': '#e04913',
+                            dark: '#111827',
+                            light: '#F3F4F6',
+                            border: '#E5E7EB',
+                            text: '#111827',
+                            muted: '#6B7280',
+                            success: '#059669',
+                            warning: '#D97706',
+                            danger: '#DC2626'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F3F4F6;
+            color: #111827;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Diagonal stripes pattern for Profit & Loss Chart Loss Bars */
+        .striped-bar {
+            background: repeating-linear-gradient(
+                45deg,
+                #FF5A1F,
+                #FF5A1F 4px,
+                #e04a14 4px,
+                #e04a14 8px
+            );
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-[#F3F4F6] text-[#111827] antialiased selection:bg-[#FF5A1F] selection:text-white p-3 sm:p-6 md:p-8">
+
+    <!-- Main Dashboard Card Layout -->
+    <div class="max-w-[1600px] mx-auto bg-white rounded-3xl shadow-xl border border-gray-200/80 flex flex-col md:flex-row overflow-hidden min-h-[900px]">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="w-full md:w-20 bg-white border-r border-gray-100 flex flex-row md:flex-col items-center justify-between p-4 md:py-6 gap-6">
+            <div class="flex flex-row md:flex-col items-center gap-8 w-full">
+                <!-- App Logo -->
+                <div class="w-11 h-11 rounded-2xl bg-[#FF5A1F] flex items-center justify-center text-white font-bold text-xl shadow-md shadow-orange-500/20 cursor-pointer hover:scale-105 transition">
+                    <i class="fa-solid fa-shapes"></i>
+                </div>
+
+                <!-- Navigation Links -->
+                <nav class="flex flex-row md:flex-col gap-3 items-center w-full justify-center">
+                    <button title="Dashboard Overview" class="w-11 h-11 rounded-xl bg-[#111827] text-white flex items-center justify-center text-base shadow-sm">
+                        <i class="fa-solid fa-border-all"></i>
+                    </button>
+                    <button title="Calendar" class="w-11 h-11 rounded-xl text-gray-400 hover:bg-gray-100 hover:text-gray-700 flex items-center justify-center text-base transition">
+                        <i class="fa-regular fa-calendar"></i>
+                    </button>
+                    <button title="Messages" class="w-11 h-11 rounded-xl text-gray-400 hover:bg-gray-100 hover:text-gray-700 flex items-center justify-center text-base transition relative">
+                        <i class="fa-regular fa-envelope"></i>
+                        <span class="absolute top-2.5 right-2.5 w-2 h-2 bg-[#FF5A1F] rounded-full"></span>
+                    </button>
+                    <button title="Documents" class="w-11 h-11 rounded-xl text-gray-400 hover:bg-gray-100 hover:text-gray-700 flex items-center justify-center text-base transition">
+                        <i class="fa-regular fa-file-lines"></i>
+                    </button>
+                    <button title="Team & Contacts" class="w-11 h-11 rounded-xl text-gray-400 hover:bg-gray-100 hover:text-gray-700 flex items-center justify-center text-base transition">
+                        <i class="fa-solid fa-users"></i>
+                    </button>
+                    <button title="Database" class="w-11 h-11 rounded-xl text-gray-400 hover:bg-gray-100 hover:text-gray-700 flex items-center justify-center text-base transition">
+                        <i class="fa-solid fa-database"></i>
+                    </button>
+                    <button title="Settings" class="w-11 h-11 rounded-xl text-gray-400 hover:bg-gray-100 hover:text-gray-700 flex items-center justify-center text-base transition">
+                        <i class="fa-solid fa-gear"></i>
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Sidebar Bottom Utility -->
+            <div class="hidden md:flex flex-col gap-3 items-center">
+                <button title="Help & Support" class="w-11 h-11 rounded-xl text-gray-400 hover:bg-gray-100 hover:text-gray-700 flex items-center justify-center text-base transition">
+                    <i class="fa-regular fa-circle-question"></i>
+                </button>
+                <button title="Log Out" class="w-11 h-11 rounded-xl text-gray-400 hover:bg-gray-100 hover:text-rose-600 flex items-center justify-center text-base transition">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 bg-[#F9FAFB] p-5 sm:p-8 flex flex-col gap-6 overflow-x-hidden">
+            
+            <!-- Top Header & Sub-navigation -->
+            <header class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                <!-- Brand Title & Navigation Tabs -->
+                <div class="flex items-center gap-6">
+                    <span class="font-bold text-2xl text-[#111827] tracking-tight">Finexy</span>
+                    <nav class="hidden sm:flex items-center bg-gray-200/80 p-1 rounded-full text-xs font-semibold">
+                        <button class="px-5 py-2 rounded-full bg-[#111827] text-white shadow-sm transition">Overview</button>
+                        <button class="px-5 py-2 text-gray-600 hover:text-gray-900 transition">Activity</button>
+                        <button class="px-5 py-2 text-gray-600 hover:text-gray-900 transition">Manage</button>
+                        <button class="px-5 py-2 text-gray-600 hover:text-gray-900 transition">Program</button>
+                        <button class="px-5 py-2 text-gray-600 hover:text-gray-900 transition">Account</button>
+                        <button class="px-5 py-2 text-gray-600 hover:text-gray-900 transition">Reports</button>
+                    </nav>
+                </div>
+
+                <!-- Utilities & User Profile -->
+                <div class="flex items-center justify-between lg:justify-end gap-3">
+                    <div class="flex items-center gap-2">
+                        <button title="Search" class="w-10 h-10 rounded-full bg-white border border-gray-200/80 text-gray-600 hover:bg-gray-50 hover:text-gray-900 flex items-center justify-center text-sm shadow-sm transition">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                        <button title="Notifications" class="w-10 h-10 rounded-full bg-white border border-gray-200/80 text-gray-600 hover:bg-gray-50 hover:text-gray-900 flex items-center justify-center text-sm shadow-sm transition relative">
+                            <i class="fa-regular fa-bell"></i>
+                            <span class="absolute top-2 right-2 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full"></span>
+                        </button>
+                        <button title="Info" class="w-10 h-10 rounded-full bg-white border border-gray-200/80 text-gray-600 hover:bg-gray-50 hover:text-gray-900 flex items-center justify-center text-sm shadow-sm transition">
+                            <i class="fa-regular fa-circle-question"></i>
+                        </button>
+                    </div>
+
+                    <!-- User Profile Badge -->
+                    <div class="flex items-center gap-3 bg-white border border-gray-200/80 p-1.5 pl-2 pr-4 rounded-full text-xs shadow-sm cursor-pointer hover:border-gray-300 transition">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80" alt="Sajibur Rahman" class="w-8 h-8 rounded-full object-cover">
+                        <div class="text-left leading-tight hidden sm:block">
+                            <p class="font-bold text-gray-900 text-xs">Sajibur Rahman</p>
+                            <p class="text-[10px] text-gray-400 truncate max-w-[110px]">sajibur.rahman@gm...</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-[10px] text-gray-400 ml-1"></i>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Greeting Banner Section -->
+            <div>
+                <h1 class="text-2xl sm:text-3xl font-bold text-[#111827] tracking-tight">Good morning, Sajibur</h1>
+                <p class="text-xs sm:text-sm text-gray-500 mt-1">Stay on top of your tasks, monitor progress, and track status.</p>
+            </div>
+
+            <!-- Bento Grid Top Row -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+                
+                <!-- Total Balance Card (Col 1 to 4) -->
+                <div class="lg:col-span-4 bg-white rounded-2xl p-6 border border-gray-200/80 shadow-sm flex flex-col justify-between gap-6">
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Total Balance</span>
+                            <button class="flex items-center gap-1.5 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-xl text-xs font-semibold text-gray-700 transition">
+                                <span>🇺🇸 USD</span>
+                                <i class="fa-solid fa-chevron-down text-[10px] text-gray-400"></i>
+                            </button>
+                        </div>
+                        <div class="mt-3 flex items-baseline gap-3">
+                            <h2 class="text-3xl sm:text-4xl font-extrabold text-[#111827] tracking-tight">$689,372.00</h2>
+                        </div>
+                        <p class="text-xs font-medium text-emerald-600 mt-2 flex items-center gap-1">
+                            <span class="bg-emerald-50 px-1.5 py-0.5 rounded font-semibold">↑ 5%</span>
+                            <span class="text-gray-400 font-normal">than last month</span>
+                        </p>
+                    </div>
+
+                    <!-- Transfer & Request Action Buttons -->
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="showToast('Transfer window opened')" class="bg-[#111827] hover:bg-black text-white py-3 px-4 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 shadow-sm">
+                            <i class="fa-solid fa-arrow-right-arrow-left text-[11px]"></i>
+                            <span>Transfer</span>
+                        </button>
+                        <button onclick="showToast('Payment request created')" class="bg-gray-100 hover:bg-gray-200 text-gray-800 py-3 px-4 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-hand-holding-dollar text-[11px]"></i>
+                            <span>Request</span>
+                        </button>
+                    </div>
+
+                    <!-- Wallets Breakdown Row -->
+                    <div class="border-t border-gray-100 pt-4">
+                        <div class="flex items-center justify-between text-xs text-gray-500 mb-3">
+                            <span class="font-bold text-gray-800">Wallets</span>
+                            <span class="text-gray-400 text-[11px]">Total 6 wallets</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div class="bg-gray-50 border border-gray-200/80 p-2.5 rounded-xl hover:border-gray-300 transition cursor-pointer">
+                                <div class="flex items-center justify-between text-[11px] font-bold text-gray-700">
+                                    <span>🇺🇸 USD</span>
+                                    <i class="fa-solid fa-ellipsis-vertical text-gray-300"></i>
+                                </div>
+                                <p class="text-xs font-bold text-gray-900 mt-2">$22,678.00</p>
+                                <p class="text-[9px] text-emerald-600 font-semibold mt-1">Active</p>
+                            </div>
+                            <div class="bg-gray-50 border border-gray-200/80 p-2.5 rounded-xl hover:border-gray-300 transition cursor-pointer">
+                                <div class="flex items-center justify-between text-[11px] font-bold text-gray-700">
+                                    <span>🇪🇺 EUR</span>
+                                    <i class="fa-solid fa-ellipsis-vertical text-gray-300"></i>
+                                </div>
+                                <p class="text-xs font-bold text-gray-900 mt-2">€18,345.00</p>
+                                <p class="text-[9px] text-emerald-600 font-semibold mt-1">Active</p>
+                            </div>
+                            <div class="bg-gray-50 border border-gray-200/80 p-2.5 rounded-xl hover:border-gray-300 transition cursor-pointer">
+                                <div class="flex items-center justify-between text-[11px] font-bold text-gray-700">
+                                    <span>🇬🇧 GBP</span>
+                                    <i class="fa-solid fa-ellipsis-vertical text-gray-300"></i>
+                                </div>
+                                <p class="text-xs font-bold text-gray-900 mt-2">£15,000.00</p>
+                                <p class="text-[9px] text-gray-400 font-semibold mt-1">Inactive</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2x2 Mini KPI Cards (Col 5 to 8) -->
+                <div class="lg:col-span-4 grid grid-cols-2 gap-4">
+                    <!-- Total Earnings Card -->
+                    <div class="bg-[#FF5A1F] text-white p-5 rounded-2xl flex flex-col justify-between shadow-lg shadow-orange-500/10">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-medium text-orange-100">Total Earnings</span>
+                            <div class="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center text-xs text-white">
+                                <i class="fa-solid fa-wallet"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <h3 class="text-3xl font-extrabold tracking-tight">$950</h3>
+                            <p class="text-[11px] text-orange-100 font-medium mt-1">↑ 7% <span class="opacity-80">This month</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Total Spending Card -->
+                    <div class="bg-white border border-gray-200/80 p-5 rounded-2xl flex flex-col justify-between shadow-sm">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-semibold text-gray-500">Total Spending</span>
+                            <div class="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center text-xs text-gray-600">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <h3 class="text-3xl font-extrabold text-gray-900 tracking-tight">$700</h3>
+                            <p class="text-[11px] text-rose-500 font-semibold mt-1">↓ 5% <span class="text-gray-400 font-normal">This month</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Total Income Card -->
+                    <div class="bg-white border border-gray-200/80 p-5 rounded-2xl flex flex-col justify-between shadow-sm">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-semibold text-gray-500">Total Income</span>
+                            <div class="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center text-xs text-gray-600">
+                                <i class="fa-solid fa-sack-dollar"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <h3 class="text-3xl font-extrabold text-gray-900 tracking-tight">$1,050</h3>
+                            <p class="text-[11px] text-emerald-600 font-semibold mt-1">↑ 8% <span class="text-gray-400 font-normal">This month</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Total Revenue Card -->
+                    <div class="bg-white border border-gray-200/80 p-5 rounded-2xl flex flex-col justify-between shadow-sm">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-semibold text-gray-500">Total Revenue</span>
+                            <div class="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center text-xs text-gray-600">
+                                <i class="fa-solid fa-vault"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <h3 class="text-3xl font-extrabold text-gray-900 tracking-tight">$850</h3>
+                            <p class="text-[11px] text-emerald-600 font-semibold mt-1">↑ 4% <span class="text-gray-400 font-normal">This month</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profit & Loss Chart Card (Col 9 to 12) -->
+                <div class="lg:col-span-4 bg-white rounded-2xl p-6 border border-gray-200/80 shadow-sm flex flex-col justify-between gap-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-sm font-bold text-gray-900">Total Income</h3>
+                            <p class="text-[11px] text-gray-400 mt-0.5">View your income in a certain period of time</p>
+                        </div>
+                    </div>
+
+                    <!-- Legend -->
+                    <div class="flex items-center justify-between text-xs pt-1">
+                        <span class="font-bold text-gray-800">Profit and Loss</span>
+                        <div class="flex items-center gap-3">
+                            <span class="flex items-center gap-1.5 text-[11px] text-gray-600 font-medium">
+                                <span class="w-2.5 h-2.5 rounded-full bg-[#111827]"></span> Profit
+                            </span>
+                            <span class="flex items-center gap-1.5 text-[11px] text-gray-600 font-medium">
+                                <span class="w-2.5 h-2.5 rounded-full bg-[#FF5A1F]"></span> Loss
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Stacked Bar Chart Visualization -->
+                    <div class="mt-2 flex items-end justify-between h-40 gap-2 border-b border-gray-100 pb-2">
+                        <!-- Jan -->
+                        <div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
+                            <div class="w-full max-w-[18px] rounded-t flex flex-col overflow-hidden">
+                                <div class="h-10 striped-bar w-full"></div>
+                                <div class="h-12 bg-[#111827] w-full"></div>
+                            </div>
+                            <span class="text-[10px] text-gray-400 font-medium">Jan</span>
+                        </div>
+                        <!-- Feb -->
+                        <div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
+                            <div class="w-full max-w-[18px] rounded-t flex flex-col overflow-hidden">
+                                <div class="h-16 striped-bar w-full"></div>
+                                <div class="h-14 bg-[#111827] w-full"></div>
+                            </div>
+                            <span class="text-[10px] text-gray-400 font-medium">Feb</span>
+                        </div>
+                        <!-- Mar -->
+                        <div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
+                            <div class="w-full max-w-[18px] rounded-t flex flex-col overflow-hidden">
+                                <div class="h-12 striped-bar w-full"></div>
+                                <div class="h-10 bg-[#111827] w-full"></div>
+                            </div>
+                            <span class="text-[10px] text-gray-400 font-medium">Mar</span>
+                        </div>
+                        <!-- Apr -->
+                        <div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
+                            <div class="w-full max-w-[18px] rounded-t flex flex-col overflow-hidden">
+                                <div class="h-14 striped-bar w-full"></div>
+                                <div class="h-[30px] bg-[#111827] w-full"></div>
+                            </div>
+                            <span class="text-[10px] text-gray-400 font-medium">Apr</span>
+                        </div>
+                        <!-- May -->
+                        <div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
+                            <div class="w-full max-w-[18px] rounded-t flex flex-col overflow-hidden">
+                                <div class="h-16 striped-bar w-full"></div>
+                                <div class="h-20 bg-[#111827] w-full"></div>
+                            </div>
+                            <span class="text-[10px] text-gray-400 font-medium">May</span>
+                        </div>
+                        <!-- Jun -->
+                        <div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
+                            <div class="w-full max-w-[18px] rounded-t flex flex-col overflow-hidden">
+                                <div class="h-20 striped-bar w-full"></div>
+                                <div class="h-16 bg-[#111827] w-full"></div>
+                            </div>
+                            <span class="text-[10px] text-gray-400 font-medium">Jun</span>
+                        </div>
+                        <!-- Jul -->
+                        <div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
+                            <div class="w-full max-w-[18px] rounded-t flex flex-col overflow-hidden">
+                                <div class="h-12 striped-bar w-full"></div>
+                                <div class="h-14 bg-[#111827] w-full"></div>
+                            </div>
+                            <span class="text-[10px] text-gray-400 font-medium">Jul</span>
+                        </div>
+                        <!-- Aug -->
+                        <div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
+                            <div class="w-full max-w-[18px] rounded-t flex flex-col overflow-hidden">
+                                <div class="h-14 striped-bar w-full"></div>
+                                <div class="h-12 bg-[#111827] w-full"></div>
+                            </div>
+                            <span class="text-[10px] text-gray-400 font-medium">Aug</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bento Grid Bottom Row -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+                
+                <!-- Left Column: Spending Limit & Credit Cards (Col 1 to 4) -->
+                <div class="lg:col-span-4 flex flex-col gap-5">
+                    
+                    <!-- Spending Limit Progress Card -->
+                    <div class="bg-white rounded-2xl p-5 border border-gray-200/80 shadow-sm">
+                        <div class="flex items-center justify-between text-xs mb-3">
+                            <span class="font-bold text-gray-900">Monthly Spending Limit</span>
+                            <span class="text-gray-400 text-[11px]">25% used</span>
+                        </div>
+                        <div class="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden mb-3">
+                            <div class="bg-[#FF5A1F] h-full rounded-full transition-all duration-500" style="width: 25%"></div>
+                        </div>
+                        <div class="flex items-center justify-between text-xs text-gray-500">
+                            <span class="font-bold text-gray-900">$1,400.00 <span class="font-normal text-gray-400">spent out of</span></span>
+                            <span class="font-bold text-gray-900">$5,500.00</span>
+                        </div>
+                    </div>
+
+                    <!-- My Cards Card -->
+                    <div class="bg-white rounded-2xl p-5 border border-gray-200/80 shadow-sm flex-1 flex flex-col justify-between">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-regular fa-credit-card text-sm text-gray-600"></i>
+                                <span class="text-xs font-bold text-gray-900">My Cards</span>
+                            </div>
+                            <button onclick="showToast('Add new card module opened')" class="text-xs text-gray-500 hover:text-gray-900 font-semibold transition">+ Add new</button>
+                        </div>
+
+                        <!-- Credit Cards Carousel Preview -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <!-- Card 1: Black Mastercard -->
+                            <div class="bg-[#111827] text-white p-4 rounded-2xl flex flex-col justify-between h-32 relative overflow-hidden shadow-md">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded text-white font-semibold">Active</span>
+                                    <i class="fa-brands fa-cc-mastercard text-xl text-gray-300"></i>
+                                </div>
+                                <div class="mt-2">
+                                    <p class="text-[9px] text-gray-400 uppercase tracking-wider font-semibold">Card Number</p>
+                                    <p class="text-xs font-mono tracking-widest text-gray-200 mt-0.5">**** **** 6782</p>
+                                </div>
+                                <div class="flex items-center justify-between text-[9px] text-gray-400 font-mono">
+                                    <span>EXP 09/29</span>
+                                    <span>CVV 611</span>
+                                </div>
+                            </div>
+
+                            <!-- Card 2: Orange Contactless Card -->
+                            <div class="bg-[#FF5A1F] text-white p-4 rounded-2xl flex flex-col justify-between h-32 relative overflow-hidden shadow-md shadow-orange-500/10">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[10px] bg-white/30 px-2 py-0.5 rounded text-white font-semibold">Active</span>
+                                    <i class="fa-solid fa-wifi text-sm text-white/90"></i>
+                                </div>
+                                <div class="mt-2">
+                                    <p class="text-[9px] text-orange-200 uppercase tracking-wider font-semibold">Card Number</p>
+                                    <p class="text-xs font-mono tracking-widest text-white mt-0.5">**** **** 4356</p>
+                                </div>
+                                <div class="flex items-center justify-between text-[9px] text-orange-200 font-mono">
+                                    <span>EXP 11/28</span>
+                                    <span>CVV 890</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Recent Activities Table (Col 5 to 12) -->
+                <div class="lg:col-span-8 bg-white rounded-2xl p-6 border border-gray-200/80 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+                            <div>
+                                <h3 class="text-sm font-bold text-gray-900">Recent Activities</h3>
+                                <p class="text-[11px] text-gray-400">Monitor latest account transactions and status</p>
+                            </div>
+                            
+                            <div class="flex items-center gap-2">
+                                <div class="relative">
+                                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-xs text-gray-400"></i>
+                                    <input type="text" id="table-search" onkeyup="filterTable()" placeholder="Search transaction..." class="pl-8 pr-3 py-1.5 bg-gray-50 border border-gray-200 rounded-xl text-xs text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#FF5A1F] w-40 sm:w-52 transition">
+                                </div>
+                                <button onclick="showToast('Table filter modal opened')" class="flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-xl text-xs text-gray-700 hover:bg-gray-100 font-semibold transition">
+                                    <i class="fa-solid fa-sliders text-[10px]"></i>
+                                    <span>Filter</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Transaction Table -->
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs border-collapse">
+                                <thead>
+                                    <tr class="border-b border-gray-100 text-[10px] text-gray-400 font-bold uppercase tracking-wider">
+                                        <th class="py-3 px-2 w-8"><input type="checkbox" class="rounded text-[#FF5A1F] focus:ring-0 cursor-pointer"></th>
+                                        <th class="py-3 px-2">Order ID</th>
+                                        <th class="py-3 px-2">Activity</th>
+                                        <th class="py-3 px-2">Price</th>
+                                        <th class="py-3 px-2">Status</th>
+                                        <th class="py-3 px-2">Date</th>
+                                        <th class="py-3 px-2 text-right"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="activity-table-body" class="divide-y divide-gray-50 text-gray-700">
+                                    <tr class="hover:bg-gray-50/80 transition cursor-pointer">
+                                        <td class="py-3.5 px-2"><input type="checkbox" class="rounded text-[#FF5A1F] focus:ring-0 cursor-pointer"></td>
+                                        <td class="py-3.5 px-2 font-mono font-bold text-gray-900">INV_000076</td>
+                                        <td class="py-3.5 px-2 font-semibold text-gray-900 flex items-center gap-2.5">
+                                            <div class="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-xs"><i class="fa-brands fa-apple"></i></div>
+                                            <span>Mobile App Purchase</span>
+                                        </td>
+                                        <td class="py-3.5 px-2 font-extrabold text-gray-900">$25,500</td>
+                                        <td class="py-3.5 px-2">
+                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-600">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Completed
+                                            </span>
+                                        </td>
+                                        <td class="py-3.5 px-2 text-gray-400 text-[11px]">17 Apr, 2026 03:45 PM</td>
+                                        <td class="py-3.5 px-2 text-right text-gray-400 hover:text-gray-700"><i class="fa-solid fa-ellipsis"></i></td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50/80 transition cursor-pointer">
+                                        <td class="py-3.5 px-2"><input type="checkbox" class="rounded text-[#FF5A1F] focus:ring-0 cursor-pointer"></td>
+                                        <td class="py-3.5 px-2 font-mono font-bold text-gray-900">INV_000075</td>
+                                        <td class="py-3.5 px-2 font-semibold text-gray-900 flex items-center gap-2.5">
+                                            <div class="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs"><i class="fa-solid fa-hotel"></i></div>
+                                            <span>Hotel Booking</span>
+                                        </td>
+                                        <td class="py-3.5 px-2 font-extrabold text-gray-900">$32,750</td>
+                                        <td class="py-3.5 px-2">
+                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-600">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Pending
+                                            </span>
+                                        </td>
+                                        <td class="py-3.5 px-2 text-gray-400 text-[11px]">15 Apr, 2026 11:30 AM</td>
+                                        <td class="py-3.5 px-2 text-right text-gray-400 hover:text-gray-700"><i class="fa-solid fa-ellipsis"></i></td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50/80 transition cursor-pointer">
+                                        <td class="py-3.5 px-2"><input type="checkbox" class="rounded text-[#FF5A1F] focus:ring-0 cursor-pointer"></td>
+                                        <td class="py-3.5 px-2 font-mono font-bold text-gray-900">INV_000074</td>
+                                        <td class="py-3.5 px-2 font-semibold text-gray-900 flex items-center gap-2.5">
+                                            <div class="w-7 h-7 rounded-lg bg-sky-50 text-sky-600 flex items-center justify-center text-xs"><i class="fa-solid fa-plane"></i></div>
+                                            <span>Flight Ticket Booking</span>
+                                        </td>
+                                        <td class="py-3.5 px-2 font-extrabold text-gray-900">$40,200</td>
+                                        <td class="py-3.5 px-2">
+                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-600">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Completed
+                                            </span>
+                                        </td>
+                                        <td class="py-3.5 px-2 text-gray-400 text-[11px]">15 Apr, 2026 12:00 PM</td>
+                                        <td class="py-3.5 px-2 text-right text-gray-400 hover:text-gray-700"><i class="fa-solid fa-ellipsis"></i></td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50/80 transition cursor-pointer">
+                                        <td class="py-3.5 px-2"><input type="checkbox" checked class="rounded text-[#FF5A1F] focus:ring-0 cursor-pointer"></td>
+                                        <td class="py-3.5 px-2 font-mono font-bold text-gray-900">INV_000073</td>
+                                        <td class="py-3.5 px-2 font-semibold text-gray-900 flex items-center gap-2.5">
+                                            <div class="w-7 h-7 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center text-xs"><i class="fa-solid fa-cart-shopping"></i></div>
+                                            <span>Grocery Purchase</span>
+                                        </td>
+                                        <td class="py-3.5 px-2 font-extrabold text-gray-900">$50,200</td>
+                                        <td class="py-3.5 px-2">
+                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-600">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span> In Progress
+                                            </span>
+                                        </td>
+                                        <td class="py-3.5 px-2 text-gray-400 text-[11px]">14 Apr, 2026 09:15 PM</td>
+                                        <td class="py-3.5 px-2 text-right text-gray-400 hover:text-gray-700"><i class="fa-solid fa-ellipsis"></i></td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50/80 transition cursor-pointer">
+                                        <td class="py-3.5 px-2"><input type="checkbox" class="rounded text-[#FF5A1F] focus:ring-0 cursor-pointer"></td>
+                                        <td class="py-3.5 px-2 font-mono font-bold text-gray-900">INV_000072</td>
+                                        <td class="py-3.5 px-2 font-semibold text-gray-900 flex items-center gap-2.5">
+                                            <div class="w-7 h-7 rounded-lg bg-red-50 text-red-600 flex items-center justify-center text-xs"><i class="fa-solid fa-cubes"></i></div>
+                                            <span>Software License</span>
+                                        </td>
+                                        <td class="py-3.5 px-2 font-extrabold text-gray-900">$15,900</td>
+                                        <td class="py-3.5 px-2">
+                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-600">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Completed
+                                            </span>
+                                        </td>
+                                        <td class="py-3.5 px-2 text-gray-400 text-[11px]">10 Apr, 2026 06:00 AM</td>
+                                        <td class="py-3.5 px-2 text-right text-gray-400 hover:text-gray-700"><i class="fa-solid fa-ellipsis"></i></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Notification Overlay -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-[#111827] text-white px-5 py-3.5 rounded-2xl shadow-2xl text-xs font-semibold flex items-center gap-3 transition-all duration-300 transform translate-y-20 opacity-0 z-50 border border-gray-800">
+        <i class="fa-solid fa-circle-check text-emerald-400 text-base"></i>
+        <span id="toast-message">Action successful</span>
+    </div>
+
+    <!-- Interactive Search Script -->
+    <script>
+        function filterTable() {
+            const input = document.getElementById('table-search');
+            const filter = input.value.toLowerCase();
+            const rows = document.querySelectorAll('#activity-table-body tr');
+
+            rows.forEach(row => {
+                const text = row.innerText.toLowerCase();
+                if (text.includes(filter)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            toastMsg.innerText = msg;
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

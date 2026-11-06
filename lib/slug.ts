@@ -9,6 +9,7 @@ export const RESERVED_SLUGS = new Set<string>([
   "admin",
   "api",
   "checkout",
+  "demo",
   "invoice",
   "login",
   "logout",
@@ -93,4 +94,3 @@ export function getSlugCandidate(baseSlug: string, attempt: number): string {
   const trimmedBase = baseSlug.slice(0, maxBaseLength).replace(/-+$/, "");
   return `${trimmedBase}${suffix}`;
 }
-

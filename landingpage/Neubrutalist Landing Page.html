@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codecuy - Neubrutalist NFT Marketplace</title>
+    <!-- Google Fonts for Bold Neubrutalist Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        outfit: ['Outfit', 'sans-serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        neoLime: '#D4FF00',
+                        neoBg: '#F9F9F4',
+                        neoPurple: '#9FA0FF',
+                        neoSky: '#CEF6FF',
+                        neoYellow: '#FFEAA7',
+                        neoBlack: '#000000',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Neubrutalist element bounce on hover and press */
+        .neubrutal-card-hover {
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .neubrutal-card-hover:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 12px 12px 0px 0px #000000 !important;
+        }
+        .neubrutal-btn {
+            transition: all 0.1s ease-in-out;
+        }
+        .neubrutal-btn:active {
+            transform: translate(3px, 3px);
+            box-shadow: 1px 1px 0px 0px #000000 !important;
+        }
+        .sketch-path {
+            stroke: #000000;
+            stroke-width: 2.5;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        /* Custom scrollbar matching neubrutalist block look */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F9F9F4;
+            border-left: 3px solid #000000;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #D4FF00;
+            border: 3px solid #000000;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body class="bg-neoBg text-neoBlack font-sans min-h-screen overflow-x-hidden relative">
+
+    <!-- Background Floating Neubrutalist Doodles (from image_c3c442.png) -->
+    <div class="absolute inset-0 pointer-events-none overflow-hidden select-none z-0">
+        <!-- Floating Black Swirl Left -->
+        <svg class="absolute top-[18%] left-[2%] w-32 h-32 opacity-40 hidden md:block" viewBox="0 0 100 100">
+            <path class="sketch-path" d="M 10 50 Q 30 20, 50 50 T 90 50 Q 80 90, 50 80 Z" />
+        </svg>
+        <!-- Floating Big Heart Right -->
+        <svg class="absolute top-[12%] right-[4%] w-40 h-40 text-neoPurple opacity-50 hidden md:block" viewBox="0 0 100 100">
+            <path class="sketch-path" fill="#9FA0FF" d="M 50 30 C 40 10, 10 20, 10 50 C 10 75, 40 85, 50 90 C 60 85, 90 75, 90 50 C 90 20, 60 10, 50 30 Z" />
+        </svg>
+        <!-- Star Doodle Mid Left -->
+        <svg class="absolute top-[45%] left-[5%] w-20 h-20 opacity-35" viewBox="0 0 100 100">
+            <path class="sketch-path" d="M 50 10 L 55 35 L 80 40 L 55 45 L 50 70 L 45 45 L 20 40 L 45 35 Z" fill="#FFEAA7" />
+        </svg>
+        <!-- Crossed Sparkle Bottom Right -->
+        <svg class="absolute bottom-[20%] right-[3%] w-24 h-24 opacity-40" viewBox="0 0 100 100">
+            <path class="sketch-path" d="M 50 10 L 50 90 M 10 50 L 90 50 M 25 25 L 75 75 M 25 75 L 75 25" />
+        </svg>
+    </div>
+
+    <!-- NAVIGATION BAR -->
+    <header class="sticky top-0 z-40 bg-white border-b-[3px] border-neoBlack px-4 py-3 md:py-4 select-none">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <!-- Brand Logo -->
+            <a href="#" class="flex items-center gap-2 group">
+                <div class="w-10 h-10 bg-neoLime border-2 border-neoBlack rounded-lg flex items-center justify-center shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-transform group-hover:-translate-y-0.5">
+                    <span class="font-outfit font-black text-xl text-neoBlack">S!</span>
+                </div>
+                <span class="font-outfit font-black text-xl md:text-2xl tracking-tight text-neoBlack">CODECUY</span>
+            </a>
+
+            <!-- Nav Links (Hidden on small screens) -->
+            <nav class="hidden md:flex items-center gap-6 font-outfit font-extrabold text-sm">
+                <a href="#discover" class="hover:text-neoPurple transition-colors">Discover</a>
+                <a href="#drops" class="hover:text-neoPurple transition-colors">Featured Drops</a>
+                <a href="#creators" class="hover:text-neoPurple transition-colors">Top Creators</a>
+                <a href="#how-it-works" class="hover:text-neoPurple transition-colors">How It Works</a>
+            </nav>
+
+            <!-- Action Button -->
+            <div class="flex items-center gap-3">
+                <button onclick="openWalletModal()" class="neubrutal-btn bg-white text-neoBlack border-2 border-neoBlack rounded-lg px-4 py-2 font-outfit font-black text-xs md:text-sm shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:bg-slate-50">
+                    Connect Wallet
+                </button>
+                <!-- Mobile Nav Toggle button -->
+                <button class="md:hidden neubrutal-btn bg-neoLime p-2 border-2 border-neoBlack rounded-lg shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]" onclick="toggleMobileMenu()">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7" /></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobileMenu" class="fixed inset-0 bg-neoBg z-50 transform -translate-x-full transition-transform duration-300 md:hidden flex flex-col p-6 border-r-4 border-neoBlack shadow-[10px_0px_0px_0px_rgba(0,0,0,1)]">
+        <div class="flex items-center justify-between mb-8">
+            <span class="font-outfit font-black text-xl">S! CODECUY</span>
+            <button onclick="toggleMobileMenu()" class="border-2 border-neoBlack rounded-lg p-1.5 bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+        </div>
+        <nav class="flex flex-col gap-5 font-outfit font-black text-lg">
+            <a href="#discover" onclick="toggleMobileMenu()" class="py-2 border-b-2 border-neoBlack">Discover</a>
+            <a href="#drops" onclick="toggleMobileMenu()" class="py-2 border-b-2 border-neoBlack">Featured Drops</a>
+            <a href="#creators" onclick="toggleMobileMenu()" class="py-2 border-b-2 border-neoBlack">Top Creators</a>
+            <a href="#how-it-works" onclick="toggleMobileMenu()" class="py-2 border-b-2 border-neoBlack">How It Works</a>
+        </nav>
+        <button onclick="openWalletModal(); toggleMobileMenu();" class="mt-auto neubrutal-btn bg-neoLime text-black border-2 border-black rounded-xl py-3.5 font-outfit font-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+            Connect Web3 Wallet
+        </button>
+    </div>
+
+    <!-- HERO SECTION -->
+    <main class="max-w-7xl mx-auto px-4 py-8 md:py-16 relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            <!-- Left Info Panel -->
+            <div class="lg:col-span-7 space-y-6 md:space-y-8">
+                <!-- Highlight Badge -->
+                <div class="inline-flex items-center gap-2 bg-neoPurple border-2 border-neoBlack rounded-full px-4 py-1.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] select-none">
+                    <span class="font-outfit font-black text-xs uppercase tracking-wider text-black">🔥 Hot Drops Live Now</span>
+                </div>
+
+                <!-- Epic Headline -->
+                <h1 class="font-outfit font-black text-4xl sm:text-5xl md:text-6xl tracking-tight leading-[1.05] text-neoBlack">
+                    Buy Random <span class="bg-neoLime border-2 border-neoBlack px-2 rounded-lg shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] inline-block my-1 transform -rotate-1">NFT Packs</span>, Broaden Your Collection.
+                </h1>
+
+                <!-- Body copy -->
+                <p class="font-sans text-base md:text-lg font-semibold text-slate-700 leading-relaxed max-w-xl">
+                    Temukan koleksi seni digital paling eksentrik dan langka melalui sistem gacha kemasan kartu yang beraliran pop-art. Dapatkan jaminan NFT edisi terbatas bernilai tinggi dalam setiap pembukaan pack!
+                </p>
+
+                <!-- Dual CTAs and Badges -->
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
+                    <button onclick="showToast('Loading gacha system... Pack opening soon!')" class="neubrutal-btn bg-neoLime text-neoBlack border-[3px] border-neoBlack rounded-xl py-4 px-8 font-outfit font-black text-base md:text-lg flex items-center justify-center gap-2 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:bg-[#c2eb00]">
+                        <span>Start Minting Now!</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
+                    </button>
+                    <a href="#drops" class="neubrutal-btn bg-white text-neoBlack border-[3px] border-neoBlack rounded-xl py-4 px-8 font-outfit font-black text-base md:text-lg flex items-center justify-center shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:bg-slate-50 text-center">
+                        Explore Collection
+                    </a>
+                </div>
+
+                <!-- Simple Quick Stats row -->
+                <div class="flex items-center gap-6 pt-4 border-t-2 border-dashed border-neoBlack/30">
+                    <div>
+                        <span class="font-outfit font-black text-2xl md:text-3xl">45.2k+</span>
+                        <p class="font-sans text-xs font-bold text-slate-500 uppercase tracking-wider">Mints Completed</p>
+                    </div>
+                    <div class="border-l-2 border-neoBlack h-8"></div>
+                    <div>
+                        <span class="font-outfit font-black text-2xl md:text-3xl">120+</span>
+                        <p class="font-sans text-xs font-bold text-slate-500 uppercase tracking-wider">Artist Creators</p>
+                    </div>
+                    <div class="border-l-2 border-neoBlack h-8"></div>
+                    <div>
+                        <span class="font-outfit font-black text-2xl md:text-3xl">0.08 ETH</span>
+                        <p class="font-sans text-xs font-bold text-slate-500 uppercase tracking-wider">Floor Price</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Hero Visual Panel (Stacked Cards from Screen 1) -->
+            <div class="lg:col-span-5 flex items-center justify-center relative select-none">
+                <!-- Stacked Background Card 3 -->
+                <div class="absolute w-[80%] aspect-square bg-[#FF7675] border-[3px] border-neoBlack rounded-2xl rotate-6 translate-x-6 translate-y-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] opacity-40"></div>
+                <!-- Stacked Background Card 2 -->
+                <div class="absolute w-[80%] aspect-square bg-neoYellow border-[3px] border-neoBlack rounded-2xl -rotate-3 translate-x-3 -translate-y-2 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] opacity-80"></div>
+                
+                <!-- Main Foreground Hero Card (Screen 1 Pack representation) -->
+                <div class="relative w-[85%] bg-white border-[4px] border-neoBlack rounded-[24px] shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] overflow-hidden p-4">
+                    
+                    <!-- Inner SVG representation of Cyber Soda Can artwork -->
+                    <div class="w-full aspect-square border-2 border-neoBlack rounded-xl overflow-hidden bg-neoSky relative flex items-center justify-center p-4">
+                        <svg class="w-full h-full" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Background Grid -->
+                            <rect width="200" height="200" fill="#CEF6FF" />
+                            <path d="M 0 40 H 200 M 0 80 H 200 M 0 120 H 200 M 0 160 H 200" stroke="#A9E3F3" stroke-width="1.5" stroke-dasharray="3 3"/>
+                            <!-- Cyber Soda Can Graphic -->
+                            <g transform="translate(60, 30)">
+                                <!-- Shadow under Can -->
+                                <ellipse cx="40" cy="135" rx="25" ry="8" fill="#A9D3DF" />
+                                <!-- Can Body Outline -->
+                                <rect x="15" y="20" width="50" height="110" rx="10" fill="#FF7675" stroke="#000" stroke-width="3" />
+                                <!-- Can top ring -->
+                                <ellipse cx="40" cy="20" rx="25" ry="8" fill="#EAEAEA" stroke="#000" stroke-width="3" />
+                                <ellipse cx="40" cy="20" rx="12" ry="4" fill="#C5C5C5" stroke="#000" stroke-width="2" />
+                                <!-- Can pull tab -->
+                                <path d="M 36 12 L 40 5 L 44 12 Z" fill="#FFF" stroke="#000" stroke-width="2" />
+                                <!-- Wrap-around metallic stripe neon blue -->
+                                <path d="M 15 65 Q 40 85, 65 65 L 65 80 Q 40 100, 15 80 Z" fill="#9FA0FF" stroke="#000" stroke-width="2.5" />
+                                <!-- Cute mascot circle -->
+                                <circle cx="40" cy="50" r="12" fill="#FFEAA7" stroke="#000" stroke-width="2.5" />
+                                <circle cx="36" cy="48" r="1.5" fill="#000" />
+                                <circle cx="44" cy="48" r="1.5" fill="#000" />
+                                <path d="M 37 54 Q 40 58, 43 54" stroke="#000" stroke-width="1.5" fill="none" stroke-linecap="round" />
+                                <!-- Can bottom metallic ring -->
+                                <path d="M 15 122 Q 40 135, 65 122" stroke="#000" stroke-width="3" fill="none" />
+                            </g>
+                        </svg>
+                        
+                        <!-- Floating Badge -->
+                        <span class="absolute bottom-3 left-3 bg-white border-2 border-neoBlack rounded-full px-3 py-1 text-[11px] font-outfit font-black shadow-[2px_2px_0px_0px_#000]">PACK #0811</span>
+                    </div>
+
+                    <!-- Meta Details on Pack -->
+                    <div class="mt-4 flex justify-between items-center">
+                        <div>
+                            <h3 class="font-outfit font-black text-lg text-neoBlack">Neon Cyber Soda Pack</h3>
+                            <div class="flex items-center gap-1.5 mt-1">
+                                <div class="w-5 h-5 rounded-md border-2 border-neoBlack bg-neoPurple overflow-hidden">
+                                    <svg class="w-full h-full bg-[#FFEAA7]" viewBox="0 0 40 40">
+                                        <circle cx="20" cy="16" r="8" fill="#55EFC4" stroke="#000" stroke-width="2"/>
+                                        <path d="M 8 36 C 8 28, 32 28, 32 36" fill="#9FA0FF" stroke="#000" stroke-width="2"/>
+                                    </svg>
+                                </div>
+                                <span class="font-sans text-xs font-bold text-slate-600">@LewisWebber</span>
+                            </div>
+                        </div>
+                        <div class="bg-neoLime border-2 border-neoBlack px-3 py-1.5 rounded-lg shadow-[2.5px_2.5px_0px_0px_rgba(0,0,0,1)]">
+                            <span class="font-outfit font-black text-sm">12.34 ETH</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </main>
+
+    <!-- TRUSTED / COUNTER ROW -->
+    <section class="bg-white border-y-[3px] border-neoBlack py-8 my-8 select-none overflow-hidden relative">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-around gap-8 text-center">
+            <div class="space-y-1">
+                <span class="font-outfit font-black text-4xl text-neoBlack">4.8M+ USD</span>
+                <p class="font-sans text-sm font-bold text-slate-500 uppercase tracking-wide">Total Volume Traded</p>
+            </div>
+            <div class="hidden md:block border-l-[3px] border-neoBlack h-12"></div>
+            <div class="space-y-1">
+                <span class="font-outfit font-black text-4xl text-neoBlack">99.4k+</span>
+                <p class="font-sans text-sm font-bold text-slate-500 uppercase tracking-wide">Unique Artpieces Minted</p>
+            </div>
+            <div class="hidden md:block border-l-[3px] border-neoBlack h-12"></div>
+            <div class="space-y-1">
+                <span class="font-outfit font-black text-4xl text-neoBlack">0.05s</span>
+                <p class="font-sans text-sm font-bold text-slate-500 uppercase tracking-wide">Average Transaction Speed</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURED NFT DROPS (BENTO GRID STYLE) -->
+    <section id="drops" class="max-w-7xl mx-auto px-4 py-16 scroll-mt-24">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+            <div class="space-y-2">
+                <h2 class="font-outfit font-black text-3xl md:text-4xl text-neoBlack">Current Live Drops</h2>
+                <p class="font-sans text-sm md:text-base font-bold text-slate-600">Pilih, bid, dan menangkan penawaran eksklusif langsung dari dompet digital Anda.</p>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="showToast('Loading older drops...')" class="neubrutal-btn bg-white border-2 border-neoBlack p-2.5 rounded-lg shadow-[2.5px_2.5px_0px_0px_rgba(0,0,0,1)] hover:bg-slate-50">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
+                </button>
+                <button onclick="showToast('Loading newer drops...')" class="neubrutal-btn bg-neoLime border-2 border-neoBlack p-2.5 rounded-lg shadow-[2.5px_2.5px_0px_0px_rgba(0,0,0,1)] hover:bg-[#c2eb00]">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Drops Bento Grid Container -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            
+            <!-- NFT CARD 1: "Too Much Rainbow" (From Screen 3) -->
+            <div class="bg-white border-[3px] border-neoBlack rounded-2xl p-5 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] neubrutal-card-hover flex flex-col justify-between">
+                <div>
+                    <!-- Image Frame -->
+                    <div class="w-full aspect-square border-2 border-neoBlack rounded-xl overflow-hidden bg-neoSky relative p-3">
+                        <svg class="w-full h-full" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="300" height="300" fill="#CEF6FF" />
+                            <path d="M 0 50 L 300 50 M 0 100 L 300 100 M 0 150 L 300 150" stroke="#B0E5F5" stroke-width="1" stroke-dasharray="4" />
+                            <circle cx="260" cy="50" r="22" fill="#FFEAA7" stroke="#000" stroke-width="2.5" />
+                            <path d="M 260 20 L 260 12 M 260 80 L 260 72 M 230 50 L 222 50 M 290 50 L 282 50" stroke="#000" stroke-width="2.5" />
+                            <!-- Rainbow curves -->
+                            <path d="M -20 180 Q 80 40, 200 110 T 320 60" stroke="#000" stroke-width="10" stroke-linecap="round" />
+                            <path d="M -20 180 Q 80 40, 200 110 T 320 60" stroke="#FF7675" stroke-width="6" stroke-linecap="round" />
+                            <path d="M -20 195 Q 80 55, 200 125 T 320 75" stroke="#000" stroke-width="10" stroke-linecap="round" />
+                            <path d="M -20 195 Q 80 55, 200 125 T 320 75" stroke="#FFEAA7" stroke-width="6" stroke-linecap="round" />
+                            <!-- Mountains -->
+                            <path d="M -10 240 L 60 140 L 130 240 Z" fill="#EAEAEA" stroke="#000000" stroke-width="3" />
+                            <path d="M 60 140 L 42.5 165 L 60 175 L 77.5 165 Z" fill="#FFFFFF" stroke="#000000" stroke-width="2.5" />
+                            <path d="M 110 260 L 190 150 L 270 260 Z" fill="#DFDFDF" stroke="#000000" stroke-width="3" />
+                            <path d="M 190 150 L 170 177 L 190 188 L 210 177 Z" fill="#FFFFFF" stroke="#000000" stroke-width="2.5" />
+                            <path d="M -20 270 Q 80 180, 180 230 T 320 200 L 320 310 L -20 310 Z" fill="#55EFC4" stroke="#000" stroke-width="3" />
+                            <path d="M -20 290 Q 100 240, 220 260 T 320 250 L 320 310 L -20 310 Z" fill="#00B894" stroke="#000" stroke-width="3" />
+                            <g transform="translate(260, 245)">
+                                <circle cx="0" cy="0" r="6" fill="#FFEAA7" stroke="#000" stroke-width="2" />
+                            </g>
+                        </svg>
+                        <span class="absolute bottom-3 left-3 bg-white border border-neoBlack rounded-full px-2.5 py-0.5 text-[10px] font-outfit font-extrabold shadow-[1.5px_1.5px_0px_0px_#000]">#41235</span>
+                    </div>
+
+                    <!-- Title & Creator Info -->
+                    <div class="mt-4 flex items-start justify-between">
+                        <div>
+                            <h3 class="font-outfit font-black text-xl text-neoBlack">Too Much Rainbow</h3>
+                            <!-- Creator Line -->
+                            <div class="flex items-center gap-1.5 mt-1.5">
+                                <div class="w-6 h-6 rounded border-2 border-neoBlack bg-neoPurple overflow-hidden p-[1px]">
+                                    <svg class="w-full h-full bg-[#FFEAA7]" viewBox="0 0 40 40">
+                                        <circle cx="20" cy="16" r="8" fill="#55EFC4" stroke="#000" stroke-width="2"/>
+                                        <path d="M 8 36 C 8 28, 32 28, 32 36" fill="#9FA0FF" stroke="#000" stroke-width="2"/>
+                                    </svg>
+                                </div>
+                                <span class="font-sans text-xs font-bold text-slate-500">Lewis Webber</span>
+                                <span class="w-3.5 h-3.5 rounded-full bg-neoLime border border-neoBlack flex items-center justify-center">
+                                    <svg class="w-2 text-black" fill="none" stroke="currentColor" stroke-width="4.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                                </span>
+                            </div>
+                        </div>
+                        <button onclick="showToast('Added to bookmarks')" class="border-2 border-neoBlack p-2 bg-white rounded-lg shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1.5px] active:translate-y-[1.5px] active:shadow-[0.5px_0.5px_0px_0px_#000]">
+                            <svg class="w-4 h-4 fill-none stroke-neoBlack" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.1 1.907 1.054 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.13.808-2.083 1.907-2.185a48.507 48.507 0 0111.186 0z" /></svg>
+                        </button>
+                    </div>
+
+                    <!-- Meta Specs Table -->
+                    <div class="grid grid-cols-2 gap-3 mt-4">
+                        <div class="border border-neoBlack rounded-lg p-2 bg-[#FAFAFA]">
+                            <span class="block text-[9px] uppercase font-bold text-slate-400">Current Bid</span>
+                            <span class="font-outfit font-black text-sm text-neoBlack" id="bid-rainbow">0.30 ETH</span>
+                        </div>
+                        <div class="border border-neoBlack rounded-lg p-2 bg-[#FAFAFA]">
+                            <span class="block text-[9px] uppercase font-bold text-slate-400">Count Favourites</span>
+                            <span class="font-outfit font-black text-sm text-neoBlack">41 Favs</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card action CTA -->
+                <div class="mt-5 pt-3 border-t-2 border-dashed border-neoBlack/20 flex items-center justify-between gap-2">
+                    <div class="text-left">
+                        <span class="block text-[9px] font-bold text-slate-400 uppercase">Ends in</span>
+                        <span class="font-outfit font-black text-xs text-neoBlack drop-timer" data-hours="12" data-mins="15">12h : 15m : 08s</span>
+                    </div>
+                    <button onclick="openBidModal('Too Much Rainbow', 0.30, 'bid-rainbow')" class="neubrutal-btn bg-neoLime text-black border-2 border-black rounded-lg py-2 px-4 font-outfit font-black text-xs shadow-[3px_3px_0px_0px_#000]">
+                        Place Bid (0.35 ETH)
+                    </button>
+                </div>
+            </div>
+
+            <!-- NFT CARD 2: "Dreaming Awake" (From Screen 2) -->
+            <div class="bg-white border-[3px] border-neoBlack rounded-2xl p-5 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] neubrutal-card-hover flex flex-col justify-between">
+                <div>
+                    <!-- Image Frame -->
+                    <div class="w-full aspect-square border-2 border-neoBlack rounded-xl overflow-hidden bg-neoYellow relative p-3">
+                        <svg class="w-full h-full" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="300" height="300" fill="#FFEAA7" />
+                            <circle cx="150" cy="120" r="70" fill="#9FA0FF" stroke="#000" stroke-width="3" />
+                            <path d="M 0 220 Q 150 150, 300 220 L 300 300 L 0 300 Z" fill="#55EFC4" stroke="#000" stroke-width="3" />
+                            <!-- Character cartoon inside face -->
+                            <g transform="translate(115, 80)">
+                                <!-- Head and Cap -->
+                                <circle cx="35" cy="45" r="25" fill="#FFF" stroke="#000" stroke-width="2.5" />
+                                <path d="M 12 35 Q 35 15, 58 35" stroke="#000" stroke-width="3" fill="#D4FF00" />
+                                <circle cx="35" cy="18" r="4" fill="#000" />
+                                <!-- Eyes closed dreaming -->
+                                <path d="M 23 48 Q 28 53, 31 48" stroke="#000" stroke-width="2" fill="none" stroke-linecap="round" />
+                                <path d="M 39 48 Q 44 53, 47 48" stroke="#000" stroke-width="2" fill="none" stroke-linecap="round" />
+                                <!-- Cheeks pink -->
+                                <circle cx="21" cy="52" r="2.5" fill="#FF7675" />
+                                <circle cx="49" cy="52" r="2.5" fill="#FF7675" />
+                            </g>
+                        </svg>
+                        <span class="absolute bottom-3 left-3 bg-white border border-neoBlack rounded-full px-2.5 py-0.5 text-[10px] font-outfit font-extrabold shadow-[1.5px_1.5px_0px_0px_#000]">#41236</span>
+                    </div>
+
+                    <!-- Title & Creator Info -->
+                    <div class="mt-4 flex items-start justify-between">
+                        <div>
+                            <h3 class="font-outfit font-black text-xl text-neoBlack">Dreaming Awake</h3>
+                            <!-- Creator Line -->
+                            <div class="flex items-center gap-1.5 mt-1.5">
+                                <div class="w-6 h-6 rounded border-2 border-neoBlack bg-neoPurple overflow-hidden p-[1px]">
+                                    <svg class="w-full h-full bg-[#FFEAA7]" viewBox="0 0 40 40">
+                                        <circle cx="20" cy="16" r="8" fill="#55EFC4" stroke="#000" stroke-width="2"/>
+                                        <path d="M 8 36 C 8 28, 32 28, 32 36" fill="#9FA0FF" stroke="#000" stroke-width="2"/>
+                                    </svg>
+                                </div>
+                                <span class="font-sans text-xs font-bold text-slate-500">Lewis Webber</span>
+                                <span class="w-3.5 h-3.5 rounded-full bg-neoLime border border-neoBlack flex items-center justify-center">
+                                    <svg class="w-2 text-black" fill="none" stroke="currentColor" stroke-width="4.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                                </span>
+                            </div>
+                        </div>
+                        <button onclick="showToast('Added to bookmarks')" class="border-2 border-neoBlack p-2 bg-white rounded-lg shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1.5px] active:translate-y-[1.5px] active:shadow-[0.5px_0.5px_0px_0px_#000]">
+                            <svg class="w-4 h-4 fill-none stroke-neoBlack" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.1 1.907 1.054 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.13.808-2.083 1.907-2.185a48.507 48.507 0 0111.186 0z" /></svg>
+                        </button>
+                    </div>
+
+                    <!-- Meta Specs Table -->
+                    <div class="grid grid-cols-2 gap-3 mt-4">
+                        <div class="border border-neoBlack rounded-lg p-2 bg-[#FAFAFA]">
+                            <span class="block text-[9px] uppercase font-bold text-slate-400">Current Bid</span>
+                            <span class="font-outfit font-black text-sm text-neoBlack" id="bid-dreaming">0.45 ETH</span>
+                        </div>
+                        <div class="border border-neoBlack rounded-lg p-2 bg-[#FAFAFA]">
+                            <span class="block text-[9px] uppercase font-bold text-slate-400">Count Favourites</span>
+                            <span class="font-outfit font-black text-sm text-neoBlack">128 Favs</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card action CTA -->
+                <div class="mt-5 pt-3 border-t-2 border-dashed border-neoBlack/20 flex items-center justify-between gap-2">
+                    <div class="text-left">
+                        <span class="block text-[9px] font-bold text-slate-400 uppercase">Ends in</span>
+                        <span class="font-outfit font-black text-xs text-neoBlack drop-timer" data-hours="18" data-mins="42">18h : 42m : 11s</span>
+                    </div>
+                    <button onclick="openBidModal('Dreaming Awake', 0.45, 'bid-dreaming')" class="neubrutal-btn bg-neoLime text-black border-2 border-black rounded-lg py-2 px-4 font-outfit font-black text-xs shadow-[3px_3px_0px_0px_#000]">
+                        Place Bid (0.50 ETH)
+                    </button>
+                </div>
+            </div>
+
+            <!-- NFT CARD 3: "Metallic Soda Twist" (From Screen 1) -->
+            <div class="bg-white border-[3px] border-neoBlack rounded-2xl p-5 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] neubrutal-card-hover flex flex-col justify-between">
+                <div>
+                    <!-- Image Frame -->
+                    <div class="w-full aspect-square border-2 border-neoBlack rounded-xl overflow-hidden bg-[#FF7675] relative p-3">
+                        <svg class="w-full h-full" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="300" height="300" fill="#FF7675" />
+                            <circle cx="150" cy="150" r="80" fill="#9FA0FF" stroke="#000" stroke-width="2.5" />
+                            <!-- Abstract twist graphics -->
+                            <path d="M 90 90 C 130 110, 170 80, 210 120 C 230 150, 190 200, 150 210" stroke="#D4FF00" stroke-width="12" stroke-linecap="round" />
+                            <path d="M 90 90 C 130 110, 170 80, 210 120 C 230 150, 190 200, 150 210" stroke="#000" stroke-width="6" stroke-linecap="round" />
+                        </svg>
+                        <span class="absolute bottom-3 left-3 bg-white border border-neoBlack rounded-full px-2.5 py-0.5 text-[10px] font-outfit font-extrabold shadow-[1.5px_1.5px_0px_0px_#000]">#41237</span>
+                    </div>
+
+                    <!-- Title & Creator Info -->
+                    <div class="mt-4 flex items-start justify-between">
+                        <div>
+                            <h3 class="font-outfit font-black text-xl text-neoBlack">Metallic Twist</h3>
+                            <!-- Creator Line -->
+                            <div class="flex items-center gap-1.5 mt-1.5">
+                                <div class="w-6 h-6 rounded border-2 border-neoBlack bg-neoPurple overflow-hidden p-[1px]">
+                                    <svg class="w-full h-full bg-[#FFEAA7]" viewBox="0 0 40 40">
+                                        <circle cx="20" cy="16" r="8" fill="#55EFC4" stroke="#000" stroke-width="2"/>
+                                        <path d="M 8 36 C 8 28, 32 28, 32 36" fill="#9FA0FF" stroke="#000" stroke-width="2"/>
+                                    </svg>
+                                </div>
+                                <span class="font-sans text-xs font-bold text-slate-500">Lewis Webber</span>
+                                <span class="w-3.5 h-3.5 rounded-full bg-neoLime border border-neoBlack flex items-center justify-center">
+                                    <svg class="w-2 text-black" fill="none" stroke="currentColor" stroke-width="4.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                                </span>
+                            </div>
+                        </div>
+                        <button onclick="showToast('Added to bookmarks')" class="border-2 border-neoBlack p-2 bg-white rounded-lg shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1.5px] active:translate-y-[1.5px] active:shadow-[0.5px_0.5px_0px_0px_#000]">
+                            <svg class="w-4 h-4 fill-none stroke-neoBlack" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.1 1.907 1.054 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.13.808-2.083 1.907-2.185a48.507 48.507 0 0111.186 0z" /></svg>
+                        </button>
+                    </div>
+
+                    <!-- Meta Specs Table -->
+                    <div class="grid grid-cols-2 gap-3 mt-4">
+                        <div class="border border-neoBlack rounded-lg p-2 bg-[#FAFAFA]">
+                            <span class="block text-[9px] uppercase font-bold text-slate-400">Current Bid</span>
+                            <span class="font-outfit font-black text-sm text-neoBlack" id="bid-metallic">0.12 ETH</span>
+                        </div>
+                        <div class="border border-neoBlack rounded-lg p-2 bg-[#FAFAFA]">
+                            <span class="block text-[9px] uppercase font-bold text-slate-400">Count Favourites</span>
+                            <span class="font-outfit font-black text-sm text-neoBlack">19 Favs</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card action CTA -->
+                <div class="mt-5 pt-3 border-t-2 border-dashed border-neoBlack/20 flex items-center justify-between gap-2">
+                    <div class="text-left">
+                        <span class="block text-[9px] font-bold text-slate-400 uppercase">Ends in</span>
+                        <span class="font-outfit font-black text-xs text-neoBlack drop-timer" data-hours="3" data-mins="19">03h : 19m : 45s</span>
+                    </div>
+                    <button onclick="openBidModal('Metallic Twist', 0.12, 'bid-metallic')" class="neubrutal-btn bg-neoLime text-black border-2 border-black rounded-lg py-2 px-4 font-outfit font-black text-xs shadow-[3px_3px_0px_0px_#000]">
+                        Place Bid (0.17 ETH)
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- CREATOR SPOTLIGHT SECTION (From Screen 2 Profile Page) -->
+    <section id="creators" class="bg-[#A4E000] border-y-[3px] border-neoBlack py-16 scroll-mt-24 select-none relative">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center space-y-3 mb-12">
+                <span class="bg-white border-2 border-black px-3 py-1 rounded-full font-outfit font-black text-xs uppercase tracking-wide inline-block shadow-[1.5px_1.5px_0px_0px_#000]">Creator Spotlight</span>
+                <h2 class="font-outfit font-black text-3xl md:text-5xl text-neoBlack">Featured Digital Artist</h2>
+            </div>
+
+            <!-- Main Creator Big Bento Box -->
+            <div class="max-w-4xl mx-auto bg-neoBg border-[4px] border-neoBlack rounded-3xl p-6 md:p-8 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]">
+                
+                <!-- Profile Header Details -->
+                <div class="flex flex-col md:flex-row items-center md:items-start justify-between gap-6 pb-6 border-b-2 border-dashed border-neoBlack/30">
+                    
+                    <!-- Avatar and Bio Details -->
+                    <div class="flex flex-col md:flex-row items-center md:items-start gap-4 text-center md:text-left">
+                        <!-- Avatar Shield Wrapper -->
+                        <div class="w-24 h-24 rounded-2xl border-[3px] border-neoBlack bg-[#FFEAA7] p-[3px] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] shrink-0 overflow-hidden relative">
+                            <svg class="w-full h-full bg-neoPurple" viewBox="0 0 40 40">
+                                <circle cx="20" cy="16" r="8" fill="#55EFC4" stroke="#000" stroke-width="2"/>
+                                <path d="M 8 36 C 8 28, 32 28, 32 36" fill="#D4FF00" stroke="#000" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        
+                        <!-- Account Names -->
+                        <div class="space-y-2 max-w-md">
+                            <div class="flex items-center justify-center md:justify-start gap-2">
+                                <h3 class="font-outfit font-black text-2xl text-neoBlack">Lewis Webber</h3>
+                                <span class="w-5 h-5 rounded-full bg-neoLime border border-neoBlack flex items-center justify-center">
+                                    <svg class="w-2.5 text-black" fill="none" stroke="currentColor" stroke-width="4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                                </span>
+                            </div>
+                            <span class="block font-outfit font-bold text-sm text-slate-500">@LewisWebberNFTs</span>
+                            <p class="font-sans text-xs md:text-sm font-semibold text-slate-600 leading-relaxed">
+                                Ilustrator digital eksperimental asal London, berfokus membuat karya bertema cyberpunk retro, gradasi spectrum neon, serta landscape minimalis.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Follow Button and Socials -->
+                    <div class="flex flex-row md:flex-col gap-3">
+                        <button id="mainFollowBtn" onclick="toggleSpotlightFollow()" class="neubrutal-btn bg-[#FFEAA7] text-neoBlack border-2 border-neoBlack px-6 py-2.5 rounded-lg font-outfit font-black text-sm shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:bg-[#ffe388] min-w-[130px]">
+                            Start Following
+                        </button>
+                        <button onclick="showToast('Showing more profile options')" class="neubrutal-btn bg-white border-2 border-neoBlack p-2.5 rounded-lg shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Three Stat Badges (From Screen 2 statistics) -->
+                <div class="grid grid-cols-3 gap-4 pt-6">
+                    <div class="bg-white border-2 border-neoBlack rounded-xl p-3 text-center shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+                        <span id="spotlightFollowers" class="block font-outfit font-black text-lg md:text-2xl text-neoBlack">1,432</span>
+                        <p class="font-sans text-[10px] font-bold text-slate-500 uppercase tracking-wide">Followers</p>
+                    </div>
+                    <div class="bg-white border-2 border-neoBlack rounded-xl p-3 text-center shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+                        <span class="block font-outfit font-black text-lg md:text-2xl text-neoBlack">10.0k+</span>
+                        <p class="font-sans text-[10px] font-bold text-slate-500 uppercase tracking-wide">NFTs Minted</p>
+                    </div>
+                    <div class="bg-white border-2 border-neoBlack rounded-xl p-3 text-center shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+                        <span class="block font-outfit font-black text-lg md:text-2xl text-neoBlack">126</span>
+                        <p class="font-sans text-[10px] font-bold text-slate-500 uppercase tracking-wide">NFTs Owned</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section id="how-it-works" class="max-w-7xl mx-auto px-4 py-16 scroll-mt-24">
+        <div class="text-center space-y-2 mb-16">
+            <h2 class="font-outfit font-black text-3xl md:text-4xl text-neoBlack">How to Collect Packs</h2>
+            <p class="font-sans text-sm md:text-base font-bold text-slate-600">Pelajari alur gacha dan transaksi kepemilikan NFT Neubrutal dalam 3 langkah ringkas.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Step 1 Card -->
+            <div class="bg-white border-2 border-neoBlack rounded-2xl p-6 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] flex flex-col justify-between">
+                <div class="space-y-4">
+                    <div class="w-12 h-12 rounded-lg bg-neoPurple border-2 border-neoBlack flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] font-outfit font-black text-lg">
+                        01
+                    </div>
+                    <h3 class="font-outfit font-black text-xl">Hubungkan Dompet</h3>
+                    <p class="font-sans text-xs md:text-sm font-semibold text-slate-600 leading-relaxed">
+                        Klik tombol Connect Wallet di navigasi atas. Pilih dompet Web3 MetaMask, Coinbase Wallet, atau WalletConnect Anda yang aktif.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Step 2 Card -->
+            <div class="bg-white border-2 border-neoBlack rounded-2xl p-6 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] flex flex-col justify-between">
+                <div class="space-y-4">
+                    <div class="w-12 h-12 rounded-lg bg-neoYellow border-2 border-neoBlack flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] font-outfit font-black text-lg">
+                        02
+                    </div>
+                    <h3 class="font-outfit font-black text-xl">Beli Pack atau Place Bid</h3>
+                    <p class="font-sans text-xs md:text-sm font-semibold text-slate-600 leading-relaxed">
+                        Buka kemasan kartu acak (*mint pack*) atau berikan penawaran bid tertinggi pada salah satu item digital art lepasan milik kreator kami.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Step 3 Card -->
+            <div class="bg-white border-2 border-neoBlack rounded-2xl p-6 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] flex flex-col justify-between">
+                <div class="space-y-4">
+                    <div class="w-12 h-12 rounded-lg bg-neoLime border-2 border-neoBlack flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] font-outfit font-black text-lg">
+                        03
+                    </div>
+                    <h3 class="font-outfit font-black text-xl">Koleksi & Jual Kembali</h3>
+                    <p class="font-sans text-xs md:text-sm font-semibold text-slate-600 leading-relaxed">
+                        Nikmati visual aset 2D resolusi tinggi di galeri portofolio Anda. Tukar, simpan, atau jual kembali di pasar sekunder kapan pun Anda mau!
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEWSLETTER BANNER -->
+    <section class="max-w-5xl mx-auto px-4 py-8 mb-16 select-none">
+        <div class="bg-neoSky border-[3px] border-neoBlack rounded-3xl p-8 shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] text-center space-y-6">
+            <h2 class="font-outfit font-black text-2xl md:text-4xl">Join The Gacha Waitlist!</h2>
+            <p class="font-sans text-xs md:text-sm font-bold text-slate-600 max-w-md mx-auto">
+                Berlangganan buletin berkala untuk mendapatkan notifikasi rilis koleksi pack kartu berikutnya dan gratis token gas fee pertama Anda!
+            </p>
+            <form onsubmit="handleSubscribe(event)" class="max-w-md mx-auto flex flex-col sm:flex-row items-stretch justify-center gap-3">
+                <input type="email" id="newsInput" required placeholder="Masukkan alamat email Anda" class="bg-white border-[3px] border-neoBlack rounded-xl px-4 py-3 font-outfit font-semibold text-xs md:text-sm text-neoBlack outline-none placeholder:text-slate-400 shadow-[3px_3px_0px_0px_#000] flex-1">
+                <button type="submit" class="neubrutal-btn bg-neoLime text-black border-[3px] border-black rounded-xl px-6 py-3 font-outfit font-black text-sm shadow-[3px_3px_0px_0px_#000] hover:bg-[#c2eb00]">
+                    Daftar Sekarang
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t-[3px] border-neoBlack py-12 px-4 select-none">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            <div class="space-y-4">
+                <span class="font-outfit font-black text-2xl">CODECUY</span>
+                <p class="font-sans text-xs font-semibold text-slate-500 leading-relaxed">
+                    Sistem gacha NFT dengan tampilan neubrutalism yang memacu keseruan mengumpulkan koleksi seni digital unik berskala internasional.
+                </p>
+            </div>
+            <div>
+                <h4 class="font-outfit font-black text-sm uppercase tracking-wider mb-4">Marketplace</h4>
+                <ul class="space-y-2 font-sans text-xs font-bold text-slate-500">
+                    <li><a href="#discover" class="hover:text-neoPurple">Semua Drops</a></li>
+                    <li><a href="#discover" class="hover:text-neoPurple">Kemasan Pack Gacha</a></li>
+                    <li><a href="#creators" class="hover:text-neoPurple">Kreator Teratas</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-outfit font-black text-sm uppercase tracking-wider mb-4">Informasi</h4>
+                <ul class="space-y-2 font-sans text-xs font-bold text-slate-500">
+                    <li><a href="#how-it-works" class="hover:text-neoPurple">Panduan Gacha</a></li>
+                    <li><a href="#" class="hover:text-neoPurple">Syarat & Ketentuan</a></li>
+                    <li><a href="#" class="hover:text-neoPurple">Kebijakan Privasi</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-outfit font-black text-sm uppercase tracking-wider mb-4">Hubungi Kami</h4>
+                <ul class="space-y-2 font-sans text-xs font-bold text-slate-500">
+                    <li>support@codecuy.io</li>
+                    <li>Discord Server</li>
+                    <li>Twitter / X Account</li>
+                </ul>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto pt-8 border-t-2 border-neoBlack flex flex-col sm:flex-row items-center justify-between gap-4 font-sans text-xs font-semibold text-slate-400">
+            <span>&copy; 2026 Codecuy Inc. All rights reserved.</span>
+            <span>Created with Neubrutalism Design Guidelines</span>
+        </div>
+    </footer>
+
+    <!-- NEUBRUTALIST MODALS -->
+    <!-- 1. Connect Wallet Dialog -->
+    <div id="walletModal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
+        <div class="w-full max-w-[380px] bg-neoBg border-[3px] border-neoBlack rounded-[24px] p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transform scale-95 transition-transform duration-200" id="walletModalBody">
+            <h3 class="font-outfit font-black text-xl text-neoBlack mb-1">Hubungkan Dompet</h3>
+            <p class="font-sans text-xs font-semibold text-slate-500 mb-4">Silakan pilih penyedia layanan dompet Web3 crypto Anda.</p>
+
+            <div class="space-y-3 mb-6">
+                <button onclick="simulateConnectWallet('MetaMask')" class="w-full neubrutal-btn bg-white border-2 border-neoBlack rounded-xl p-3 font-outfit font-bold text-xs flex items-center justify-between shadow-[2px_2px_0px_0px_#000] hover:bg-slate-50">
+                    <span>MetaMask Wallet</span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-orange-500"></span>
+                </button>
+                <button onclick="simulateConnectWallet('Coinbase')" class="w-full neubrutal-btn bg-white border-2 border-neoBlack rounded-xl p-3 font-outfit font-bold text-xs flex items-center justify-between shadow-[2px_2px_0px_0px_#000] hover:bg-slate-50">
+                    <span>Coinbase Wallet</span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+                </button>
+                <button onclick="simulateConnectWallet('WalletConnect')" class="w-full neubrutal-btn bg-white border-2 border-neoBlack rounded-xl p-3 font-outfit font-bold text-xs flex items-center justify-between shadow-[2px_2px_0px_0px_#000] hover:bg-slate-50">
+                    <span>WalletConnect Interface</span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span>
+                </button>
+            </div>
+
+            <button onclick="closeWalletModal()" class="w-full neubrutal-btn bg-white text-neoBlack border-2 border-neoBlack rounded-lg py-2.5 font-outfit font-bold text-xs shadow-[3px_3px_0px_0px_#000] hover:bg-slate-50">
+                Kembali / Tutup
+            </button>
+        </div>
+    </div>
+
+    <!-- 2. Place Bid Dialog -->
+    <div id="bidModal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
+        <div class="w-full max-w-[360px] bg-neoBg border-[3px] border-neoBlack rounded-[24px] p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transform scale-95 transition-transform duration-200" id="bidModalBody">
+            <h3 class="font-outfit font-black text-xl text-neoBlack mb-1">Berikan Penawaran</h3>
+            <p class="font-sans text-xs font-semibold text-slate-500 mb-4">Masukkan nilai bid (ETH) untuk karya <span id="bidNftName" class="font-bold text-neoBlack underline">NFT</span></p>
+
+            <!-- Bid Input -->
+            <div class="w-full bg-white border-[3px] border-neoBlack rounded-xl p-3 flex items-center justify-between mb-4 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                <input type="number" id="bidInputAmount" value="0.35" step="0.01" class="w-full bg-transparent border-none outline-none font-outfit font-black text-lg text-neoBlack" placeholder="0.35">
+                <span class="font-outfit font-extrabold text-sm text-neoBlack bg-neoPurple border border-neoBlack px-2 py-0.5 rounded-md">ETH</span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="closeBidModal()" class="neubrutal-btn bg-white text-neoBlack border-2 border-neoBlack rounded-lg py-2.5 font-outfit font-bold text-xs shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:bg-slate-50">
+                    Batal
+                </button>
+                <button onclick="submitBidValue()" class="neubrutal-btn bg-neoLime text-neoBlack border-2 border-neoBlack rounded-lg py-2.5 font-outfit font-black text-xs shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:bg-[#c2eb00]">
+                    Kirim Bid
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. General Toast Alert Notification (WCAG Compliant Alert alternative) -->
+    <div id="toastNotification" class="fixed bottom-6 right-6 z-50 bg-white border-[3px] border-neoBlack px-4 py-3 rounded-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none flex items-center gap-2.5">
+        <div class="w-6 h-6 rounded-full bg-neoPurple border border-neoBlack flex items-center justify-center shrink-0">
+            <span class="font-outfit font-black text-xs">!</span>
+        </div>
+        <span id="toastMessage" class="font-outfit font-bold text-xs text-neoBlack">Aktivitas berhasil!</span>
+    </div>
+
+    <!-- JAVASCRIPT INTERACTIONS -->
+    <script>
+        // State variables
+        let isSpotlightFollowing = false;
+        let spotlightFollowersCount = 1432;
+        let currentTargetBidFieldId = ''; // Dynamic bid value selector target
+
+        // Toast System Utility
+        let toastTimeout;
+        function showToast(message) {
+            const toast = document.getElementById('toastNotification');
+            const toastMsg = document.getElementById('toastMessage');
+            
+            toastMsg.innerText = message;
+            
+            // Pop Toast up
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // Active countdown timer on featured cards
+        function startDropTimers() {
+            const timers = document.querySelectorAll('.drop-timer');
+            timers.forEach(timer => {
+                let hours = parseInt(timer.getAttribute('data-hours')) || 0;
+                let minutes = parseInt(timer.getAttribute('data-mins')) || 0;
+                let seconds = Math.floor(Math.random() * 60);
+
+                function tick() {
+                    if (seconds > 0) {
+                        seconds--;
+                    } else {
+                        seconds = 59;
+                        if (minutes > 0) {
+                            minutes--;
+                        } else {
+                            minutes = 59;
+                            if (hours > 0) {
+                                hours--;
+                            } else {
+                                timer.innerText = "AUCTION ENDED";
+                                return;
+                            }
+                        }
+                    }
+                    const hStr = hours.toString().padStart(2, '0') + 'h';
+                    const mStr = minutes.toString().padStart(2, '0') + 'm';
+                    const sStr = seconds.toString().padStart(2, '0') + 's';
+                    timer.innerText = `${hStr} : ${mStr} : ${sStr}`;
+                }
+                setInterval(tick, 1000);
+            });
+        }
+
+        // Connect Wallet simulator
+        const walletModal = document.getElementById('walletModal');
+        const walletModalBody = document.getElementById('walletModalBody');
+
+        function openWalletModal() {
+            walletModal.classList.remove('opacity-0', 'pointer-events-none');
+            walletModalBody.classList.remove('scale-95');
+        }
+
+        function closeWalletModal() {
+            walletModal.classList.add('opacity-0', 'pointer-events-none');
+            walletModalBody.classList.add('scale-95');
+        }
+
+        function simulateConnectWallet(walletName) {
+            closeWalletModal();
+            showToast(`Dompet ${walletName} berhasil terkoneksi! 🎉`);
+        }
+
+        // Place Bid modal simulator
+        const bidModal = document.getElementById('bidModal');
+        const bidModalBody = document.getElementById('bidModalBody');
+        const bidInput = document.getElementById('bidInputAmount');
+        const bidNftLabel = document.getElementById('bidNftName');
+
+        function openBidModal(nftName, currentBid, targetElementId) {
+            bidNftLabel.innerText = nftName;
+            currentTargetBidFieldId = targetElementId;
+            
+            // Recommend bid amount higher than current
+            const minAllowedBid = (parseFloat(currentBid) + 0.05).toFixed(2);
+            bidInput.value = minAllowedBid;
+            bidInput.min = minAllowedBid;
+
+            bidModal.classList.remove('opacity-0', 'pointer-events-none');
+            bidModalBody.classList.remove('scale-95');
+        }
+
+        function closeBidModal() {
+            bidModal.classList.add('opacity-0', 'pointer-events-none');
+            bidModalBody.classList.add('scale-95');
+        }
+
+        function submitBidValue() {
+            const finalBid = parseFloat(bidInput.value);
+            const minimumRequired = parseFloat(bidInput.min);
+
+            if (isNaN(finalBid) || finalBid < minimumRequired) {
+                showToast(`Bid minimal adalah ${minimumRequired} ETH!`);
+                return;
+            }
+
+            // Update live element data
+            if (currentTargetBidFieldId) {
+                document.getElementById(currentTargetBidFieldId).innerText = `${finalBid.toFixed(2)} ETH`;
+            }
+
+            closeBidModal();
+            showToast(`Sukses memberikan penawaran senilai ${finalBid.toFixed(2)} ETH!`);
+        }
+
+        // Spotlight Follower button toggle (Creator Hub)
+        function toggleSpotlightFollow() {
+            isSpotlightFollowing = !isSpotlightFollowing;
+            const followBtn = document.getElementById('mainFollowBtn');
+            const counterLabel = document.getElementById('spotlightFollowers');
+
+            if (isSpotlightFollowing) {
+                spotlightFollowersCount++;
+                followBtn.innerText = 'Unfollow';
+                followBtn.classList.remove('bg-[#FFEAA7]');
+                followBtn.classList.add('bg-rose-100');
+                showToast('Sekarang Anda mengikuti Lewis Webber!');
+            } else {
+                spotlightFollowersCount--;
+                followBtn.innerText = 'Start Following';
+                followBtn.classList.remove('bg-rose-100');
+                followBtn.classList.add('bg-[#FFEAA7]');
+                showToast('Batal mengikuti Lewis Webber.');
+            }
+            counterLabel.innerText = spotlightFollowersCount.toLocaleString('en-US');
+        }
+
+        // Newsletter sign-up simulator
+        function handleSubscribe(event) {
+            event.preventDefault();
+            const inputVal = document.getElementById('newsInput').value;
+            if (inputVal) {
+                showToast(`Email Anda (${inputVal}) berhasil didaftarkan dalam waitlist!`);
+                document.getElementById('newsInput').value = '';
+            }
+        }
+
+        // Mobile menu toggle Drawer drawer action
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            if (menu.classList.contains('-translate-x-full')) {
+                menu.classList.remove('-translate-x-full');
+            } else {
+                menu.classList.add('-translate-x-full');
+            }
+        }
+
+        // Closing modals on ambient backdrop click
+        window.addEventListener('click', (e) => {
+            if (e.target === walletModal) closeWalletModal();
+            if (e.target === bidModal) closeBidModal();
+        });
+
+        // Initialize timers on windows load
+        window.onload = function() {
+            startDropTimers();
+        }
+    </script>
+</body>
+</html>

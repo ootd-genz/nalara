@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codecuy: Bring your Ring cameras to your Mac.</title>
+    <meta name="description" content="Bring your Ring devices to your Mac's menu bar.">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons for added interaction fidelity -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        macBackground: '#050507',
+                        livePink: '#FF2D55',
+                        brandBlue: '#007AFF',
+                        surfaceGlass: 'rgba(255, 255, 255, 0.08)',
+                        borderGlass: 'rgba(255, 255, 255, 0.15)',
+                    },
+                    fontFamily: {
+                        sans: ['system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Premium Blur Glass Panel Styles */
+        .glass-panel {
+            background: rgba(20, 20, 25, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        
+        .glass-panel-light {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        /* macOS Dock Icon bounce effect */
+        .dock-icon {
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .dock-icon:hover {
+            transform: translateY(-10px) scale(1.15);
+        }
+
+        /* Ambient glowing highlights */
+        .glow-privacy {
+            box-shadow: 0 0 60px 10px rgba(0, 122, 255, 0.15);
+        }
+
+        /* Accordion transition utility */
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, opacity 0.2s ease-out;
+            opacity: 0;
+        }
+        .faq-item.active .faq-answer {
+            max-height: 200px;
+            opacity: 1;
+            margin-top: 12px;
+        }
+        .faq-item.active .faq-chevron {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body class="h-full bg-macBackground text-white font-sans overflow-x-hidden selection:bg-brandBlue/30 selection:text-white">
+
+    <!-- 1. HERO SECTION & INTERACTIVE DESKTOP DEMO CONTAINER -->
+    <section class="relative min-h-screen flex flex-col justify-between overflow-hidden">
+        <!-- High-fidelity background image matching original design -->
+        <div class="absolute inset-0 -z-20">
+            <img src="https://picsum.photos/seed/app-hero-background/1600/900" alt="hero background" class="w-full h-full object-cover opacity-90">
+            <div class="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-macBackground"></div>
+        </div>
+
+        <!-- Fake macOS Menu Bar (Top) -->
+        <div class="w-full h-11 px-6 flex items-center justify-between text-sm glass-panel border-t-0 border-x-0 z-40 bg-black/10 backdrop-blur-md">
+            <!-- Left Utilities -->
+            <div class="flex items-center space-x-5 text-white/95">
+                <span class="flex items-center font-bold tracking-tight cursor-pointer hover:text-white transition">
+                    <svg class="w-3.5 h-3.5 mr-2 fill-current" viewBox="0 0 170 170">
+                        <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.38.13-9.13-1.84-14.25-5.91-2.95-2.38-6.82-6.96-11.59-13.73-8.13-11.66-14.15-24.81-18.06-39.46-3.91-14.65-4.88-28.53-2.91-41.65 1.97-13.11 7.24-23.77 15.81-31.97 7.23-6.9 15.34-10.4 24.34-10.51 4.79 0 9.87 1.25 15.22 3.74 5.35 2.49 9.17 3.74 11.45 3.74 2.12 0 5.69-1.15 10.7-3.46 5.01-2.31 9.94-3.52 14.8-3.64 12.33-.12 22.75 4.3 31.28 13.26-11.23 6.81-16.71 16.03-16.44 27.68.27 9.4 3.77 17.29 10.51 23.68 6.74 6.39 14.64 9.91 23.7 10.56-1.92 5.56-4.48 11.24-7.68 17.02zM119.53 19.34c5.11-6.19 7.64-13.54 7.6-22.06-.04-.54-.08-1.07-.13-1.6-.76.04-1.53.09-2.32.14-8.08.51-14.77 4.19-20.08 11.03-4.87 6.27-7.46 13.58-7.79 21.93-.13 1.11-.2 1.94-.2 2.48.58.04 1.12.06 1.62.06 8.35 0 15.65-3.35 21.3-11.98z"/>
+                    </svg>
+                    Codecuy
+                </span>
+                <span class="cursor-pointer hover:text-white transition">File</span>
+                <span class="cursor-pointer hover:text-white transition">Edit</span>
+                <span class="cursor-pointer hover:text-white transition">View</span>
+                <span class="cursor-pointer hover:text-white transition">Help</span>
+            </div>
+
+            <!-- Right Status Indicators -->
+            <div class="flex items-center space-x-4 text-white/95 text-xs">
+                <button class="hover:text-white transition cursor-pointer" onclick="triggerNotification()">
+                    <i data-lucide="bell" class="w-4 h-4"></i>
+                </button>
+                <a href="#" target="_blank" class="hover:text-white transition">
+                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 1200 1227">
+                        <path d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.163 519.284ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z"/>
+                    </svg>
+                </a>
+                <span class="inline-flex items-center"><img src="https://picsum.photos/seed/menu-bar-brand-icon/40/40" alt="menubar brand" class="w-4.5 h-4.5 mr-1.5"></span>
+                <span id="menubar-clock" class="font-medium tracking-wide">Wed 15 Jul 12:41</span>
+            </div>
+        </div>
+
+        <!-- Simulated macOS Native Notification Popover -->
+        <div id="os-notification" class="fixed top-14 right-6 w-80 glass-panel p-3.5 rounded-2xl shadow-2xl flex items-start space-x-3 transition-all duration-500 transform translate-x-96 opacity-0 z-50 pointer-events-none">
+            <div class="w-9 h-9 shrink-0 bg-white/10 rounded-xl flex items-center justify-center border border-white/10">
+                <img src="https://picsum.photos/seed/notification-icon-popup/80/80" alt="App notification icon" class="w-7 h-7">
+            </div>
+            <div class="flex-grow text-xs">
+                <div class="flex items-center justify-between">
+                    <span class="font-bold text-white/90">Codecuy</span>
+                    <span class="text-white/40 text-[10px]">Just Now</span>
+                </div>
+                <p class="text-white/80 mt-1 font-medium">Someone is in your Garden.</p>
+            </div>
+        </div>
+
+        <!-- Main Hero Sandbox Workspace -->
+        <div class="flex-grow max-w-7xl mx-auto w-full px-6 py-12 flex flex-col lg:flex-row items-center justify-between gap-12 relative">
+            
+            <!-- Left Column: Copy & Primary Call to Action -->
+            <div class="flex-grow text-center lg:text-left z-10 max-w-xl">
+                <h1 class="text-5xl md:text-7xl font-bold tracking-tight leading-[1.05] text-white">
+                    Ring in your<br><span class="text-white/80">menu bar</span>
+                </h1>
+                <p class="text-lg text-white/70 mt-6 max-w-md mx-auto lg:mx-0 font-medium">
+                    Monitor your Ring security cameras natively on macOS. Instant previews, crystal clear feed, and lightning-fast menu bar access.
+                </p>
+
+                <div class="mt-8 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                    <a href="#" class="hero-cta group inline-flex items-center justify-center space-x-3 bg-white text-black px-7 py-3.5 rounded-full font-bold tracking-wide shadow-lg hover:bg-neutral-100 transition-all transform hover:scale-[1.02] active:scale-[0.98]">
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 170 170">
+                            <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.38.13-9.13-1.84-14.25-5.91-2.95-2.38-6.82-6.96-11.59-13.73-8.13-11.66-14.15-24.81-18.06-39.46-3.91-14.65-4.88-28.53-2.91-41.65 1.97-13.11 7.24-23.77 15.81-31.97 7.23-6.9 15.34-10.4 24.34-10.51 4.79 0 9.87 1.25 15.22 3.74 5.35 2.49 9.17 3.74 11.45 3.74 2.12 0 5.69-1.15 10.7-3.46 5.01-2.31 9.94-3.52 14.8-3.64 12.33-.12 22.75 4.3 31.28 13.26-11.23 6.81-16.71 16.03-16.44 27.68.27 9.4 3.77 17.29 10.51 23.68 6.74 6.39 14.64 9.91 23.7 10.56-1.92 5.56-4.48 11.24-7.68 17.02zM119.53 19.34c5.11-6.19 7.64-13.54 7.6-22.06-.04-.54-.08-1.07-.13-1.6-.76.04-1.53.09-2.32.14-8.08.51-14.77 4.19-20.08 11.03-4.87 6.27-7.46 13.58-7.79 21.93-.13 1.11-.2 1.94-.2 2.48.58.04 1.12.06 1.62.06 8.35 0 15.65-3.35 21.3-11.98z"/>
+                        </svg>
+                        <span>Download for Mac</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right Column: Interactive macOS Codecuy App window -->
+            <div class="w-full max-w-md z-10">
+                <div class="glass-panel rounded-2xl shadow-2xl overflow-hidden border border-white/10">
+                    
+                    <!-- App Inner Header -->
+                    <div class="flex items-center justify-between px-4 py-3 bg-black/20 border-b border-white/5">
+                        <div class="flex items-center space-x-2">
+                            <span class="font-bold text-xs tracking-wide">Ring Cameras</span>
+                            <span class="bg-white/15 text-[10px] font-bold px-1.5 py-0.5 rounded-full text-white/80">3</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="flex items-center bg-white/5 rounded-lg p-0.5 border border-white/5">
+                                <button id="view-grid-btn" class="p-1 rounded bg-white/10 text-white transition hover:text-white" title="Grid view">
+                                    <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
+                                </button>
+                                <button id="view-single-btn" class="p-1 rounded text-white/50 transition hover:text-white" title="Single feed">
+                                    <i data-lucide="square" class="w-3.5 h-3.5"></i>
+                                </button>
+                            </div>
+                            <button class="text-white/60 hover:text-white transition">
+                                <i data-lucide="settings" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 1. Default App Content View: Camera Grid Mode -->
+                    <div id="camera-grid-view" class="p-3 grid grid-cols-2 gap-3 transition-opacity duration-300">
+                        <!-- Front Door Tile -->
+                        <div class="group relative rounded-xl overflow-hidden bg-black aspect-video border border-white/5 cursor-pointer" onclick="switchToSingle('Front door', 'https://picsum.photos/seed/camera-feed-front-door/1200/800')">
+                            <img src="https://picsum.photos/seed/camera-feed-front-door/400/300" alt="Front Door camera" class="w-full h-full object-cover opacity-85 group-hover:scale-105 transition-all duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                            <span class="absolute bottom-2 left-2 text-[10px] font-medium text-white/90">Front door</span>
+                        </div>
+                        <!-- Garden Tile (Clicking opens live stream view) -->
+                        <div id="garden-tile-selector" class="group relative rounded-xl overflow-hidden bg-black aspect-video border border-white/5 cursor-pointer ring-2 ring-brandBlue/30" onclick="switchToSingle('Garden', 'https://picsum.photos/seed/camera-feed-garden/1200/800')">
+                            <img src="https://picsum.photos/seed/camera-feed-garden/400/300" alt="Garden camera" class="w-full h-full object-cover opacity-85 group-hover:scale-105 transition-all duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                            <span class="absolute bottom-2 left-2 text-[10px] font-medium text-white/95 flex items-center">
+                                Garden <span class="w-1.5 h-1.5 rounded-full bg-livePink ml-1.5 animate-pulse"></span>
+                            </span>
+                        </div>
+                        <!-- Sideview Tile -->
+                        <div class="group relative rounded-xl overflow-hidden bg-black aspect-video border border-white/5 cursor-pointer" onclick="switchToSingle('Sideview', 'https://picsum.photos/seed/camera-feed-sideview/1200/800')">
+                            <img src="https://picsum.photos/seed/camera-feed-sideview/400/300" alt="Sideview camera" class="w-full h-full object-cover opacity-85 group-hover:scale-105 transition-all duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                            <span class="absolute bottom-2 left-2 text-[10px] font-medium text-white/90">Sideview</span>
+                        </div>
+                        <!-- Empty Placeholder Tile -->
+                        <div class="rounded-xl border border-dashed border-white/10 flex items-center justify-center aspect-video text-white/30 text-[10px]">
+                            <span>No Camera</span>
+                        </div>
+                    </div>
+
+                    <!-- 2. Single Feed View / Interactive Expanded Stream -->
+                    <div id="camera-expanded-view" class="hidden relative aspect-video w-full bg-black overflow-hidden transition-opacity duration-300">
+                        <img id="expanded-video-poster" src="https://picsum.photos/seed/camera-feed-garden/1200/800" alt="Active camera feed" class="w-full h-full object-cover opacity-80">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/30 pointer-events-none"></div>
+
+                        <!-- Active Title -->
+                        <span id="expanded-camera-title" class="absolute top-3 left-3 px-2 py-0.5 rounded bg-black/60 border border-white/10 text-[10px] font-semibold text-white/90">
+                            Garden
+                        </span>
+
+                        <!-- Flashing Live Badge -->
+                        <div class="absolute top-3 right-3 flex items-center space-x-1 bg-livePink px-2 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase text-white">
+                            <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
+                            <span>Live</span>
+                        </div>
+
+                        <!-- Dynamic Two-Way Talk Overlay Buttons -->
+                        <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center space-x-3 z-20">
+                            <button id="mic-toggle" class="w-9 h-9 rounded-full bg-black/60 backdrop-blur-md border border-white/15 flex items-center justify-center text-white/90 hover:text-white hover:bg-black/90 hover:scale-105 active:scale-95 transition-all">
+                                <img src="https://picsum.photos/seed/icon-mic-toggle/40/40" alt="mic icon" class="w-4.5 h-4.5">
+                            </button>
+                            <button id="speaker-toggle" class="w-9 h-9 rounded-full bg-black/60 backdrop-blur-md border border-white/15 flex items-center justify-center text-white/90 hover:text-white hover:bg-black/90 hover:scale-105 active:scale-95 transition-all">
+                                <img src="https://picsum.photos/seed/icon-speaker-toggle/40/40" alt="speaker icon" class="w-4.5 h-4.5">
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Fake macOS App Dock (Bottom Navigation) -->
+        <div class="w-full pb-8 flex items-center justify-center z-10">
+            <div class="glass-panel px-4 py-3 rounded-[24px] flex items-center justify-center space-x-4 shadow-2xl border border-white/15 bg-white/5">
+                <img class="dock-icon w-12 h-12 rounded-xl cursor-pointer shadow-md" src="https://picsum.photos/seed/dock-icon-system-app/100/100" alt="System App">
+                <div class="relative group">
+                    <img class="dock-icon w-12 h-12 rounded-xl cursor-pointer shadow-md" src="https://picsum.photos/seed/dock-icon-app/100/100" alt="App">
+                    <!-- App active dot marker -->
+                    <span class="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-white rounded-full"></span>
+                </div>
+                <img class="dock-icon w-12 h-12 rounded-xl cursor-pointer shadow-md" src="https://picsum.photos/seed/dock-icon-terminal/100/100" alt="Terminal">
+                <img class="dock-icon w-12 h-12 rounded-xl cursor-pointer shadow-md" src="https://picsum.photos/seed/dock-icon-preferences/100/100" alt="Preferences">
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. FEATURES INTRO SECTION -->
+    <section class="py-24 bg-[#0a0a0d] border-t border-white/5 relative">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <div class="inline-flex items-center space-x-2 text-brandBlue text-sm font-semibold tracking-wider uppercase">
+                <i data-lucide="apple" class="w-4 h-4"></i>
+                <span>Designed for macOS</span>
+            </div>
+            <h2 class="text-4xl md:text-5xl font-bold tracking-tight mt-3 text-white">
+                At home on your Mac.
+            </h2>
+            <p class="text-lg text-white/60 mt-4 max-w-xl mx-auto font-medium">
+                Live views, motion alerts, and instant replay right in your menu bar. Built natively for fluid performance.
+            </p>
+        </div>
+
+        <!-- Features Icons Triad -->
+        <div class="max-w-6xl mx-auto px-6 mt-16 grid grid-cols-1 md:grid-cols-3 gap-12">
+            <!-- Feature 1 -->
+            <div class="bg-white/[0.02] border border-white/5 p-8 rounded-2xl flex flex-col items-center text-center hover:border-white/10 transition duration-300">
+                <div class="w-12 h-12 flex items-center justify-center bg-white/5 rounded-xl border border-white/10 mb-6">
+                    <img src="https://picsum.photos/seed/feature-icon-every-camera/60/60" alt="every camera icon" class="w-6 h-6">
+                </div>
+                <h3 class="text-xl font-bold text-white">Every camera, one click</h3>
+                <p class="text-white/60 text-sm mt-3 leading-relaxed">
+                    Open any Ring feed from your menu bar. No phone, no browser, no complicated application setup.
+                </p>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="bg-white/[0.02] border border-white/5 p-8 rounded-2xl flex flex-col items-center text-center hover:border-white/10 transition duration-300">
+                <div class="w-12 h-12 flex items-center justify-center bg-white/5 rounded-xl border border-white/10 mb-6">
+                    <img src="https://picsum.photos/seed/feature-icon-notification-bell/60/60" alt="notification bell icon" class="w-6 h-6">
+                </div>
+                <h3 class="text-xl font-bold text-white">Never miss a thing</h3>
+                <p class="text-white/60 text-sm mt-3 leading-relaxed">
+                    Doorbell rings and motion alerts arrive as native macOS notifications. Tap to instant open the feed.
+                </p>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="bg-white/[0.02] border border-white/5 p-8 rounded-2xl flex flex-col items-center text-center hover:border-white/10 transition duration-300">
+                <div class="w-12 h-12 flex items-center justify-center bg-white/5 rounded-xl border border-white/10 mb-6">
+                    <img src="https://picsum.photos/seed/feature-icon-speaker-talk/60/60" alt="speaker talk icon" class="w-6 h-6">
+                </div>
+                <h3 class="text-xl font-bold text-white">Two-way talk</h3>
+                <p class="text-white/60 text-sm mt-3 leading-relaxed">
+                    See visitors at the door and speak directly with them using two-way communication built into the window.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. DETAILED BENEFITS CARDS SECTION (Interactive Video Timeline & Local Privacy) -->
+    <section class="py-24 bg-[#08080a] border-t border-white/5">
+        <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <!-- Card 1: Interactive Activity Scrubber -->
+            <article class="bg-white/[0.02] border border-white/5 rounded-3xl p-8 flex flex-col justify-between overflow-hidden relative group hover:border-white/10 transition-all duration-300">
+                <div class="w-full">
+                    <!-- Widget Display Screen -->
+                    <div class="glass-panel rounded-2xl overflow-hidden border border-white/10 shadow-lg">
+                        <div class="relative aspect-video w-full">
+                            <!-- Scrubbable Image Sequence Container -->
+                            <img id="scrub-image-feed" src="https://picsum.photos/seed/activity-scrub-frame-015/1200/800" alt="Scrub Frame" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-black/10"></div>
+                            
+                            <!-- Static overlay metadata labels -->
+                            <span class="absolute top-3 left-3 bg-black/60 px-2 py-0.5 rounded text-[10px] text-white/90 font-medium">Front Door</span>
+                            <span class="absolute top-3 right-3 bg-black/60 px-2 py-0.5 rounded text-[10px] text-white/70">Jun 14, 2026 at 14:09PM</span>
+
+                            <!-- HUD Timeline overlay mimicking Figma app window -->
+                            <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white/80 text-[10px] font-mono">
+                                <span>0:00</span>
+                                <div class="flex-grow mx-3 relative">
+                                    <input id="timeline-slider" type="range" min="1" max="15" value="15" class="w-full accent-white h-1 bg-white/20 rounded-lg appearance-none cursor-pointer">
+                                </div>
+                                <span>0:30</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Visual Timeline indicators below -->
+                    <div class="mt-6 flex items-center justify-between text-xs text-white/50 border-t border-white/5 pt-4">
+                        <span class="flex items-center"><i data-lucide="clock" class="w-3.5 h-3.5 mr-1"></i> 2PM</span>
+                        <div class="flex-grow mx-4 h-0.5 bg-gradient-to-r from-transparent via-white/25 to-transparent relative">
+                            <!-- Custom playhead indicator -->
+                            <div class="absolute -top-1 left-1/2 w-2.5 h-2.5 rounded-full bg-white/80 transform -translate-x-1/2"></div>
+                        </div>
+                        <span>3PM</span>
+                        <span class="ml-4 bg-white/10 text-white/90 text-[10px] font-semibold px-2 py-0.5 rounded-full">Motion detected</span>
+                    </div>
+                </div>
+
+                <div class="mt-8">
+                    <h3 class="text-2xl font-bold text-white">Activity log</h3>
+                    <p class="text-white/60 text-sm mt-2 leading-relaxed">
+                        Scrub back through motion clips and doorbell rings from the last few hours effortlessly with our local timeline scrubber.
+                    </p>
+                </div>
+            </article>
+
+            <!-- Card 2: Local Privacy Concept -->
+            <article class="bg-white/[0.02] border border-white/5 rounded-3xl p-8 flex flex-col justify-between overflow-hidden relative group hover:border-white/10 transition-all duration-300">
+                <!-- Graphic representing local data security -->
+                <div class="w-full flex items-center justify-center py-10 relative">
+                    <div class="absolute w-44 h-44 rounded-full bg-brandBlue/10 animate-ping opacity-30"></div>
+                    <div class="w-28 h-28 rounded-full border border-white/15 flex items-center justify-center glass-panel shadow-inner glow-privacy">
+                        <div class="w-16 h-16 rounded-full bg-brandBlue flex items-center justify-center shadow-lg transform group-hover:scale-105 transition-all">
+                            <i data-lucide="shield-check" class="w-8 h-8 text-white"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-2xl font-bold text-white">Nothing leaves your Mac</h3>
+                    <p class="text-white/60 text-sm mt-2 leading-relaxed">
+                        No external servers, no cloud tracking, and absolutely no analytics. Your private feeds go straight to your device. Pure privacy, standard local execution.
+                    </p>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- 4. FAQ SECTION (Accordion Interface) -->
+    <section class="py-24 bg-[#0a0a0d] border-t border-white/5">
+        <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-3 gap-12">
+            
+            <!-- Left Header Grid -->
+            <div>
+                <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-white leading-tight">
+                    Frequently<br>asked questions.
+                </h2>
+                <p class="text-sm text-white/50 mt-4 leading-relaxed">
+                    Have any other questions regarding privacy, setup, or subscriptions? Don't hesitate to reach out to our team.
+                </p>
+            </div>
+
+            <!-- Right Accordion List -->
+            <div class="lg:col-span-2 space-y-4">
+                
+                <!-- FAQ Item 1 -->
+                <div class="faq-item bg-white/[0.02] border border-white/5 p-5 rounded-2xl hover:border-white/10 transition cursor-pointer" onclick="toggleFaq(this)">
+                    <button class="w-full flex items-center justify-between text-left font-bold text-white text-base">
+                        <span>What is Codecuy?</span>
+                        <i data-lucide="chevron-down" class="faq-chevron w-5 h-5 text-white/50 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p class="text-white/60 text-sm leading-relaxed">
+                            Codecuy puts your Ring cameras in your Mac's menu bar. Live view, two-way talk, motion alerts, and clip playback, all one click away, without opening a browser or reaching for your phone.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 2 -->
+                <div class="faq-item bg-white/[0.02] border border-white/5 p-5 rounded-2xl hover:border-white/10 transition cursor-pointer" onclick="toggleFaq(this)">
+                    <button class="w-full flex items-center justify-between text-left font-bold text-white text-base">
+                        <span>Is Codecuy an official Ring app?</span>
+                        <i data-lucide="chevron-down" class="faq-chevron w-5 h-5 text-white/50 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p class="text-white/60 text-sm leading-relaxed">
+                            No. Codecuy is an independent app, not affiliated with, endorsed by, or sponsored by Ring or Amazon. You sign in with your own Ring account, and your credentials go directly to Ring, never to us.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 3 -->
+                <div class="faq-item bg-white/[0.02] border border-white/5 p-5 rounded-2xl hover:border-white/10 transition cursor-pointer" onclick="toggleFaq(this)">
+                    <button class="w-full flex items-center justify-between text-left font-bold text-white text-base">
+                        <span>What do I need to use Codecuy?</span>
+                        <i data-lucide="chevron-down" class="faq-chevron w-5 h-5 text-white/50 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p class="text-white/60 text-sm leading-relaxed">
+                            A Mac with Apple Silicon running macOS 14 (Sonoma) or later, a Ring account, and at least one Ring camera or doorbell. That's it, no other software to install.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 4 -->
+                <div class="faq-item bg-white/[0.02] border border-white/5 p-5 rounded-2xl hover:border-white/10 transition cursor-pointer" onclick="toggleFaq(this)">
+                    <button class="w-full flex items-center justify-between text-left font-bold text-white text-base">
+                        <span>Is my Ring account safe with Codecuy?</span>
+                        <i data-lucide="chevron-down" class="faq-chevron w-5 h-5 text-white/50 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p class="text-white/60 text-sm leading-relaxed">
+                            Yes. Your email and password go only to Ring, Codecuy never stores them and has no servers, no analytics, and no tracking. Video streams travel from Ring to your Mac and nowhere else. After sign-in, a Ring session token is kept securely on your Mac, the same way Ring's own app stays signed in.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 5 -->
+                <div class="faq-item bg-white/[0.02] border border-white/5 p-5 rounded-2xl hover:border-white/10 transition cursor-pointer" onclick="toggleFaq(this)">
+                    <button class="w-full flex items-center justify-between text-left font-bold text-white text-base">
+                        <span>Can I watch recorded clips?</span>
+                        <i data-lucide="chevron-down" class="faq-chevron w-5 h-5 text-white/50 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p class="text-white/60 text-sm leading-relaxed">
+                            Yes, recent motion events appear in the activity log and replay right in the app. Playback uses Ring's recordings, so it requires an active Ring Protect subscription.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 6 -->
+                <div class="faq-item bg-white/[0.02] border border-white/5 p-5 rounded-2xl hover:border-white/10 transition cursor-pointer" onclick="toggleFaq(this)">
+                    <button class="w-full flex items-center justify-between text-left font-bold text-white text-base">
+                        <span>What happens if Ring changes something?</span>
+                        <i data-lucide="chevron-down" class="faq-chevron w-5 h-5 text-white/50 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p class="text-white/60 text-sm leading-relaxed">
+                            Because Codecuy is independent, a Ring-side change can occasionally interrupt features until we ship a fix. We watch closely and patch quickly, and Codecuy updates itself automatically, so fixes arrive without you doing anything.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 7 -->
+                <div class="faq-item bg-white/[0.02] border border-white/5 p-5 rounded-2xl hover:border-white/10 transition cursor-pointer" onclick="toggleFaq(this)">
+                    <button class="w-full flex items-center justify-between text-left font-bold text-white text-base">
+                        <span>I'm not getting sound from a camera.</span>
+                        <i data-lucide="chevron-down" class="faq-chevron w-5 h-5 text-white/50 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p class="text-white/60 text-sm leading-relaxed">
+                            Check that <strong>Audio Streaming</strong> is enabled for that camera in the Ring app (Device Settings &rarr; Audio). Some Ring cameras ship with it off, and Codecuy can only play the audio Ring sends.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 5. SITE FOOTER SECTION -->
+    <footer class="py-16 bg-[#060608] border-t border-white/5 text-white/45 text-xs">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col items-center text-center">
+            
+            <!-- Shimmer Logo Emblem Container -->
+            <div class="relative w-16 h-16 rounded-2xl border border-white/10 flex items-center justify-center glass-panel mb-8">
+                <img src="https://picsum.photos/seed/footer-brand-icon/80/80" alt="App footer brand icon" class="w-10 h-10">
+            </div>
+
+            <!-- Nav Links -->
+            <nav class="flex items-center justify-center space-x-6 text-white/70 font-medium mb-6">
+                <span>&copy; 2026</span>
+                <span class="w-1 h-1 rounded-full bg-white/20"></span>
+                <a href="#" class="hover:text-white transition">Download</a>
+                <span class="w-1 h-1 rounded-full bg-white/20"></span>
+                <a href="/privacy.html" class="hover:text-white transition">Privacy Policy</a>
+                <span class="w-1 h-1 rounded-full bg-white/20"></span>
+                <a href="#" target="_blank" class="hover:text-white transition">Follow</a>
+            </nav>
+
+            <!-- Legal Disclaimer text -->
+            <p class="max-w-2xl leading-relaxed text-[11px] text-white/30">
+                Codecuy is an independent app for your Ring cameras, built by Wireframe Design Studio and not affiliated with Ring. It is not endorsed, sponsored, or associated with Ring LLC or Amazon in any way.
+            </p>
+
+        </div>
+    </footer>
+
+    <!-- Interactive Scripts -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // 1. Live Menubar clock updater
+        function updateClock() {
+            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const now = new Date();
+            
+            const dayName = days[now.getDay()];
+            const dayNum = now.getDate();
+            const monthName = months[now.getMonth()];
+            
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            hours = hours < 10 ? '0' + hours : hours;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+
+            document.getElementById('menubar-clock').textContent = `${dayName} ${dayNum} ${monthName} ${hours}:${minutes}`;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // 2. Interactive App View Mode Toggles
+        const gridView = document.getElementById('camera-grid-view');
+        const expandedView = document.getElementById('camera-expanded-view');
+        const gridBtn = document.getElementById('view-grid-btn');
+        const singleBtn = document.getElementById('view-single-btn');
+        const expandedTitle = document.getElementById('expanded-camera-title');
+        const expandedPoster = document.getElementById('expanded-video-poster');
+
+        function toggleToGridView() {
+            expandedView.classList.add('hidden');
+            gridView.classList.remove('hidden');
+            gridBtn.classList.add('bg-white/10', 'text-white');
+            gridBtn.classList.remove('text-white/50');
+            singleBtn.classList.remove('bg-white/10', 'text-white');
+            singleBtn.classList.add('text-white/50');
+        }
+
+        function toggleToSingleView() {
+            gridView.classList.add('hidden');
+            expandedView.classList.remove('hidden');
+            singleBtn.classList.add('bg-white/10', 'text-white');
+            singleBtn.classList.remove('text-white/50');
+            gridBtn.classList.remove('bg-white/10', 'text-white');
+            gridBtn.classList.add('text-white/50');
+        }
+
+        gridBtn.addEventListener('click', toggleToGridView);
+        singleBtn.addEventListener('click', toggleToSingleView);
+
+        function switchToSingle(cameraName, imageSrc) {
+            expandedTitle.textContent = cameraName;
+            expandedPoster.src = imageSrc;
+            toggleToSingleView();
+        }
+
+        // 3. Simulated OS Notification slide-in trigger (Runs automatically after 2 seconds)
+        function triggerNotification() {
+            const notif = document.getElementById('os-notification');
+            notif.classList.remove('translate-x-96', 'opacity-0');
+            notif.classList.add('translate-x-0', 'opacity-100');
+            
+            setTimeout(() => {
+                notif.classList.remove('translate-x-0', 'opacity-100');
+                notif.classList.add('translate-x-96', 'opacity-0');
+            }, 6000);
+        }
+        setTimeout(triggerNotification, 2000);
+
+        // 4. FAQ Accordion Toggle action
+        function toggleFaq(element) {
+            const isActive = element.classList.contains('active');
+            
+            // Close all active FAQs
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Open clicked if it wasn't already active
+            if (!isActive) {
+                element.classList.add('active');
+            }
+        }
+
+        // 5. Timeline Scrubber Drag / Swipe logic for Activity Log
+        const slider = document.getElementById('timeline-slider');
+        const scrubFeed = document.getElementById('scrub-image-feed');
+        
+        slider.addEventListener('input', (e) => {
+            const frameNum = String(e.target.value).padStart(3, '0');
+            // Re-render frame image dynamically based on range input matching assets
+            // 001 through 015
+            scrubFeed.src = `https://picsum.photos/seed/activity-scrub-frame-${frameNum}/1200/800`;
+        });
+    </script>
+</body>
+</html>
