@@ -18,32 +18,32 @@ import {
 } from "@/lib/site-config";
 
 describe("Regression Baseline WhatsApp URLs (Sesuai docs/audit.md)", () => {
-  it("harus memiliki nomor default NALARA 6283829198193", () => {
-    expect(siteConfig.whatsappNumber).toBe("6283829198193");
+  it("harus memiliki nomor default NALARA 6289517795206", () => {
+    expect(siteConfig.whatsappNumber).toBe("6289517795206");
   });
 
   it("harus menghasilkan tautan WhatsApp konsultasi utama yang sama persis dengan baseline", () => {
     expect(whatsappUrl).toBe(
-      `https://wa.me/6283829198193?text=${encodeURIComponent(defaultWhatsAppMessage)}`
+      `https://wa.me/6289517795206?text=${encodeURIComponent(defaultWhatsAppMessage)}`
     );
   });
 
   it("harus menghasilkan tautan WhatsApp Paket Beginner yang sama persis dengan baseline", () => {
     expect(beginnerWhatsappUrl).toBe(
-      `https://wa.me/6283829198193?text=${encodeURIComponent(getBeginnerWhatsAppMessage())}`
+      `https://wa.me/6289517795206?text=${encodeURIComponent(getBeginnerWhatsAppMessage())}`
     );
   });
 
   it("harus menghasilkan tautan WhatsApp Paket Starter yang sama persis dengan baseline", () => {
     expect(starterWhatsappUrl).toBe(
-      `https://wa.me/6283829198193?text=${encodeURIComponent(getStarterWhatsAppMessage())}`
+      `https://wa.me/6289517795206?text=${encodeURIComponent(getStarterWhatsAppMessage())}`
     );
     expect(catalogWhatsappUrl).toBe(starterWhatsappUrl);
   });
 
   it("harus menghasilkan tautan WhatsApp Paket Business yang sama persis dengan baseline", () => {
     expect(businessWhatsappUrl).toBe(
-      `https://wa.me/6283829198193?text=${encodeURIComponent(getBusinessWhatsAppMessage())}`
+      `https://wa.me/6289517795206?text=${encodeURIComponent(getBusinessWhatsAppMessage())}`
     );
     expect(onlineStoreWhatsappUrl).toBe(businessWhatsappUrl);
   });

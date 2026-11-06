@@ -81,7 +81,7 @@ Jalankan pengujian langsung di browser pada domain produksi untuk memastikan fun
 | No | Lokasi URL | Tindakan Pengujian | Hasil yang Diharapkan | Status |
 | :---: | :--- | :--- | :--- | :---: |
 | 1 | `/` | Buka halaman utama | Halaman terbuka normal, tampilan identik dengan versi sebelumnya. | [ ] |
-| 2 | `/` | Klik tombol "Konsultasi" di Hero & Footer | Mengarah ke `wa.me/6283829198193` (nomor resmi NALARA). | [ ] |
+| 2 | `/` | Klik tombol "Konsultasi" di Hero & Footer | Mengarah ke `wa.me/6289517795206` (nomor resmi NALARA). | [ ] |
 | 3 | `/admin` | Buka tanpa login | Otomatis dialihkan (*redirect*) ke `/admin/login`. | [ ] |
 | 4 | `/admin/login` | Login dengan akun non-admin | Muncul pesan error akses ditolak (*Forbidden*). | [ ] |
 | 5 | `/admin/login` | Login dengan akun admin resmi | Berhasil masuk ke dashboard `/admin`. | [ ] |

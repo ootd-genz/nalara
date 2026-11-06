@@ -3,7 +3,7 @@ import { beginnerPackage, businessPackage, formatRupiah, starterPackage } from "
 export const siteConfig = {
   name: "NALARA",
   tagline: "Solusi digital dengan nalar dan arah yang jelas.",
-  whatsappNumber: "6283829198193",
+  whatsappNumber: "6289517795206",
   instagramHandle: "nalara.website",
   offerPrice: formatRupiah(starterPackage.price),
   regularPrice: formatRupiah(starterPackage.regularPrice),

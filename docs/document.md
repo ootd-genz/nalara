@@ -230,7 +230,7 @@ Buka file [`lib/site-config.ts`](file:///c:/Users/muhaz/OneDrive/Desktop/nalara/
 export const siteConfig = {
   name: "NALARA",
   tagline: "Solusi digital dengan nalar dan arah yang jelas.",
-  whatsappNumber: "6283829198193", // Ganti dengan nomor WhatsApp aktif (awali 62 tanpa +)
+  whatsappNumber: "6289517795206", // Ganti dengan nomor WhatsApp aktif (awali 62 tanpa +)
   instagramHandle: "nalara.website", // Ganti dengan username IG
 };
 ```

@@ -48,7 +48,7 @@ Branch Kerja: `feat/user-pages`
 
 ### A. Titik Konfigurasi & Generator URL Dasar
 - **`lib/site-config.ts`**:
-  - Baris 6: `whatsappNumber: "6283829198193"` (nomor default NALARA)
+  - Baris 6: `whatsappNumber: "6289517795206"` (nomor default NALARA)
   - Baris 16: `whatsappUrl` (`https://wa.me/${siteConfig.whatsappNumber}?text=${whatsappMessage}`)
   - Baris 18: `beginnerWhatsappUrl` (`https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURIComponent(...)}`)
   - Baris 22: `starterWhatsappUrl` (`https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURIComponent(...)}`)
