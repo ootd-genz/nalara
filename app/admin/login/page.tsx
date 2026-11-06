@@ -50,7 +50,17 @@ export default function AdminLoginPage() {
         // 3. Login sukses dan memiliki hak admin
         router.push("/admin");
         router.refresh();
-      } catch {
+      } catch (err) {
+        console.error("Admin login error:", err);
+        if (
+          err instanceof Error &&
+          err.message.includes("Supabase environment variables")
+        ) {
+          setErrorMessage(
+            "Konfigurasi Supabase belum disetel di server/Vercel (Environment Variables)."
+          );
+          return;
+        }
         setErrorMessage("Terjadi gangguan jaringan atau server. Silakan coba lagi.");
       }
     });
