@@ -1,11 +1,23 @@
+"use client";
+
 import { Briefcase, CheckCircle2, FileCode2, MessageCircle, Rocket, Sparkles } from "lucide-react";
 import { PromoOfferNotice, PromoOfferPrice } from "@/components/promo-price";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { beginnerPackage, businessPackage, starterPackage } from "@/lib/commerce";
-import { beginnerWhatsappUrl, businessWhatsappUrl, starterWhatsappUrl } from "@/lib/site-config";
+import {
+  getBeginnerWhatsAppUrl,
+  getBusinessWhatsAppUrl,
+  getStarterWhatsAppUrl,
+} from "@/lib/site-config";
+import { useContact } from "@/components/contact-provider";
 
 export function Offer() {
+  const { whatsappNumber, trackClick } = useContact();
+  const beginnerWhatsappUrl = getBeginnerWhatsAppUrl(whatsappNumber);
+  const starterWhatsappUrl = getStarterWhatsAppUrl(whatsappNumber);
+  const businessWhatsappUrl = getBusinessWhatsAppUrl(whatsappNumber);
+
   return (
     <section id="penawaran" className="section-padding border-t border-white/6 bg-[#0d110f]">
       <div className="container-shell">
@@ -60,7 +72,13 @@ export function Offer() {
 
             <div className="mt-auto pt-8">
               <Button asChild size="lg" className="w-full">
-                <a href={beginnerWhatsappUrl} target="_blank" rel="noreferrer" data-cta="order-beginner-whatsapp">
+                <a
+                  href={beginnerWhatsappUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  data-cta="order-beginner-whatsapp"
+                  onClick={() => trackClick("offer-beginner", "beginner")}
+                >
                   <MessageCircle aria-hidden="true" /> Pesan Sekarang
                 </a>
               </Button>
@@ -105,7 +123,13 @@ export function Offer() {
 
             <div className="mt-auto pt-8">
               <Button asChild size="lg" className="w-full bg-[var(--accent)] text-[var(--accent-foreground)] hover:brightness-110">
-                <a href={starterWhatsappUrl} target="_blank" rel="noreferrer" data-cta="order-starter-whatsapp">
+                <a
+                  href={starterWhatsappUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  data-cta="order-starter-whatsapp"
+                  onClick={() => trackClick("offer-starter", "starter")}
+                >
                   <MessageCircle aria-hidden="true" /> Pesan Sekarang
                 </a>
               </Button>
@@ -148,7 +172,13 @@ export function Offer() {
 
             <div className="mt-auto pt-8">
               <Button asChild size="lg" className="w-full">
-                <a href={businessWhatsappUrl} target="_blank" rel="noreferrer" data-cta="order-business-whatsapp">
+                <a
+                  href={businessWhatsappUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  data-cta="order-business-whatsapp"
+                  onClick={() => trackClick("offer-business", "business")}
+                >
                   <MessageCircle aria-hidden="true" /> Pesan Sekarang
                 </a>
               </Button>
