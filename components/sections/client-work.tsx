@@ -11,9 +11,12 @@ import {
   portfolioProjects,
   type PortfolioCategory,
 } from "@/lib/portfolio-data";
-import { whatsappUrl } from "@/lib/site-config";
+import { getConsultationWhatsAppUrl } from "@/lib/site-config";
+import { useContact } from "@/components/contact-provider";
 
 export function ClientWork() {
+  const { whatsappNumber, trackClick } = useContact();
+  const whatsappUrl = getConsultationWhatsAppUrl(whatsappNumber);
   const [selectedCategory, setSelectedCategory] = useState<PortfolioCategory>("all");
 
   const filteredProjects = useMemo(() => {
@@ -164,7 +167,13 @@ export function ClientWork() {
             </div>
             <div className="shrink-0">
               <Button asChild size="lg" className="shadow-lg shadow-[var(--accent)]/20">
-                <a href={whatsappUrl} target="_blank" rel="noreferrer" data-cta="portfolio-cta-whatsapp">
+                <a
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  data-cta="portfolio-cta-whatsapp"
+                  onClick={() => trackClick("portfolio-banner")}
+                >
                   <MessageCircle aria-hidden="true" /> Konsultasi Sekarang <ArrowUpRight aria-hidden="true" />
                 </a>
               </Button>

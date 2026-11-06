@@ -1,10 +1,13 @@
+"use client";
+
 import { ArrowUpRight, CheckCircle2, AtSign, MessageCircle, Sparkles } from "lucide-react";
 import { BrandLogo } from "@/components/brand-logo";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PromoAmount } from "@/components/promo-price";
 import { beginnerPackage } from "@/lib/commerce";
-import { instagramUrl, siteConfig, whatsappUrl } from "@/lib/site-config";
+import { getConsultationWhatsAppUrl, instagramUrl, siteConfig } from "@/lib/site-config";
+import { useContact } from "@/components/contact-provider";
 
 const benefits = [
   "Desain responsif mobile & desktop",
@@ -32,6 +35,9 @@ const showcaseItems = [
 ];
 
 export function Hero() {
+  const { whatsappNumber, trackClick } = useContact();
+  const whatsappUrl = getConsultationWhatsAppUrl(whatsappNumber);
+
   return (
     <section id="top" className="relative isolate overflow-hidden">
       <div className="hero-grid absolute inset-0 -z-20 opacity-50" />
@@ -47,7 +53,13 @@ export function Hero() {
               </a>
             </Button>
             <Button asChild size="sm">
-              <a href={whatsappUrl} target="_blank" rel="noreferrer" data-cta="nav-whatsapp">
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noreferrer"
+                data-cta="nav-whatsapp"
+                onClick={() => trackClick("hero")}
+              >
                 <MessageCircle aria-hidden="true" /> Konsultasi
               </a>
             </Button>
